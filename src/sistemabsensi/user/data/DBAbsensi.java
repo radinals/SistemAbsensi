@@ -15,9 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import sistemabsensi.database.connection.DBConnection;
-import sistemabsensi.user.data.Karyawan;
-import sistemabsensi.user.data.RecordAbsen;
-import sistemabsensi.user.data.Shift;
 
 /**
  *
@@ -138,6 +135,25 @@ public class DBAbsensi {
 		return false;
 	}
 
+	public void buatDetailRecord(int idRecord, String catatan) {
+
+		final String sql = "INSERT INTO tdetailAbsen(id_recordabsen, catatan_absen, time_created, time_modified) VALUES (?,?,?,?)";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+
+			final Timestamp timestampSekarang = Timestamp.valueOf(LocalDateTime.now());
+
+			query.setInt(1, idRecord);
+			query.setString(2, catatan);
+			query.setTimestamp(3, timestampSekarang);
+			query.setTimestamp(4, timestampSekarang);
+
+		} catch (SQLException e) {
+			exitError("Gagal Membuat Detail Record", e);
+		}
+	}
+
 	public void updateRecordAbsenKaryawan(final RecordAbsen recordAbsen) throws SQLException {
 		final String sql = "UPDATE trecordabsen SET jamAbsenMasuk = ?, jamAbsenPulang = ?, jamAbsenMulaiIstirahat = ?, jamAbsenKembaliIstirahat = ?, time_modified = ? where id_recordabsen = ?;";
 		try {
@@ -162,7 +178,7 @@ public class DBAbsensi {
 		}
 
 	}
-	
+
 	public LinkedList<RecordAbsen> getDaftarRecordAbsenKaryawan(String idKaryawan) throws SQLException {
 		final String sql = "SELECT * FROM trecordabsen where id_karyawan = ?;";
 
@@ -173,8 +189,8 @@ public class DBAbsensi {
 			query.setString(1, idKaryawan);
 
 			ResultSet result = query.executeQuery();
-			
-			while(result.next()) {
+
+			while (result.next()) {
 				RecordAbsen record = new RecordAbsen();
 				record.setIdKaryawan(result.getString("id_karyawan"));
 				record.setIdRecord(result.getInt("id_recordabsen"));
@@ -187,6 +203,37 @@ public class DBAbsensi {
 			}
 
 			return daftarTanggal;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	public RecordAbsen getRecordAbsenKaryawan(String idKaryawan, Date tanggalRecord) throws SQLException {
+		final String sql = "SELECT * FROM trecordabsen where id_karyawan = ? and tanggalrecord = ?;";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+
+			query.setString(1, idKaryawan);
+			query.setDate(2, tanggalRecord);
+
+			ResultSet result = query.executeQuery();
+
+			if (!result.next()) {
+				throw new SQLException("DATA TIDAK DITEMUKAN");
+			}
+			RecordAbsen record = new RecordAbsen();
+			record.setIdKaryawan(result.getString("id_karyawan"));
+			record.setIdRecord(result.getInt("id_recordabsen"));
+			record.setWaktuMasuk(result.getTime("jamAbsenMasuk"));
+			record.setWaktuPulang(result.getTime("jamAbsenPulang"));
+			record.setWaktuIstirahat(result.getTime("jamAbsenMulaiIstirahat"));
+			record.setWaktuSelesaiIstirahat(result.getTime("jamAbsenKembaliIstirahat"));
+			record.setTglRecord(result.getDate("tanggalrecord"));
+
+			return record;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -254,17 +301,17 @@ public class DBAbsensi {
 
 	public Karyawan getDataKaryawan(String idKaryawan) throws SQLException {
 		final String sql = "SELECT "
-			    + "a.id_karyawan, a.nama_karyawan, a.password, b.nama_prodi,"
-		            + " c.nama_jabatan, d.role, e.jamMasukKerja, e.jamPulangKerja,"
-		            + " e.jamIstirahat, e.jamSelesaiIstirahat"
+			+ "a.id_karyawan, a.nama_karyawan, a.password, b.nama_prodi,"
+			+ " c.nama_jabatan, d.role, e.jamMasukKerja, e.jamPulangKerja,"
+			+ " e.jamIstirahat, e.jamSelesaiIstirahat"
 			+ " FROM"
-			    + " tkaryawan a, tprodi b, tjabatan c, trole d, tshift e"
+			+ " tkaryawan a, tprodi b, tjabatan c, trole d, tshift e"
 			+ " WHERE"
-			    + " a.id_karyawan = ? "
-			    + "AND a.id_prodi = b.id_prodi "
-			    + "AND a.id_jabatan = c.id_jabatan "
-		            + "AND a.id_role = d.id_role "
-			    + "AND a.id_shift = e.id_shift;";
+			+ " a.id_karyawan = ? "
+			+ "AND a.id_prodi = b.id_prodi "
+			+ "AND a.id_jabatan = c.id_jabatan "
+			+ "AND a.id_role = d.id_role "
+			+ "AND a.id_shift = e.id_shift;";
 
 		try {
 			PreparedStatement query = this.getConnection().prepareStatement(sql);

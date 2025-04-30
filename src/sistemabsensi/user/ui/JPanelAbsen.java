@@ -4,7 +4,9 @@
  */
 package sistemabsensi.user.ui;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Timer;
@@ -23,7 +25,8 @@ public class JPanelAbsen extends javax.swing.JPanel {
 
 	private JFrameAbsensi frameAbsensi;
 	private DBAbsensi dbAbsensi;
-	private Timer timer;
+	private Timer timerJam; // buat tampilan jam
+	private Timer timerSync; // buat update data terkini
 
 	/**
 	 * Creates new form JPanelAbsen
@@ -32,13 +35,12 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		this.frameAbsensi = frameAbsensi;
 		this.dbAbsensi = frameAbsensi.getDB();
 		initComponents();
+		
+		this.tabelData.setRowHeight(21);
+		this.tabelData.setDefaultEditor(Object.class, null);
 
-		this.comboModeAbsen.addItem("MASUK KERJA");
-		this.comboModeAbsen.addItem("PULANG KERJA");
-		this.comboModeAbsen.addItem("ISTIRAHAT");
-		this.comboModeAbsen.addItem("KEMBALI ISTIRAHAT");
-		this.timer = new Timer();
-		this.timer.scheduleAtFixedRate(new TimerTask() {
+		this.timerJam = new Timer();
+		this.timerJam.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				LocalTime waktu = LocalTime.now();
 				DateTimeFormatter format = DateTimeFormatter.ofPattern("hh:mm:ss a");
@@ -46,6 +48,16 @@ public class JPanelAbsen extends javax.swing.JPanel {
 				labelWaktu.setText(waktu.format(format));
 			}
 		}, 0, 1000);
+
+		this.timerSync = new Timer();
+		this.timerSync.scheduleAtFixedRate(new TimerTask() {
+
+			public void run() {
+				dapatkanDataTerkini();
+
+			}
+		},
+			0, 1 * 6_000_000); // tiap 5 menit (1 menit == 6.000.000 ms);
 	}
 
 	/**
@@ -57,34 +69,24 @@ public class JPanelAbsen extends javax.swing.JPanel {
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
-                comboModeAbsen = new javax.swing.JComboBox<>();
                 labelWaktu = new javax.swing.JLabel();
                 btnAbsen = new javax.swing.JButton();
                 jScrollPane1 = new javax.swing.JScrollPane();
                 tabelData = new javax.swing.JTable();
                 comboDaftarTanggalRecord = new javax.swing.JComboBox<>();
                 btnLogout = new javax.swing.JButton();
-                jCheckBox1 = new javax.swing.JCheckBox();
-                jScrollPane3 = new javax.swing.JScrollPane();
-                jTable1 = new javax.swing.JTable();
+                jScrollPane2 = new javax.swing.JScrollPane();
+                jTextArea1 = new javax.swing.JTextArea();
+                btnRefresh = new javax.swing.JButton();
 
                 setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-                comboModeAbsen.setFont(comboModeAbsen.getFont().deriveFont(comboModeAbsen.getFont().getStyle() | java.awt.Font.BOLD));
-                comboModeAbsen.setModel(new javax.swing.DefaultComboBoxModel<>());
-                comboModeAbsen.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                comboModeAbsenActionPerformed(evt);
-                        }
-                });
-                add(comboModeAbsen, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 120, 170, 30));
 
                 labelWaktu.setBackground(new java.awt.Color(255, 255, 255));
                 labelWaktu.setFont(new java.awt.Font("sansserif", 0, 36)); // NOI18N
                 labelWaktu.setForeground(new java.awt.Color(51, 204, 0));
                 labelWaktu.setText("00:00:00 AM");
                 labelWaktu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-                add(labelWaktu, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 40, 230, 80));
+                add(labelWaktu, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 230, 40));
 
                 btnAbsen.setFont(new java.awt.Font("sansserif", 0, 48)); // NOI18N
                 btnAbsen.setText("ABSEN");
@@ -93,8 +95,9 @@ public class JPanelAbsen extends javax.swing.JPanel {
                                 btnAbsenActionPerformed(evt);
                         }
                 });
-                add(btnAbsen, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 40, 290, -1));
+                add(btnAbsen, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 450, -1));
 
+                tabelData.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null},
@@ -109,7 +112,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
                 tabelData.setShowGrid(true);
                 jScrollPane1.setViewportView(tabelData);
 
-                add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 560, 370));
+                add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 770, 130));
 
                 comboDaftarTanggalRecord.setModel(new javax.swing.DefaultComboBoxModel<>());
                 comboDaftarTanggalRecord.addActionListener(new java.awt.event.ActionListener() {
@@ -117,7 +120,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
                                 comboDaftarTanggalRecordActionPerformed(evt);
                         }
                 });
-                add(comboDaftarTanggalRecord, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 560, 180, 30));
+                add(comboDaftarTanggalRecord, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 180, 30));
 
                 btnLogout.setText("Logout");
                 btnLogout.addActionListener(new java.awt.event.ActionListener() {
@@ -127,46 +130,42 @@ public class JPanelAbsen extends javax.swing.JPanel {
                 });
                 add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 560, -1, 30));
 
-                jCheckBox1.setText("jCheckBox1");
-                jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+                jTextArea1.setColumns(20);
+                jTextArea1.setRows(5);
+                jScrollPane2.setViewportView(jTextArea1);
+
+                add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 770, -1));
+
+                btnRefresh.setText("REFRESH");
+                btnRefresh.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jCheckBox1ActionPerformed(evt);
+                                btnRefreshActionPerformed(evt);
                         }
                 });
-                add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 110, 30));
-
-                jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                        new Object [][] {
-                                {null, null, null, null},
-                                {null, null, null, null},
-                                {null, null, null, null},
-                                {null, null, null, null}
-                        },
-                        new String [] {
-                                "Title 1", "Title 2", "Title 3", "Title 4"
-                        }
-                ));
-                jScrollPane3.setViewportView(jTable1);
-
-                add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 210, 370));
+                add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
         }// </editor-fold>//GEN-END:initComponents
 
 	private void dapatkanDataRecord() {
 		try {
-			DefaultTableModel model = new DefaultTableModel();
-			model.addColumn("Tanggal");
-			model.addColumn("Absen Masuk");
-			model.addColumn("Absen Pulang");
-			model.addColumn("Absen Istirahat");
-			model.addColumn("Absen Kembali Istirahat");
 			this.comboDaftarTanggalRecord.removeAllItems();
 
 			for (RecordAbsen record : this.dbAbsensi.getDaftarRecordAbsenKaryawan(this.frameAbsensi.getKaryawan().getIdKaryawan())) {
 				this.comboDaftarTanggalRecord.addItem(record.getTglRecord().toString());
-				Object[] dataBaris = {record.getTglRecord(), record.getWaktuMasuk(), record.getWaktuPulang(), record.getWaktuIstirahat(), record.getWaktuSelesaiIstirahat()};
-				model.addRow(dataBaris);
 			}
-			this.tabelData.setModel(model);
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			System.exit(-1);
+		}
+	}
+
+	public void dapatkanDataTerkini() {
+		try {
+			if (this.frameAbsensi.getKaryawan() == null) {
+				return;
+			}
+			this.frameAbsensi.setKaryawan(this.dbAbsensi.getDataKaryawan(this.frameAbsensi.getKaryawan().getIdKaryawan()));
+			updateTeksTombolAbsen();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			System.exit(-1);
@@ -177,18 +176,79 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn("Masuk - Pulang");
 		model.addColumn("Istirahat");
-		
-		Shift shift = frameAbsensi.getKaryawan().getShift();
-		
-		Object[] baris = { shift.getWaktuMasuk() + " - " + shift.getWaktuPulang(), shift.getWaktuIstirahat() + " - " + shift.getWaktuSelesaiIstirahat()};
-		model.addRow(baris);
-		
-		//this.jTable1.setModel(model);
 
+		Shift shift = frameAbsensi.getKaryawan().getShift();
+
+		Object[] baris = {shift.getWaktuMasuk() + " - " + shift.getWaktuPulang(), shift.getWaktuIstirahat() + " - " + shift.getWaktuSelesaiIstirahat()};
+
+		model.addRow(baris);
+
+		//this.jTable1.setModel(model);
 	}
 
 	private void tampilkanPesan(String pesan) {
 		JOptionPane.showMessageDialog(this, pesan);
+	}
+
+	private Time tambahkanToleransiTelat(Time waktu, int menit) {
+		LocalTime time = waktu.toLocalTime();
+		return Time.valueOf(time.plusMinutes(menit));
+	}
+
+	private Time tambahkanToleransiAbsenDini(Time waktu, int menit) {
+		LocalTime time = waktu.toLocalTime();
+		return Time.valueOf(time.minusMinutes(menit));
+	}
+
+	private boolean cekJikaDiantaraJangkaWaktu(Time min, Time waktu, Time max) {
+		return (waktu.after(min) && waktu.before(max));
+	}
+
+	private boolean cekJikaSaatnyaWaktuShift(Time waktuShift) {
+		final int TOLERANSI = 5; // menit
+
+		final Time waktuSekarang = Time.valueOf(LocalTime.now());
+		final Time waktuAbsenMaksimum = tambahkanToleransiTelat(waktuShift, TOLERANSI);
+		final Time waktuAbsenMinimum = tambahkanToleransiAbsenDini(waktuShift, TOLERANSI);
+
+		return cekJikaDiantaraJangkaWaktu(waktuAbsenMinimum, waktuSekarang, waktuAbsenMaksimum);
+	}
+
+	private void updateTeksTombolAbsen() {
+		final Shift shift = frameAbsensi.getKaryawan().getShift();
+
+		if (cekJikaSaatnyaWaktuShift(shift.getWaktuMasuk())) {
+			this.btnAbsen.setText("ABSEN MASUK");
+		} else if (cekJikaSaatnyaWaktuShift(shift.getWaktuIstirahat())) {
+			this.btnAbsen.setText("ABSEN ISTIRAHAT");
+		} else if (cekJikaSaatnyaWaktuShift(shift.getWaktuSelesaiIstirahat())) {
+			this.btnAbsen.setText("ABSEN KEMBALI ISTIRAHAT");
+		} else if (cekJikaSaatnyaWaktuShift(shift.getWaktuPulang())) {
+			this.btnAbsen.setText("ABSEN KEMBALI ISTIRAHAT");
+		} else {
+			this.btnAbsen.setText("INVALID");
+		}
+	}
+
+	private boolean sudahAbsenKembaliIstirahat() {
+		return this.frameAbsensi.getKaryawan().getRecordAbsen().getWaktuSelesaiIstirahat() != null;
+	}
+
+	private boolean sudahAbsenIstirahat() {
+		return this.frameAbsensi.getKaryawan().getRecordAbsen().getWaktuIstirahat() != null;
+	}
+
+	private boolean sudahAbsenMasuk() {
+		return this.frameAbsensi.getKaryawan().getRecordAbsen().getWaktuMasuk() != null;
+	}
+
+	private boolean sudahAbsenPulang() {
+		return this.frameAbsensi.getKaryawan().getRecordAbsen().getWaktuPulang() != null;
+	}
+
+	private Time hitungPerbedaan(Time a, Time b) {
+
+		return null;
 	}
 
         private void btnAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbsenActionPerformed
@@ -197,52 +257,66 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		// PROMPT: !PULANG -> MASUK KERJA -> ((!KEMBALI ISTIRAHAT -> ISTIRAHAT -> KEMBALI ISTIRAHAT) || PULANG)
 		try {
 			RecordAbsen record = frameAbsensi.getKaryawan().getRecordAbsen();
-			switch (comboModeAbsen.getItemAt(comboModeAbsen.getSelectedIndex())) {
-				case "MASUK KERJA":
-					if (record.getWaktuMasuk() != null) {
-						tampilkanPesan("ANDA SUDAH ABSEN MASUK");
-						return;
-					} else if (record.getWaktuPulang() != null) {
-						tampilkanPesan("Anda Sudah Absen Pulang!");
-						return;
-					}
+			final Shift shift = frameAbsensi.getKaryawan().getShift();
+
+			if (cekJikaSaatnyaWaktuShift(shift.getWaktuMasuk())) {
+
+				if (sudahAbsenMasuk()) {
+					this.tampilkanPesan("Anda sudah Absen Masuk");
+					return;
+				} else {
 					record.catatWaktuMasuk();
-					break;
-				case "PULANG KERJA":
-					if (record.getWaktuPulang() != null) {
-						tampilkanPesan("ANDA SUDAH ABSEN Pulang");
-						return;
-					}
-					record.catatWaktuPulang();
-					break;
-				case "ISTIRAHAT":
-					if (record.getWaktuIstirahat() != null) {
-						tampilkanPesan("Anda Sudah Absen Istirahat");
-						return;
-					}
+				}
+
+			} else if (cekJikaSaatnyaWaktuShift(shift.getWaktuIstirahat())) {
+
+				if (sudahAbsenIstirahat()) {
+					this.tampilkanPesan("Anda sudah Absen Istirahat");
+					return;
+				} else if (!sudahAbsenMasuk()) {
+					this.tampilkanPesan("Anda Tidak Absen Masuk Hari ini!");
+					return;
+				} else {
 					record.catatWaktuIstirahat();
-					break;
-				case "KEMBALI ISTIRAHAT":
-					if (record.getWaktuSelesaiIstirahat() != null) {
-						tampilkanPesan("Anda Sudah Absen Kembali Istirahat");
-						return;
-					}
+				}
+
+			} else if (cekJikaSaatnyaWaktuShift(shift.getWaktuSelesaiIstirahat())) {
+
+				if (sudahAbsenKembaliIstirahat()) {
+					this.tampilkanPesan("Anda sudah Absen Kembali Istirahat");
+					return;
+				} else if (!sudahAbsenIstirahat()) {
+					this.tampilkanPesan("Anda Tidak Absen Istirahat Hari ini!.");
+					return;
+				} else {
 					record.catatWaktuSelesaiIstirahat();
-					break;
+				}
+
+			} else if (cekJikaSaatnyaWaktuShift(shift.getWaktuPulang())) {
+
+				if (sudahAbsenPulang()) {
+					this.tampilkanPesan("Anda sudah Absen Pulang");
+					return;
+				} else if (!sudahAbsenMasuk()) {
+					this.tampilkanPesan("Anda Tidak Absen Masuk Hari ini!.");
+					return;
+				} else {
+					record.catatWaktuPulang();
+				}
+			} else {
+				this.tampilkanPesan("ANDA MENCOBA ABSEN DILUAR JAM SHIFT ANDA");
+				return;
 			}
 
 			this.dbAbsensi.updateRecordAbsenKaryawan(this.frameAbsensi.getKaryawan().getRecordAbsen());
 			this.frameAbsensi.setKaryawan(this.dbAbsensi.getDataKaryawan(this.frameAbsensi.getKaryawan().getIdKaryawan()));
 			this.dapatkanDataRecord();
+
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			System.exit(-1);
 		}
         }//GEN-LAST:event_btnAbsenActionPerformed
-
-        private void comboModeAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboModeAbsenActionPerformed
-		// TODO add your handling code here:
-        }//GEN-LAST:event_comboModeAbsenActionPerformed
 
         private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
 		this.frameAbsensi.setKaryawan(null);
@@ -250,29 +324,55 @@ public class JPanelAbsen extends javax.swing.JPanel {
         }//GEN-LAST:event_btnLogoutActionPerformed
 
         private void comboDaftarTanggalRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDaftarTanggalRecordActionPerformed
-		// TODO add your handling code here:
+		try {
+			String tanggalCombo = (String) this.comboDaftarTanggalRecord.getSelectedItem();
+			if ( tanggalCombo == null || tanggalCombo.isBlank() || tanggalCombo.isEmpty() ) return;
+			RecordAbsen record = dbAbsensi.getRecordAbsenKaryawan(this.frameAbsensi.getKaryawan().getIdKaryawan(), Date.valueOf(tanggalCombo));
+			Shift shift = this.frameAbsensi.getKaryawan().getShift();
+			DefaultTableModel model = new DefaultTableModel();
+
+			model.addColumn("SHIFT");
+			model.addColumn("JAM ABSEN");
+			model.addColumn("CATATAN");
+
+			Object[] barisMasuk = {"MASUK", record.getWaktuMasuk()};
+			Object[] barisIstirahat = {"ISTIRAHAT", record.getWaktuIstirahat()};
+			Object[] barisKembaliIstirahat = {"KEMBALI ISTIRAHAT", record.getWaktuSelesaiIstirahat()};
+			Object[] barisPulang = {"PULANG", record.getWaktuPulang()};
+
+
+			model.addRow(barisMasuk);
+			model.addRow(barisIstirahat);
+			model.addRow(barisKembaliIstirahat);
+			model.addRow(barisPulang);
+
+			this.tabelData.setModel(model);
+		} catch (SQLException | IllegalArgumentException ex) {
+			ex.printStackTrace();
+			System.exit(-1);
+		}
         }//GEN-LAST:event_comboDaftarTanggalRecordActionPerformed
 
-        private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-                // TODO add your handling code here:
-        }//GEN-LAST:event_jCheckBox1ActionPerformed
+        private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+		dapatkanData();
+        }//GEN-LAST:event_btnRefreshActionPerformed
 
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnAbsen;
         private javax.swing.JButton btnLogout;
+        private javax.swing.JButton btnRefresh;
         private javax.swing.JComboBox<String> comboDaftarTanggalRecord;
-        private javax.swing.JComboBox<String> comboModeAbsen;
-        private javax.swing.JCheckBox jCheckBox1;
         private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JScrollPane jScrollPane3;
-        private javax.swing.JTable jTable1;
+        private javax.swing.JScrollPane jScrollPane2;
+        private javax.swing.JTextArea jTextArea1;
         private javax.swing.JLabel labelWaktu;
         private javax.swing.JTable tabelData;
         // End of variables declaration//GEN-END:variables
 
 	public void dapatkanData() {
 		//this.dapatkanDataJadwalShift();
+		this.dapatkanDataTerkini();
 		this.dapatkanDataRecord();
 	}
 }

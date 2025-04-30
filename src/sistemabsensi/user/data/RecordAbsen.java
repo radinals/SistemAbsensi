@@ -20,6 +20,7 @@ public class RecordAbsen {
 	private Time waktuIstirahat;
 	private Time waktuSelesaiIstirahat;
 	private Date tglRecord;
+	private CatatanRecord catatanRecord;
 
 	public RecordAbsen(int idRecord, int idKaryawan, Time waktuMasuk, Time waktuPulang, Time waktuIstirahat, Time waktuSelesaiIstirahat, Date tglRecord) {
 		this.waktuMasuk = waktuMasuk;
@@ -31,6 +32,11 @@ public class RecordAbsen {
 
 	public RecordAbsen() {
 		this(-1, -1, null, null, null, null, null);
+	}
+	
+	public void tambahkanCatatanAbsen(String catatan) {
+		assert(catatan.length() <= 30);
+		this.catatanRecord.tambahkanCatatan(catatan);
 	}
 	
 	private Time getWaktuTerkini() {
