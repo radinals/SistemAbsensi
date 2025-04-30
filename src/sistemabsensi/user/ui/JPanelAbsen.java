@@ -48,16 +48,6 @@ public class JPanelAbsen extends javax.swing.JPanel {
 				labelWaktu.setText(waktu.format(format));
 			}
 		}, 0, 1000);
-
-		this.timerSync = new Timer();
-		this.timerSync.scheduleAtFixedRate(new TimerTask() {
-
-			public void run() {
-				dapatkanDataTerkini();
-
-			}
-		},
-			0, 1 * 6_000_000); // tiap 5 menit (1 menit == 6.000.000 ms);
 	}
 
 	/**
