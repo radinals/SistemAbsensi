@@ -8,7 +8,14 @@ package sistemabsensi.user.data;
  *
  * @author rss
  */
+
+
+//------------------------------------------------------------------------------------------------------//
+// Class Karyawan menyimpan seluruh set data yang dimiliki atau berhubungan langsung seorang karyawan.  //
+//------------------------------------------------------------------------------------------------------//
+
 public class Karyawan {
+
 	private String idKaryawan;
 	private String namaKaryawan;
 	private String password;
@@ -17,9 +24,9 @@ public class Karyawan {
 	private Shift shift;
 	private String role;
 	private RecordAbsen recordAbsen;
-	
+
 	public Karyawan() {
-		this(null,null, null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null, null);
 	}
 
 	public Karyawan(String idKaryawan, String namaKaryawan, String password, String namaProdi, String jabatan, Shift shift, String role, RecordAbsen recordAbsen) {
@@ -96,7 +103,5 @@ public class Karyawan {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
-	
-	
+
 }

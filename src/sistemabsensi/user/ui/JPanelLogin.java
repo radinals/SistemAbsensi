@@ -154,6 +154,10 @@ public class JPanelLogin extends javax.swing.JPanel{
                 add(jPanel1);
         }// </editor-fold>//GEN-END:initComponents
 
+	//---------------------------------------------------------------------//
+	// Event tombol login ditekan                                          //
+	//---------------------------------------------------------------------//
+	
         private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
                 if (fieldPassword.getText().isEmpty() && textFieldID.getText().isEmpty()) {
@@ -165,34 +169,43 @@ public class JPanelLogin extends javax.swing.JPanel{
                 } else if (textFieldID.getText().isEmpty()) {
                         tampilkanDialog("Masukan ID!");
                         textFieldID.requestFocus();
-                } else {
+                } else { // jika field password dan id sudah valid
 
-                        String idKaryawan = textFieldID.getText();
-
-                        String password = fieldPassword.getText();
+                        final String idKaryawan = textFieldID.getText();
+                        final String password = fieldPassword.getText();
 
                         // TODO: cek role user
+			// cek jika data karyawan yang memiliki id yg diinput ada di database.
                         if (dbAbsensi.isDataKaryawanAda(idKaryawan)) {
                                 try {
+					
                                         Karyawan karyawan = dbAbsensi.getDataKaryawan(idKaryawan);
 
                                         if (karyawan.getRole() == null) {
                                                 tampilkanDialog("Pastikan anda telah terdaftar sebagai karyawan!");
                                                 fieldPassword.setText("");
                                                 textFieldID.setText("");
-                                        }else if (karyawan.getPassword().equals(password)) {
+						return;
+                                        }
+					
+					if (karyawan.getPassword().equals(password)) { // jika password sesuai
+						// karyawan yang absen disimpan
                                                 this.frameAbsensi.setKaryawan(karyawan);
+						// buka tampilan absen
                                                 this.frameAbsensi.bukaPanelAbsen();
-                                        } else {
+                                        } else {                                       // jika password salah
                                                 tampilkanDialog("Password Salah!");
                                                 fieldPassword.setText("");
                                                 fieldPassword.requestFocus();
                                         }
+					
+					
                                 } catch (SQLException e) {
                                         e.printStackTrace();
                                         System.exit(-1);
                                 }
-                        } else {
+				
+                        } else { // keluar jika tidak terdaftar
                                 tampilkanDialog("Pastikan anda telah terdaftar sebagai karyawan!");
                                 fieldPassword.setText("");
                                 textFieldID.setText("");

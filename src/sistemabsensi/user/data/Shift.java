@@ -22,6 +22,10 @@ public class Shift {
 		this.waktuIstirahat = waktuIstirahat;
 		this.waktuSelesaiIstirahat = waktuSelesaiIstirahat;
 	}
+	
+	// getter
+	// (Tidak memerlukan setter karena user tidak
+	//  memiliki kemampuan untuk merubah shift)
 
 	public Time getWaktuMasuk() {
 		return waktuMasuk;

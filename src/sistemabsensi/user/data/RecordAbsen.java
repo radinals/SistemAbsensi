@@ -34,14 +34,24 @@ public class RecordAbsen {
 		this(-1, -1, null, null, null, null, null);
 	}
 	
+	//--------------------------------------------------------------------------//
+	// digunakan untuk membuat catatan absen (liat tdetailabsen)                //
+	//--------------------------------------------------------------------------//
+	
 	public void tambahkanCatatanAbsen(String catatan) {
 		assert(catatan.length() <= 30);
 		this.catatanRecord.tambahkanCatatan(catatan);
 	}
 	
+	// waktu sekarang terformat dengan SQL
+	
 	private Time getWaktuTerkini() {
 		return Time.valueOf(LocalTime.now());
 	}
+	
+	//------------------------------------------------------------------------------//
+	// method untuk dengan mudah mencatat waktu absen sesuai waktu sekarang         //
+	//------------------------------------------------------------------------------//
 	
 	public void catatWaktuMasuk() {
 		this.waktuMasuk = getWaktuTerkini();
@@ -58,6 +68,8 @@ public class RecordAbsen {
 	public void catatWaktuSelesaiIstirahat() {
 		this.waktuSelesaiIstirahat = getWaktuTerkini();
 	}
+	
+	// getter & setter
 
 	public void setWaktuMasuk(Time waktuMasuk) {
 		this.waktuMasuk = waktuMasuk;

@@ -16,8 +16,18 @@ import sistemabsensi.user.data.Karyawan;
  *
  * @author rss
  */
+
+// Aplikasi disusun dengan menggunakan satu jframe yang
+// memiliki jpanel yang banyak.
+
+// Hierarki Tampilan,
+// JFrameAbsensi (JFrame)
+//   |---- panelUtama (JPanel) <-- Menggunakan CardLayout
+//             |--- JPanelLogin (JPanel)
+//             |--- JPanelAbsen (JPanel)
+
 public class JFrameAbsensi extends JFrame {
-	private JPanel panelUtama;
+	private JPanel panelUtama; // Panel utama dari frame ini
 	private CardLayout layoutPanelUtama;
 	private DBAbsensi dbAbsensi;
 	private Karyawan karyawan;
@@ -28,6 +38,8 @@ public class JFrameAbsensi extends JFrame {
 	public JFrameAbsensi() {
 		this.dbAbsensi = new DBAbsensi();
 		initFrame();
+		initJPanelUtama();
+		bukaPanelLogin();
 	}
 	
 	private void initFrame() {
@@ -35,20 +47,25 @@ public class JFrameAbsensi extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setLayout(new GridLayout());
+
+	}
+	
+	private void initJPanelUtama() {
+
+		// Agar dapat menyimpan banayk JPanel dalam satu
+		// Jpanel, digunakan CardLayout. Agar JPanel yang
+		// terkandung seperti tumpukan kartu.
 		
 		this.layoutPanelUtama = new CardLayout();
 		this.panelUtama = new JPanel(this.layoutPanelUtama);
 		
-		panelLogin = new JPanelLogin(this);
-		panelAbsen = new JPanelAbsen(this);
+		this.panelLogin = new JPanelLogin(this);
+		this.panelAbsen = new JPanelAbsen(this);
 		
 		this.panelUtama.add("LOGIN", panelLogin);
 		this.panelUtama.add("ABSEN", panelAbsen);
-
 		
 		this.add(this.panelUtama);
-		
-		bukaPanelLogin();
 	}
 	
 	public Karyawan getKaryawan() {

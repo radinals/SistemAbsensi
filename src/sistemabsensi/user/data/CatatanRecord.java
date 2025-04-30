@@ -8,6 +8,11 @@ package sistemabsensi.user.data;
  *
  * @author rss
  */
+
+//-----------------------------------------------------------------------------//
+// Class ini untuk membuat data baru pada tdetailabsen, catatan absensi        //
+// hanya diperlukan untuk membuat catatan, user tidak dapat mengedit           //
+//-----------------------------------------------------------------------------//
 public class CatatanRecord {
 	private final int idRecord;
 	private DBAbsensi db;
