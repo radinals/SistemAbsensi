@@ -7,6 +7,7 @@ package sistemabsensi.user.ui;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Timer;
@@ -33,12 +34,12 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	public JPanelAbsen(JFrameAbsensi frameAbsensi) {
 		this.frameAbsensi = frameAbsensi;
 		this.dbAbsensi = frameAbsensi.getDB();
-		
+
 		initComponents();
-		
+
 		// untuk membuat baris tabel lebih tinggi
 		this.tabelData.setRowHeight(21);
-		
+
 		// agar tabel tidak bisa diedit oleh user
 		this.tabelData.setDefaultEditor(Object.class, null);
 
@@ -139,11 +140,10 @@ public class JPanelAbsen extends javax.swing.JPanel {
                 });
                 add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
         }// </editor-fold>//GEN-END:initComponents
-	
+
 	//--------------------------------------------------------------------------------------------------------------//
 	// Melakukan query SELECT pada data record, hanya digunakan untuk mendapat tanggal-tanggal dari record yang ada //
 	//--------------------------------------------------------------------------------------------------------------//
-	
 	private void isiDaftarTanggalCombo() {
 		try {
 			this.comboDaftarTanggalRecord.removeAllItems();
@@ -157,11 +157,10 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			System.exit(-1);
 		}
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------//
 	// Melakukan query SELECT pada database, dapatkan data karyawan terlogin                         //
 	//-----------------------------------------------------------------------------------------------//
-
 	public void dapatkanDataTerkini() {
 		try {
 			if (this.frameAbsensi.getKaryawan() == null) {
@@ -174,18 +173,16 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			System.exit(-1);
 		}
 	}
-	
-	// tampilkan peringatan dll
 
+	// tampilkan peringatan dll
 	private void tampilkanPesan(String pesan) {
 		JOptionPane.showMessageDialog(this, pesan);
 	}
-	
+
 	//---------------------------------------------------------------------------------------------//
 	// Kembalikan salinan waktu yang telah ditambah/dikurang menitnya                              //
 	// digunakan untuk menghasilkan range/jangka waktu.                                            //
 	//---------------------------------------------------------------------------------------------//
-
 	private Time tambahkanToleransiTelat(Time waktu, int menit) {
 		LocalTime time = waktu.toLocalTime();
 		return Time.valueOf(time.plusMinutes(menit));
@@ -195,19 +192,17 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		LocalTime time = waktu.toLocalTime();
 		return Time.valueOf(time.minusMinutes(menit));
 	}
-	
+
 	//------------------------------------------------------------------------------------------------//
 	// cek jika 'waktu' diantara 'min' dan 'max'                                                      //
 	//------------------------------------------------------------------------------------------------//
-
 	private boolean cekJikaDiantaraJangkaWaktu(Time min, Time waktu, Time max) {
 		return (waktu.after(min) && waktu.before(max));
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------//
 	// cek jika waktu sekarang diantara jangka waktu -5 menit atau +5 menit jadwal shift               //
 	//-------------------------------------------------------------------------------------------------//
-
 	private boolean cekJikaSaatnyaWaktuShift(Time waktuShift) {
 		final int TOLERANSI = 5; // menit
 
@@ -216,14 +211,12 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		final Time waktuAbsenMinimum = tambahkanToleransiAbsenDini(waktuShift, TOLERANSI);
 
 		return cekJikaDiantaraJangkaWaktu(waktuAbsenMinimum, waktuSekarang, waktuAbsenMaksimum);
-	
-	
+
 	}
-	
+
 	//----------------------------------------------------------------------------------------------------//
 	// update teks tombol absen agar sesuai dengan waktu terkini.                                         //
 	//----------------------------------------------------------------------------------------------------//
-
 	private void updateTeksTombolAbsen() {
 		final Shift shift = frameAbsensi.getKaryawan().getShift();
 
@@ -239,13 +232,12 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			this.btnAbsen.setText("INVALID");
 		}
 	}
-	
+
 	//---------------------------------------------------------------------------------------------------//
 	// Pengecekan Jika sudah Absen                                                                       //
 	//                                                                                                   //
 	// Data Record didapatkan dari saat login. dapat diupdate (Jika Diperlukan dengan tombol refresh     //
 	//---------------------------------------------------------------------------------------------------//
-	
 	private boolean sudahAbsenKembaliIstirahat() {
 		return this.frameAbsensi.getKaryawan().getRecordAbsen().getWaktuSelesaiIstirahat() != null;
 	}
@@ -262,13 +254,20 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		return this.frameAbsensi.getKaryawan().getRecordAbsen().getWaktuPulang() != null;
 	}
 
-	
 	// TODO: tambahkan perhitungan perbedaan antara dua waktu.
-	private Time hitungPerbedaan(Time a, Time b) {
+	private String hitungPerbedaan(Time a, Time b) {
+		final LocalTime start = a.toLocalTime();
+		final LocalTime end = b.toLocalTime();
 
-		return null;
+		final Duration duration = Duration.between(start, end);
+		
+		final long jam = duration.toHours();
+		final long menit = duration.toMinutesPart();
+		final long detik = duration.toMinutesPart();
+		
+		return String.format("(%d JAM, %d MENIT, %d DETIK)",jam, menit, detik);
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------------//
 	// Event tombol absen ditekan                                                                            //
 	//-------------------------------------------------------------------------------------------------------//
@@ -277,7 +276,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 
 		try {
 			this.dapatkanData(); // memastikan absen menggunakan data terbaru
-			
+
 			RecordAbsen record = frameAbsensi.getKaryawan().getRecordAbsen();
 			final Shift shift = frameAbsensi.getKaryawan().getShift();
 
@@ -329,10 +328,10 @@ public class JPanelAbsen extends javax.swing.JPanel {
 				this.tampilkanPesan("ANDA MENCOBA ABSEN DILUAR JAM SHIFT ANDA");
 				return;
 			}
-			
+
 			// jalankan query UPDATE data record di database
 			this.dbAbsensi.updateRecordAbsenKaryawan(record);
-			
+
 			// pemanggilan untuk memperbarui data-data yang disimpan oleh program agar mengikuti
 			// perubahan-perubahan.
 			this.dapatkanData();
@@ -348,6 +347,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	// data karyawan yang disimpan di jframe di reset dan kembali ke panel login                       //
 	//-------------------------------------------------------------------------------------------------//
         private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+		this.dbAbsensi.tandaiKaryawanTerLogout(this.frameAbsensi.getKaryawan().getIdKaryawan());
 		this.frameAbsensi.setKaryawan(null);
 		this.frameAbsensi.bukaPanelLogin();
         }//GEN-LAST:event_btnLogoutActionPerformed
@@ -358,16 +358,17 @@ public class JPanelAbsen extends javax.swing.JPanel {
         private void comboDaftarTanggalRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDaftarTanggalRecordActionPerformed
 		try {
 			final String tanggalCombo = (String) this.comboDaftarTanggalRecord.getSelectedItem(); // dapatkan nilai tanggal yang teratas
-			
-			if ( tanggalCombo == null || tanggalCombo.isBlank() || tanggalCombo.isEmpty() ) return; // pastikan ada data tanggal
-			
+
+			if (tanggalCombo == null || tanggalCombo.isBlank() || tanggalCombo.isEmpty()) {
+				return; // pastikan ada data tanggal
+			}
 			// lakukan query SELECT pada record absen.
 			// dapatkan data record untuk tanggal tersebut untuk karyawan yang terlogin
 			final RecordAbsen record = this.dbAbsensi.getRecordAbsenKaryawan(
 				this.frameAbsensi.getKaryawan().getIdKaryawan(),
 				Date.valueOf(tanggalCombo)
 			);
-			
+
 			DefaultTableModel model = new DefaultTableModel();
 
 			model.addColumn("SHIFT");
@@ -385,7 +386,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			model.addRow(barisPulang);
 
 			this.tabelData.setModel(model); // update tampilan data
-			
+
 		} catch (SQLException | IllegalArgumentException ex) {
 			ex.printStackTrace();
 			System.exit(-1);

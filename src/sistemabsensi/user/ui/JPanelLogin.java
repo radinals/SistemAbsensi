@@ -186,11 +186,19 @@ public class JPanelLogin extends javax.swing.JPanel{
                                                 fieldPassword.setText("");
                                                 textFieldID.setText("");
 						return;
-                                        }
+                                        } else if (dbAbsensi.isKaryawanTerlogin(idKaryawan)) {
+						tampilkanDialog("Anda memiliki sesi login yang aktif di sistem absensi");
+                                                fieldPassword.setText("");
+                                                textFieldID.setText("");
+						return;
+					}
 					
 					if (karyawan.getPassword().equals(password)) { // jika password sesuai
 						// karyawan yang absen disimpan
                                                 this.frameAbsensi.setKaryawan(karyawan);
+						
+						this.dbAbsensi.tandaiKaryawanSedangLogin(idKaryawan);
+						
 						// buka tampilan absen
                                                 this.frameAbsensi.bukaPanelAbsen();
                                         } else {                                       // jika password salah

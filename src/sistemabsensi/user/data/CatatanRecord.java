@@ -22,7 +22,7 @@ public class CatatanRecord {
 		this.db = db;
 	}
 	
-	public void tambahkanCatatan(String catatan) {
-		this.db.buatDetailRecord(idRecord, catatan);
+	public void tambahkanCatatan(String catatan, KategoriCatatanAbsen kategori) {
+		this.db.buatDetailRecord(idRecord, catatan, kategori.toString());
 	}
 }

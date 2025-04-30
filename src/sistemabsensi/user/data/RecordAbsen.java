@@ -38,9 +38,9 @@ public class RecordAbsen {
 	// digunakan untuk membuat catatan absen (liat tdetailabsen)                //
 	//--------------------------------------------------------------------------//
 	
-	public void tambahkanCatatanAbsen(String catatan) {
+	public void tambahkanCatatanAbsen(String catatan, KategoriCatatanAbsen kategori) {
 		assert(catatan.length() <= 30);
-		this.catatanRecord.tambahkanCatatan(catatan);
+		this.catatanRecord.tambahkanCatatan(catatan, kategori);
 	}
 	
 	// waktu sekarang terformat dengan SQL
