@@ -25,7 +25,7 @@ public class DBConnection {
 		try {
 			this.connection = DriverManager.getConnection(url, username, password); 
 		} catch (SQLException e) { 
-			System.err.println("gagal menghubungkan database" + e.getMessage());
+			System.err.println("gagal menghubungkan database: " + e.getMessage());
 			System.exit(-1);
 		}
 	}

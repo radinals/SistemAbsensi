@@ -9,8 +9,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import sistemabsensi.database.DBAbsensi;
-import sistemabsensi.database.data.Karyawan;
+import sistemabsensi.user.data.DBAbsensi;
+import sistemabsensi.user.data.Karyawan;
 
 /**
  *

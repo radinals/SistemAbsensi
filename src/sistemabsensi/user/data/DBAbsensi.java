@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemabsensi.database;
+package sistemabsensi.user.data;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -15,9 +15,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import sistemabsensi.database.connection.DBConnection;
-import sistemabsensi.database.data.Karyawan;
-import sistemabsensi.database.data.RecordAbsen;
-import sistemabsensi.database.data.Shift;
+import sistemabsensi.user.data.Karyawan;
+import sistemabsensi.user.data.RecordAbsen;
+import sistemabsensi.user.data.Shift;
 
 /**
  *

@@ -1,39 +1,27 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package sistemabsensi.user.ui;
+package sistemabsensi.admin.ui;
 
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import sistemabsensi.user.data.DBAbsensi;
-import sistemabsensi.user.data.Karyawan;
 
 /**
  *
  * @author rss
  */
-public class JPanelLogin extends javax.swing.JPanel{
+public class JDialogLogin extends javax.swing.JDialog {
 
-	private JFrameAbsensi frameAbsensi;
-	private DBAbsensi dbAbsensi;
-	
 	/**
-	 * Creates new form LoginScreen
+	 * Creates new form JDialogLogin
 	 */
-	public JPanelLogin(JFrameAbsensi frameAbsensi) {
-		this.frameAbsensi = frameAbsensi;
-		this.dbAbsensi = frameAbsensi.getDB();
+	public JDialogLogin(java.awt.Frame parent, boolean modal) {
+		super(parent, modal);
 		initComponents();
 	}
 	
 	private void tampilkanDialog(String msg) {
-		JOptionPane.showMessageDialog(frameAbsensi, msg);
-	}
-	
-	public void resetInputBox() {
-		this.textFieldID.setText("");
-		this.fieldPassword.setText("");
+		JOptionPane.showMessageDialog(getParent(), msg);
 	}
 
 	/**
@@ -45,10 +33,6 @@ public class JPanelLogin extends javax.swing.JPanel{
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
-                jInternalFrame1 = new javax.swing.JInternalFrame();
-                jScrollPane1 = new javax.swing.JScrollPane();
-                jTable1 = new javax.swing.JTable();
-                jPanel1 = new javax.swing.JPanel();
                 jPanel2 = new javax.swing.JPanel();
                 jLabel4 = new javax.swing.JLabel();
                 jLabel3 = new javax.swing.JLabel();
@@ -56,37 +40,7 @@ public class JPanelLogin extends javax.swing.JPanel{
                 textFieldID = new javax.swing.JTextField();
                 fieldPassword = new javax.swing.JPasswordField();
 
-                jInternalFrame1.setVisible(true);
-
-                javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
-                jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
-                jInternalFrame1Layout.setHorizontalGroup(
-                        jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 0, Short.MAX_VALUE)
-                );
-                jInternalFrame1Layout.setVerticalGroup(
-                        jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 0, Short.MAX_VALUE)
-                );
-
-                jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                        new Object [][] {
-                                {null, null, null, null},
-                                {null, null, null, null},
-                                {null, null, null, null},
-                                {null, null, null, null}
-                        },
-                        new String [] {
-                                "Title 1", "Title 2", "Title 3", "Title 4"
-                        }
-                ));
-                jScrollPane1.setViewportView(jTable1);
-
-                setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
-
-                jPanel1.setMinimumSize(new java.awt.Dimension(800, 600));
-                jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
-                jPanel1.setLayout(null);
+                setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
                 jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -148,10 +102,28 @@ public class JPanelLogin extends javax.swing.JPanel{
                                 .addContainerGap(12, Short.MAX_VALUE))
                 );
 
-                jPanel1.add(jPanel2);
-                jPanel2.setBounds(210, 200, 390, 170);
+                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+                getContentPane().setLayout(layout);
+                layout.setHorizontalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 822, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 216, Short.MAX_VALUE)
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 216, Short.MAX_VALUE)))
+                );
+                layout.setVerticalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 478, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 154, Short.MAX_VALUE)
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 154, Short.MAX_VALUE)))
+                );
 
-                add(jPanel1);
+                pack();
         }// </editor-fold>//GEN-END:initComponents
 
         private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
@@ -204,19 +176,54 @@ public class JPanelLogin extends javax.swing.JPanel{
                 // TODO add your handling code here:
         }//GEN-LAST:event_textFieldIDActionPerformed
 
-	
+	/**
+	 * @param args the command line arguments
+	 */
+	public static void main(String args[]) {
+		/* Set the Nimbus look and feel */
+		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+		/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+		 */
+		try {
+			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (ClassNotFoundException ex) {
+			java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		} catch (InstantiationException ex) {
+			java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		} catch (IllegalAccessException ex) {
+			java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+			java.util.logging.Logger.getLogger(JDialogLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		}
+		//</editor-fold>
+
+		/* Create and display the dialog */
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				JDialogLogin dialog = new JDialogLogin(new javax.swing.JFrame(), true);
+				dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+					@Override
+					public void windowClosing(java.awt.event.WindowEvent e) {
+						System.exit(0);
+					}
+				});
+				dialog.setVisible(true);
+			}
+		});
+	}
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnLogin;
         private javax.swing.JPasswordField fieldPassword;
-        private javax.swing.JInternalFrame jInternalFrame1;
         private javax.swing.JLabel jLabel3;
         private javax.swing.JLabel jLabel4;
-        private javax.swing.JPanel jPanel1;
         private javax.swing.JPanel jPanel2;
-        private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JTable jTable1;
         private javax.swing.JTextField textFieldID;
         // End of variables declaration//GEN-END:variables
-
 }
