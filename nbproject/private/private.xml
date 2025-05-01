@@ -20,9 +20,12 @@
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/SistemAbsensiAdmin.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/data/Shift.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/data/Shift.java</file>
+            <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/data/CatatanRecord.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/data/DBAbsensi.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/ui/JDialogLogin.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/data/Karyawan.java</file>
+            <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/data/DBAbsensi.java</file>
+            <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/data/KategoriCatatanAbsen.java</file>
         </group>
     </open-files>
 </project-private>

@@ -79,8 +79,6 @@ public class JPanelAbsen extends javax.swing.JPanel {
                 tabelData = new javax.swing.JTable();
                 comboDaftarTanggalRecord = new javax.swing.JComboBox<>();
                 btnLogout = new javax.swing.JButton();
-                jScrollPane2 = new javax.swing.JScrollPane();
-                jTextArea1 = new javax.swing.JTextArea();
                 btnRefresh = new javax.swing.JButton();
 
                 setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -134,12 +132,6 @@ public class JPanelAbsen extends javax.swing.JPanel {
                 });
                 add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 560, -1, 30));
 
-                jTextArea1.setColumns(20);
-                jTextArea1.setRows(5);
-                jScrollPane2.setViewportView(jTextArea1);
-
-                add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 770, -1));
-
                 btnRefresh.setText("REFRESH");
                 btnRefresh.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,8 +178,6 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	private void tampilkanPesan(String pesan) {
 		JOptionPane.showMessageDialog(this, pesan);
 	}
-
-
 
 	//----------------------------------------------------------------------------------------------------//
 	// update teks tombol absen agar sesuai dengan waktu terkini.                                         //
@@ -243,7 +233,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	private boolean sudahAbsenPulang() {
 		return this.frameAbsensi.getKaryawan().getRecordAbsen().getWaktuPulang() != null;
 	}
-	
+
 	//---------------------------------------------------------------------------------------------//
 	// Kembalikan salinan waktu yang telah ditambah/dikurang menitnya                              //
 	// digunakan untuk menghasilkan range/jangka waktu.                                            //
@@ -257,11 +247,10 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		LocalTime time = waktu.toLocalTime();
 		return Time.valueOf(time.minusMinutes(menit));
 	}
-	
+
 	//----------------------------------------------------------------------------------------------//
 	// Method untuk menghitung ketelatan                                                            //
 	//----------------------------------------------------------------------------------------------//
-
 	private Duration hitungPerbedaan(Time a, Time b) {
 		final LocalTime x = a.toLocalTime();
 		final LocalTime y = b.toLocalTime();
@@ -276,11 +265,10 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		}
 		return hitungPerbedaan(waktuAbsenMaksimum, waktuAbsen); // hitung waktu antara waktu absen maksimum ke waktu absen
 	}
-	
+
 	//----------------------------------------------------------------------------------------------//
 	// Method untuk mengecek apakah telat                                                           //
 	//----------------------------------------------------------------------------------------------//
-
 	public boolean isAbsenTelat(Time waktuAbsen, Time waktuShift) {
 		final Time waktuAbsenMaksimum = tambahkanToleransiAbsenDini(waktuShift, TOLERANSI);
 		return waktuAbsen.after(waktuAbsenMaksimum);
@@ -303,14 +291,14 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		record.catatWaktuMasuk(); // catat waktu terkini
 
 		if (isAbsenTelat(record.getWaktuMasuk(), shift.getWaktuMasuk())) { // Masuk Telat
-			final Duration ketelatan = hitungKetelatan(record.getWaktuMasuk(), shift.getWaktuMasuk());
-			final String ketelatanStr = String.format("[%d:%d:%d]", ketelatan.toHours(), ketelatan.toMinutes(), ketelatan.toMinutes());
-			record.tambahkanCatatanAbsen("TIDAK_SESUAI_JADWAL, TERLAMBAT," + ketelatanStr, KategoriCatatanAbsen.MASUK);
+			//final Duration ketelatan = hitungKetelatan(record.getWaktuMasuk(), shift.getWaktuMasuk());
+			//final String ketelatanStr = String.format("[%d:%d:%d]", ketelatan.toHours(), ketelatan.toMinutesPart(), ketelatan.toMinutesPart());
+			record.tambahkanCatatanAbsen("TERLAMBAT", KategoriCatatanAbsen.MASUK);
 		} else if (isAbsenLebihAwal(record.getWaktuMasuk(), shift.getWaktuMasuk())) { // Masuk lebih Awal
-			record.tambahkanCatatanAbsen("TIDAK_SESUAI_JADWAL, LEBIH_AWAL", KategoriCatatanAbsen.MASUK);
+			record.tambahkanCatatanAbsen("TERLALU AWAL", KategoriCatatanAbsen.MASUK);
+		} else {
+			record.tambahkanCatatanAbsen("TEPAT WAKTU", KategoriCatatanAbsen.MASUK);
 		}
-		
-		
 
 		try {
 			this.dbAbsensi.updateRecordAbsenKaryawan(record);
@@ -319,12 +307,11 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			ex.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 		// pemanggilan untuk memperbarui data-data yang disimpan oleh program agar mengikuti
 		// perubahan-perubahan.
 		this.dapatkanData();
-		
-		
+
 		updateTabelData(record.getTglRecord().toString());
 
 	}
@@ -337,12 +324,12 @@ public class JPanelAbsen extends javax.swing.JPanel {
 
 		record.catatWaktuIstirahat(); // catat waktu terkini
 
-	
-
 		if (isAbsenTelat(record.getWaktuIstirahat(), shift.getWaktuIstirahat())) { // ISTIRAHAT TELAT
-			record.tambahkanCatatanAbsen("TIDAK_SESUAI_JADWAL, TERLAMBAT", KategoriCatatanAbsen.ISTIRAHAT);
+			record.tambahkanCatatanAbsen("TERLAMBAT", KategoriCatatanAbsen.ISTIRAHAT);
 		} else if (isAbsenLebihAwal(record.getWaktuIstirahat(), shift.getWaktuIstirahat())) { // ISTIRAHAT LEBIH AWAL
-			record.tambahkanCatatanAbsen("TIDAK_SESUAI_JADWAL, LEBIH_AWAL", KategoriCatatanAbsen.ISTIRAHAT);
+			record.tambahkanCatatanAbsen("TERLALU AWAL", KategoriCatatanAbsen.ISTIRAHAT);
+		} else {
+			record.tambahkanCatatanAbsen("TEPAT WAKTU", KategoriCatatanAbsen.ISTIRAHAT);
 		}
 
 		try {
@@ -352,11 +339,11 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			ex.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 		// pemanggilan untuk memperbarui data-data yang disimpan oleh program agar mengikuti
 		// perubahan-perubahan.
 		this.dapatkanData();
-		
+
 		updateTabelData(record.getTglRecord().toString());
 
 	}
@@ -368,7 +355,9 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		record.catatWaktuSelesaiIstirahat();// catat waktu terkini
 
 		if (isAbsenTelat(record.getWaktuSelesaiIstirahat(), shift.getWaktuSelesaiIstirahat())) { // KEMBALI DARI ISTIRAHAT TELAT
-			record.tambahkanCatatanAbsen("TIDAK_SESUAI_JADWAL", KategoriCatatanAbsen.KEMBALI_ISTIRAHAT);
+			record.tambahkanCatatanAbsen("TERLAMBAT", KategoriCatatanAbsen.KEMBALI_ISTIRAHAT);
+		} else {
+			record.tambahkanCatatanAbsen("TEPAT WAKTU", KategoriCatatanAbsen.KEMBALI_ISTIRAHAT);
 		}
 
 		try {
@@ -382,7 +371,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		// pemanggilan untuk memperbarui data-data yang disimpan oleh program agar mengikuti
 		// perubahan-perubahan.
 		this.dapatkanData();
-		
+
 		updateTabelData(record.getTglRecord().toString());
 	}
 
@@ -395,9 +384,11 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		record.catatWaktuPulang();// catat waktu terkini
 
 		if (isAbsenTelat(record.getWaktuPulang(), shift.getWaktuPulang())) {
-			record.tambahkanCatatanAbsen("TIDAK_SESUAI_JADWAL", KategoriCatatanAbsen.PULANG);
+			record.tambahkanCatatanAbsen("TERLAMBAT", KategoriCatatanAbsen.PULANG);
 		} else if (isAbsenLebihAwal(record.getWaktuPulang(), shift.getWaktuPulang())) {
-			record.tambahkanCatatanAbsen("TIDAK_SESUAI_JADWAL, LEBIH_AWAL", KategoriCatatanAbsen.PULANG);
+			record.tambahkanCatatanAbsen("TERLALU AWAL", KategoriCatatanAbsen.PULANG);
+		} else {
+			record.tambahkanCatatanAbsen("TEPAT WAKTU", KategoriCatatanAbsen.PULANG);
 		}
 
 		try {
@@ -411,7 +402,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		// pemanggilan untuk memperbarui data-data yang disimpan oleh program agar mengikuti
 		// perubahan-perubahan.
 		this.dapatkanData();
-		
+
 		updateTabelData(record.getTglRecord().toString());
 
 	}
@@ -436,7 +427,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		// pemanggilan untuk memperbarui data-data yang disimpan oleh program agar mengikuti
 		// perubahan-perubahan.
 		this.dapatkanData();
-		
+
 		updateTabelData(record.getTglRecord().toString());
 	}
 
@@ -445,7 +436,9 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	//-------------------------------------------------------------------------------------------------------//
 
         private void btnAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbsenActionPerformed
-		if(modeAbsen == null) return;
+		if (modeAbsen == null) {
+			return;
+		}
 		switch (modeAbsen) {
 			case MASUK:
 				absenMasuk();
@@ -497,7 +490,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			model.addColumn("SHIFT");
 			model.addColumn("JAM ABSEN");
 			model.addColumn("CATATAN");
-
+			
 			Object[] barisMasuk = {"MASUK", record.getWaktuMasuk(), dbAbsensi.getCatatanDetailRecord(record, KategoriCatatanAbsen.MASUK)};
 			Object[] barisIstirahat = {"ISTIRAHAT", record.getWaktuIstirahat(), dbAbsensi.getCatatanDetailRecord(record, KategoriCatatanAbsen.ISTIRAHAT)};
 			Object[] barisKembaliIstirahat = {"KEMBALI ISTIRAHAT", record.getWaktuSelesaiIstirahat(), dbAbsensi.getCatatanDetailRecord(record, KategoriCatatanAbsen.KEMBALI_ISTIRAHAT)};
@@ -536,8 +529,6 @@ public class JPanelAbsen extends javax.swing.JPanel {
         private javax.swing.JButton btnRefresh;
         private javax.swing.JComboBox<String> comboDaftarTanggalRecord;
         private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JScrollPane jScrollPane2;
-        private javax.swing.JTextArea jTextArea1;
         private javax.swing.JLabel labelWaktu;
         private javax.swing.JTable tabelData;
         // End of variables declaration//GEN-END:variables
