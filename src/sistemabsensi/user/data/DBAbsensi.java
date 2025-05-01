@@ -141,15 +141,16 @@ public class DBAbsensi {
 	//------------------------------------------------------------------------------------------------------------//
 	// Buatkan detail record baru untuk sebuah record                                                             //
 	//------------------------------------------------------------------------------------------------------------//
-	public void buatDetailRecord(int idRecord, String catatan, String kd_kategori) {
+	public void buatDetailRecord(int idRecord, String catatan, KategoriCatatanAbsen kd_kategori) {
 
 		final String sql
-			= "INSERT INTO tdetailAbsen("
+			= "INSERT INTO tdetailabsen("
 			+ "id_recordabsen,"
 			+ " catatan_absen,"
+			+ " kd_kategoriAbsen,"
 			+ " time_created,"
 			+ " time_modified)"
-			+ " VALUES (?,?,?,?)";
+			+ " VALUES (?,?,?,?,?);";
 
 		try {
 			PreparedStatement query = this.getConnection().prepareStatement(sql);
@@ -158,12 +159,44 @@ public class DBAbsensi {
 
 			query.setInt(1, idRecord);
 			query.setString(2, catatan);
-			query.setTimestamp(3, timestampSekarang);
+			query.setString(3, kd_kategori.toString());
 			query.setTimestamp(4, timestampSekarang);
+			query.setTimestamp(5, timestampSekarang);
+			
+			int affected = query.executeUpdate();
+
+			System.out.println("MENAMBAHKAN DETAIL ABSEN BARU: " + affected);
 
 		} catch (SQLException e) {
 			exitError("Gagal Membuat Detail Record", e);
 		}
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------//
+	// Dapatkan Data catatan detail record absen                                                                       //
+	//-----------------------------------------------------------------------------------------------------------------//
+	
+	public String getCatatanDetailRecord(final RecordAbsen record, KategoriCatatanAbsen kategori) throws SQLException {
+		final String sql = "SELECT catatan_absen FROM tdetailabsen WHERE id_recordabsen = ? AND kd_kategoriAbsen = ?;";
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+
+			query.setInt(1, record.getIdRecord());
+			query.setString(2, kategori.toString());
+
+			ResultSet result = query.executeQuery();
+
+			if (result.next()) {
+				return result.getString("catatan_absen");
+			}
+
+			return "";
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------//
@@ -226,6 +259,7 @@ public class DBAbsensi {
 				record.setWaktuIstirahat(result.getTime("jamAbsenMulaiIstirahat"));
 				record.setWaktuSelesaiIstirahat(result.getTime("jamAbsenKembaliIstirahat"));
 				record.setTglRecord(result.getDate("tanggalrecord"));
+				record.setCatatanRecord(this);
 				daftarTanggal.add(record);
 			}
 
@@ -264,6 +298,7 @@ public class DBAbsensi {
 			record.setWaktuIstirahat(result.getTime("jamAbsenMulaiIstirahat"));
 			record.setWaktuSelesaiIstirahat(result.getTime("jamAbsenKembaliIstirahat"));
 			record.setTglRecord(result.getDate("tanggalrecord"));
+			record.setCatatanRecord(this);
 
 			return record;
 
@@ -335,6 +370,7 @@ public class DBAbsensi {
 				record.setWaktuIstirahat(result.getTime("jamAbsenMulaiIstirahat"));
 				record.setWaktuSelesaiIstirahat(result.getTime("jamAbsenKembaliIstirahat"));
 				record.setTglRecord(result.getDate("tanggalrecord"));
+				record.setCatatanRecord(this);
 				return record;
 			} else {
 				createRecordAbsenBaruKaryawan(idKaryawan);
@@ -406,6 +442,10 @@ public class DBAbsensi {
 			throw e;
 		}
 	}
+	
+	//-----------------------------------------------------------------------------------------------------//
+	// Method-Method yang mengupdate status login karyawan                                                 //
+	//-----------------------------------------------------------------------------------------------------//
 
 	private void setNilaiStatusLoginKaryawan(String idKaryawan, boolean status) throws SQLException {
 		final String sql = "UPDATE tkaryawan SET sedang_login = ? WHERE id_karyawan = ?";

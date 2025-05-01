@@ -22,16 +22,17 @@ public class RecordAbsen {
 	private Date tglRecord;
 	private CatatanRecord catatanRecord;
 
-	public RecordAbsen(int idRecord, int idKaryawan, Time waktuMasuk, Time waktuPulang, Time waktuIstirahat, Time waktuSelesaiIstirahat, Date tglRecord) {
+	public RecordAbsen(int idRecord, int idKaryawan, Time waktuMasuk, Time waktuPulang, Time waktuIstirahat, Time waktuSelesaiIstirahat, Date tglRecord, DBAbsensi db) {
 		this.waktuMasuk = waktuMasuk;
 		this.waktuPulang = waktuPulang;
 		this.waktuIstirahat = waktuIstirahat;
 		this.waktuSelesaiIstirahat = waktuSelesaiIstirahat;
 		this.tglRecord = tglRecord;
+		this.catatanRecord = new CatatanRecord(db, idRecord);
 	}
 
 	public RecordAbsen() {
-		this(-1, -1, null, null, null, null, null);
+		this(-1, -1, null, null, null, null, null, null);
 	}
 	
 	//--------------------------------------------------------------------------//
@@ -71,6 +72,10 @@ public class RecordAbsen {
 	
 	// getter & setter
 
+	public void setCatatanRecord(DBAbsensi db) {
+		this.catatanRecord = new CatatanRecord(db, this.idRecord);
+	}
+	
 	public void setWaktuMasuk(Time waktuMasuk) {
 		this.waktuMasuk = waktuMasuk;
 	}

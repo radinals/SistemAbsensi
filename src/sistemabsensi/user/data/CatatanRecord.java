@@ -23,6 +23,6 @@ public class CatatanRecord {
 	}
 	
 	public void tambahkanCatatan(String catatan, KategoriCatatanAbsen kategori) {
-		this.db.buatDetailRecord(idRecord, catatan, kategori.toString());
+		this.db.buatDetailRecord(idRecord, catatan, kategori);
 	}
 }
