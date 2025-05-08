@@ -7,8 +7,6 @@ package sistemabsensi.user.ui;
 import java.awt.event.KeyEvent;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Timer;
@@ -27,7 +25,7 @@ import sistemabsensi.user.data.Shift;
  */
 public class JPanelAbsen extends javax.swing.JPanel {
 
-	private static final int TOLERANSI = 5; // menit
+	// private static final int TOLERANSI = 5; // menit
 
 	private DBAbsensi dbAbsensi;
 	private Timer timerJam; // buat tampilan jam
@@ -38,7 +36,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	
 	private ModeAbsen modeAbsen = null;
 	
-	private Karyawan karyawan;
+	private Karyawan karyawan = null;
 
 	/**
 	 * Creates new form JPanelAbsen
@@ -202,6 +200,8 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		return this.karyawan.getRecordAbsen().getWaktuPulang() != null;
 	}
 
+	/*
+	
 	//---------------------------------------------------------------------------------------------//
 	// Kembalikan salinan waktu yang telah ditambah/dikurang menitnya                              //
 	// digunakan untuk menghasilkan range/jangka waktu.                                            //
@@ -246,6 +246,8 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		final Time waktuAbsenMinimum = tambahkanToleransiTelat(waktuShift, TOLERANSI);
 		return waktuAbsen.before(waktuAbsenMinimum);
 	}
+	
+	*/
 
 	//-----------------------------------------------------------------------------------//
 	// METHOD UNTUK MELAKUKAN ABSEN                                                      //
