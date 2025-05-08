@@ -21,6 +21,8 @@ public class JFrameAdmin extends javax.swing.JFrame {
 		this.jPanelUtama.add("MasterDataKaryawan", new JPanelMasterDataKaryawan());
 		this.jPanelUtama.add("MasterDataRecordAbsen", new JPanelMasterDataRecordAbsen());
 		this.jPanelUtama.add("MasterDataShift", new JPanelMasterDataShift());
+		this.jPanelUtama.add("MasterDataProdi", new JPanelMasterDataProdi());
+		this.jPanelUtama.add("MasterDataJabatan", new JPanelMasterDataJabatan());
 		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
 	}
 
@@ -68,9 +70,19 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 jMenu4.add(jMenuMasterData_Karyawan);
 
                 jMenuMasterData_Prodi.setText("Prodi");
+                jMenuMasterData_Prodi.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuMasterData_ProdiActionPerformed(evt);
+                        }
+                });
                 jMenu4.add(jMenuMasterData_Prodi);
 
                 jMenuMasterData_Jabatan.setText("Jabatan");
+                jMenuMasterData_Jabatan.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuMasterData_JabatanActionPerformed(evt);
+                        }
+                });
                 jMenu4.add(jMenuMasterData_Jabatan);
 
                 jMenuMasterData_Shift.setText("Shift");
@@ -108,6 +120,15 @@ public class JFrameAdmin extends javax.swing.JFrame {
                  this.layoutPanel.show(this.jPanelUtama, "MasterDataShift");
         }//GEN-LAST:event_jMenuMasterData_ShiftActionPerformed
 
+        private void jMenuMasterData_ProdiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_ProdiActionPerformed
+                this.layoutPanel.show(this.jPanelUtama, "MasterDataProdi");
+        }//GEN-LAST:event_jMenuMasterData_ProdiActionPerformed
+
+        private void jMenuMasterData_JabatanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_JabatanActionPerformed
+                this.layoutPanel.show(this.jPanelUtama, "MasterDataJabatan");
+        }//GEN-LAST:event_jMenuMasterData_JabatanActionPerformed
+
+	
 	/**
 	 * @param args the command line arguments
 	 */
