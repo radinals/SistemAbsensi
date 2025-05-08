@@ -257,16 +257,6 @@ public class JPanelAbsen extends javax.swing.JPanel {
 
 		record.catatWaktuMasuk(); // catat waktu terkini
 
-		if (isAbsenTelat(record.getWaktuMasuk(), shift.getWaktuMasuk())) { // Masuk Telat
-			//final Duration ketelatan = hitungKetelatan(record.getWaktuMasuk(), shift.getWaktuMasuk());
-			//final String ketelatanStr = String.format("[%d:%d:%d]", ketelatan.toHours(), ketelatan.toMinutesPart(), ketelatan.toMinutesPart());
-			record.tambahkanCatatanAbsen("TERLAMBAT", KategoriCatatanAbsen.MASUK);
-		} else if (isAbsenLebihAwal(record.getWaktuMasuk(), shift.getWaktuMasuk())) { // Masuk lebih Awal
-			record.tambahkanCatatanAbsen("TERLALU AWAL", KategoriCatatanAbsen.MASUK);
-		} else {
-			record.tambahkanCatatanAbsen("TEPAT WAKTU", KategoriCatatanAbsen.MASUK);
-		}
-
 		try {
 			this.dbAbsensi.updateRecordAbsenKaryawan(record);
 		} catch (SQLException ex) {
@@ -284,14 +274,6 @@ public class JPanelAbsen extends javax.swing.JPanel {
 
 		record.catatWaktuIstirahat(); // catat waktu terkini
 
-		if (isAbsenTelat(record.getWaktuIstirahat(), shift.getWaktuIstirahat())) { // ISTIRAHAT TELAT
-			record.tambahkanCatatanAbsen("TERLAMBAT", KategoriCatatanAbsen.ISTIRAHAT);
-		} else if (isAbsenLebihAwal(record.getWaktuIstirahat(), shift.getWaktuIstirahat())) { // ISTIRAHAT LEBIH AWAL
-			record.tambahkanCatatanAbsen("TERLALU AWAL", KategoriCatatanAbsen.ISTIRAHAT);
-		} else {
-			record.tambahkanCatatanAbsen("TEPAT WAKTU", KategoriCatatanAbsen.ISTIRAHAT);
-		}
-
 		try {
 			this.dbAbsensi.updateRecordAbsenKaryawan(record);
 		} catch (SQLException ex) {
@@ -308,12 +290,6 @@ public class JPanelAbsen extends javax.swing.JPanel {
 
 		record.catatWaktuSelesaiIstirahat();// catat waktu terkini
 
-		if (isAbsenTelat(record.getWaktuSelesaiIstirahat(), shift.getWaktuSelesaiIstirahat())) { // KEMBALI DARI ISTIRAHAT TELAT
-			record.tambahkanCatatanAbsen("TERLAMBAT", KategoriCatatanAbsen.KEMBALI_ISTIRAHAT);
-		} else {
-			record.tambahkanCatatanAbsen("TEPAT WAKTU", KategoriCatatanAbsen.KEMBALI_ISTIRAHAT);
-		}
-
 		try {
 			this.dbAbsensi.updateRecordAbsenKaryawan(record);
 		} catch (SQLException ex) {
@@ -329,14 +305,6 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		final Shift shift = this.karyawan.getShift();
 
 		record.catatWaktuPulang();// catat waktu terkini
-
-		if (isAbsenTelat(record.getWaktuPulang(), shift.getWaktuPulang())) {
-			record.tambahkanCatatanAbsen("TERLAMBAT", KategoriCatatanAbsen.PULANG);
-		} else if (isAbsenLebihAwal(record.getWaktuPulang(), shift.getWaktuPulang())) {
-			record.tambahkanCatatanAbsen("TERLALU AWAL", KategoriCatatanAbsen.PULANG);
-		} else {
-			record.tambahkanCatatanAbsen("TEPAT WAKTU", KategoriCatatanAbsen.PULANG);
-		}
 
 		try {
 			this.dbAbsensi.updateRecordAbsenKaryawan(record);
@@ -385,12 +353,11 @@ public class JPanelAbsen extends javax.swing.JPanel {
 
 			model.addColumn("SHIFT");
 			model.addColumn("JAM ABSEN");
-			model.addColumn("CATATAN");
 
-			Object[] barisMasuk = {"MASUK", record.getWaktuMasuk(), dbAbsensi.getCatatanDetailRecord(record, KategoriCatatanAbsen.MASUK)};
-			Object[] barisIstirahat = {"ISTIRAHAT", record.getWaktuIstirahat(), dbAbsensi.getCatatanDetailRecord(record, KategoriCatatanAbsen.ISTIRAHAT)};
-			Object[] barisKembaliIstirahat = {"KEMBALI ISTIRAHAT", record.getWaktuSelesaiIstirahat(), dbAbsensi.getCatatanDetailRecord(record, KategoriCatatanAbsen.KEMBALI_ISTIRAHAT)};
-			Object[] barisPulang = {"PULANG", record.getWaktuPulang(), dbAbsensi.getCatatanDetailRecord(record, KategoriCatatanAbsen.PULANG)};
+			Object[] barisMasuk = {"MASUK", record.getWaktuMasuk()};
+			Object[] barisIstirahat = {"ISTIRAHAT", record.getWaktuIstirahat()};
+			Object[] barisKembaliIstirahat = {"KEMBALI ISTIRAHAT", record.getWaktuSelesaiIstirahat()};
+			Object[] barisPulang = {"PULANG", record.getWaktuPulang()};
 
 			model.addRow(barisMasuk);
 			model.addRow(barisIstirahat);
