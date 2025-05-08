@@ -6,23 +6,22 @@
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/ui/JFrameAbsensi.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/data/RecordAbsen.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/data/CatatanRecord.java</file>
-            <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/ui/JPanelLogAbsenTerkini.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/data/Prodi.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/data/Jabatan.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/data/RecordAbsen.java</file>
+            <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/ui/JPanelMasterDataKaryawan.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/SistemAbsenUser.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/ui/JFrameAdmin.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/database/connection/DBConnection.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/ui/JPanelLogin.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/data/Karyawan.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/ui/JPanelAbsen.java</file>
-            <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/ui/JPanelModifikasiData.java</file>
-            <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/SistemAbsensiAdmin.java</file>
+            <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/ui/JPanelMasterDataRecordAbsen.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/data/Shift.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/data/Shift.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/data/CatatanRecord.java</file>
+            <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/ui/JPanelMasterDataShift.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/data/DBAbsensi.java</file>
-            <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/ui/JDialogLogin.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/data/Karyawan.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/admin/data/DBAbsensi.java</file>
             <file>file:/home/rss/Programming/PemogramanDesktop/SistemAbsensi/src/sistemabsensi/user/data/KategoriCatatanAbsen.java</file>
