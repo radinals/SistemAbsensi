@@ -4,17 +4,24 @@
  */
 package sistemabsensi.admin.ui;
 
+import java.awt.CardLayout;
+
 /**
  *
  * @author rss
  */
 public class JFrameAdmin extends javax.swing.JFrame {
 
+	private CardLayout layoutPanel;
 	/**
 	 * Creates new form JFrameAdmin
 	 */
 	public JFrameAdmin() {
 		initComponents();
+		this.jPanelUtama.add("MasterDataKaryawan", new JPanelMasterDataKaryawan());
+		this.jPanelUtama.add("MasterDataRecordAbsen", new JPanelMasterDataRecordAbsen());
+		this.jPanelUtama.add("MasterDataShift", new JPanelMasterDataShift());
+		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
 	}
 
 	/**
@@ -26,64 +33,125 @@ public class JFrameAdmin extends javax.swing.JFrame {
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
-                jPanel1 = new javax.swing.JPanel();
-                jButton3 = new javax.swing.JButton();
-                jButton6 = new javax.swing.JButton();
-                jButton2 = new javax.swing.JButton();
+                jPanelUtama = new javax.swing.JPanel();
+                jMenuBar1 = new javax.swing.JMenuBar();
+                jMenu1 = new javax.swing.JMenu();
+                jMenu4 = new javax.swing.JMenu();
+                jMenuMasterData_Karyawan = new javax.swing.JMenuItem();
+                jMenuMasterData_Prodi = new javax.swing.JMenuItem();
+                jMenuMasterData_Jabatan = new javax.swing.JMenuItem();
+                jMenuMasterData_Shift = new javax.swing.JMenuItem();
+                jMenuMasterData_RecordAbsen = new javax.swing.JMenuItem();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                setMinimumSize(new java.awt.Dimension(800, 600));
-                setSize(new java.awt.Dimension(800, 600));
-                getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+                setMaximumSize(new java.awt.Dimension(1024, 768));
+                setMinimumSize(new java.awt.Dimension(1024, 768));
+                setPreferredSize(new java.awt.Dimension(1024, 768));
+                setResizable(false);
+                getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
-                javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-                jPanel1.setLayout(jPanel1Layout);
-                jPanel1Layout.setHorizontalGroup(
-                        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 660, Short.MAX_VALUE)
-                );
-                jPanel1Layout.setVerticalGroup(
-                        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 570, Short.MAX_VALUE)
-                );
+                jPanelUtama.setMaximumSize(new java.awt.Dimension(991, 599));
+                jPanelUtama.setLayout(new java.awt.CardLayout());
+                getContentPane().add(jPanelUtama);
 
-                getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, -1, 570));
+                jMenu1.setText("File");
+                jMenuBar1.add(jMenu1);
 
-                jButton3.setText("EDIT");
-                jButton3.addActionListener(new java.awt.event.ActionListener() {
+                jMenu4.setText("Master Data");
+
+                jMenuMasterData_Karyawan.setText("Karyawan");
+                jMenuMasterData_Karyawan.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton3ActionPerformed(evt);
+                                jMenuMasterData_KaryawanActionPerformed(evt);
                         }
                 });
-                getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 84, 80));
+                jMenu4.add(jMenuMasterData_Karyawan);
 
-                jButton6.setText("LOG");
-                getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 84, 80));
+                jMenuMasterData_Prodi.setText("Prodi");
+                jMenu4.add(jMenuMasterData_Prodi);
 
-                jButton2.setText("LOG OUT");
-                jButton2.addActionListener(new java.awt.event.ActionListener() {
+                jMenuMasterData_Jabatan.setText("Jabatan");
+                jMenu4.add(jMenuMasterData_Jabatan);
+
+                jMenuMasterData_Shift.setText("Shift");
+                jMenuMasterData_Shift.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton2ActionPerformed(evt);
+                                jMenuMasterData_ShiftActionPerformed(evt);
                         }
                 });
-                getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, -1, 60));
+                jMenu4.add(jMenuMasterData_Shift);
+
+                jMenuMasterData_RecordAbsen.setText("Record Absen");
+                jMenuMasterData_RecordAbsen.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuMasterData_RecordAbsenActionPerformed(evt);
+                        }
+                });
+                jMenu4.add(jMenuMasterData_RecordAbsen);
+
+                jMenuBar1.add(jMenu4);
+
+                setJMenuBar(jMenuBar1);
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
 
-        private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-                // TODO add your handling code here:
-        }//GEN-LAST:event_jButton3ActionPerformed
+        private void jMenuMasterData_KaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_KaryawanActionPerformed
+		this.layoutPanel.show(this.jPanelUtama, "MasterDataKaryawan");
+        }//GEN-LAST:event_jMenuMasterData_KaryawanActionPerformed
 
-        private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-                // TODO add your handling code here:
-        }//GEN-LAST:event_jButton2ActionPerformed
-	
+        private void jMenuMasterData_RecordAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_RecordAbsenActionPerformed
+                this.layoutPanel.show(this.jPanelUtama, "MasterDataRecordAbsen");
+        }//GEN-LAST:event_jMenuMasterData_RecordAbsenActionPerformed
+
+        private void jMenuMasterData_ShiftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_ShiftActionPerformed
+                 this.layoutPanel.show(this.jPanelUtama, "MasterDataShift");
+        }//GEN-LAST:event_jMenuMasterData_ShiftActionPerformed
+
+	/**
+	 * @param args the command line arguments
+	 */
+	public static void main(String args[]) {
+		/* Set the Nimbus look and feel */
+		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+		/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+		 */
+		try {
+			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (ClassNotFoundException ex) {
+			java.util.logging.Logger.getLogger(JFrameAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		} catch (InstantiationException ex) {
+			java.util.logging.Logger.getLogger(JFrameAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		} catch (IllegalAccessException ex) {
+			java.util.logging.Logger.getLogger(JFrameAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+			java.util.logging.Logger.getLogger(JFrameAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		}
+		//</editor-fold>
+
+		/* Create and display the form */
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				new JFrameAdmin().setVisible(true);
+			}
+		});
+	}
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JButton jButton2;
-        private javax.swing.JButton jButton3;
-        private javax.swing.JButton jButton6;
-        private javax.swing.JPanel jPanel1;
+        private javax.swing.JMenu jMenu1;
+        private javax.swing.JMenu jMenu4;
+        private javax.swing.JMenuBar jMenuBar1;
+        private javax.swing.JMenuItem jMenuMasterData_Jabatan;
+        private javax.swing.JMenuItem jMenuMasterData_Karyawan;
+        private javax.swing.JMenuItem jMenuMasterData_Prodi;
+        private javax.swing.JMenuItem jMenuMasterData_RecordAbsen;
+        private javax.swing.JMenuItem jMenuMasterData_Shift;
+        private javax.swing.JPanel jPanelUtama;
         // End of variables declaration//GEN-END:variables
 }

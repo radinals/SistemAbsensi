@@ -6,6 +6,7 @@ package sistemabsensi.admin.data;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -131,28 +132,149 @@ public class DBAbsensi {
 		return false;
 	}
 
-	public LinkedList<Jabatan> getDaftarDataJabatan() {
-		
+	public LinkedList<Jabatan> getDaftarDataJabatan() throws SQLException {
+		final String sql = "SELECT * FROM tjabatan";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			
+			ResultSet result = query.executeQuery();
+
+			while(result.next()) {
+				// create jabatan, add to list.
+			}
+
+			return null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 	
-	public LinkedList<Karyawan> getDaftarDataKaryawan() {
-		
+	public LinkedList<Karyawan> getDaftarDataKaryawan() throws SQLException {
+		final String sql = "SELECT * FROM tkaryawan";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			
+			ResultSet result = query.executeQuery();
+
+			while(result.next()) {
+				// create karyawan, add to list.
+			}
+
+			return null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 	
-	public LinkedList<Prodi> getDaftarDataProdi() {
-		
+	public LinkedList<Prodi> getDaftarDataProdi() throws SQLException {
+		final String sql = "SELECT * FROM tprodi";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			
+			ResultSet result = query.executeQuery();
+
+			while(result.next()) {
+				// create prodi, add to list.
+			}
+
+			return null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}	
 	}
 	
-	public LinkedList<RecordAbsen> getDaftarDataRecordAbsen() {
-		
+	public LinkedList<RecordAbsen> getDaftarDataRecordAbsen() throws SQLException {
+		final String sql = "SELECT * FROM tprodi ";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			
+			ResultSet result = query.executeQuery();
+
+			while(result.next()) {
+				// create recordabsen, add to list.
+			}
+
+			return null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 	
-	public LinkedList<CatatanRecord> getDaftarDataCatatanRecord() {
-		
+	
+	public LinkedList<RecordAbsen> getDaftarDataRecordAbsen(String idKaryawan) throws SQLException {
+		final String sql = "SELECT * FROM tprodi WHERE id_karyawan = ?";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			
+			query.setString(1, idKaryawan);
+			
+			ResultSet result = query.executeQuery();
+
+			while(result.next()) {
+				// create recordabsen, add to list.
+			}
+
+			return null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 	
-	public LinkedList<Shift> getDaftarDataShift() {
-		
+	public LinkedList<CatatanRecord> getDaftarDataCatatanRecord(int idRecordAbsen) throws SQLException {
+		final String sql = "SELECT * FROM tdetailrecord WHERE id_recordabsen = ?";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			
+			query.setInt(1, idRecordAbsen);
+			
+			ResultSet result = query.executeQuery();
+
+			while(result.next()) {
+				// create detailrecordabsen, add to list.
+			}
+
+			return null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	public LinkedList<Shift> getDaftarDataShift() throws SQLException {
+		final String sql = "SELECT * FROM tshift";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			
+			ResultSet result = query.executeQuery();
+
+			while(result.next()) {
+				// create shift, add to list.
+			}
+
+			return null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 	
 	public void updateDataKaryawan(final Karyawan karyawan) {
@@ -176,6 +298,30 @@ public class DBAbsensi {
 	}
 	
 	public void updateDataShift(final Shift shift) {
+		
+	}
+	
+	public void deleteDataKaryawan(String idKaryawan) {
+		
+	}
+	
+	public void deleteDataJabatan(int idJabatan) {
+		
+	}
+	
+	public void deleteDataProdi(int idProdi) {
+		
+	}
+	
+	public void deleteDataRecordAbsen(int idRecord) {
+		
+	}
+	
+	public void deleteDataCatatanRecord(int idDetailRecord) {
+		
+	}
+	
+	public void deleteDataShift(int idShift) {
 		
 	}
 	
