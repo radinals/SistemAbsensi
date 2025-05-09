@@ -4,17 +4,43 @@
  */
 package sistemabsensi.admin.ui;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sistemabsensi.admin.data.DBAbsensi;
+import sistemabsensi.admin.data.Jabatan;
+
 /**
  *
  * @author rss
  */
 public class JPanelMasterDataJabatan extends javax.swing.JPanel {
 
+	private DBAbsensi db;
+
+	private Jabatan jabatanTerpilih;
+
 	/**
 	 * Creates new form JPanelMasterDataShift
 	 */
-	public JPanelMasterDataJabatan() {
+	public JPanelMasterDataJabatan(DBAbsensi db) {
+		this.db = db;
 		initComponents();
+		this.updateData();
+	}
+
+	public void updateData() {
+		this.jabatanTerpilih = null;
+		this.textFieldNamaJabatan.setText("");
+		this.dapatkanData();
+	}
+
+	private void dapatkanData() {
+		try {
+			this.tabelData.setModel(db.getModelTabel_Jabatan());
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataJabatan.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 
 	/**
@@ -28,17 +54,16 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 java.awt.GridBagConstraints gridBagConstraints;
 
                 jScrollPane1 = new javax.swing.JScrollPane();
-                jTable1 = new javax.swing.JTable();
-                jTextField1 = new javax.swing.JTextField();
+                tabelData = new javax.swing.JTable();
+                textFieldNamaJabatan = new javax.swing.JTextField();
                 jLabel1 = new javax.swing.JLabel();
-                jButton1 = new javax.swing.JButton();
-                jButton2 = new javax.swing.JButton();
-                jButton3 = new javax.swing.JButton();
+                btnHapus = new javax.swing.JButton();
+                btnSimpan = new javax.swing.JButton();
 
                 setMaximumSize(new java.awt.Dimension(991, 599));
                 setLayout(new java.awt.GridBagLayout());
 
-                jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null},
                                 {null, null, null, null},
@@ -49,7 +74,12 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                                 "Title 1", "Title 2", "Title 3", "Title 4"
                         }
                 ));
-                jScrollPane1.setViewportView(jTable1);
+                tabelData.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                tabelDataMouseClicked(evt);
+                        }
+                });
+                jScrollPane1.setViewportView(tabelData);
 
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 8;
@@ -64,9 +94,9 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 gridBagConstraints.insets = new java.awt.Insets(109, 34, 251, 68);
                 add(jScrollPane1, gridBagConstraints);
 
-                jTextField1.addActionListener(new java.awt.event.ActionListener() {
+                textFieldNamaJabatan.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jTextField1ActionPerformed(evt);
+                                textFieldNamaJabatanActionPerformed(evt);
                         }
                 });
                 gridBagConstraints = new java.awt.GridBagConstraints();
@@ -77,7 +107,7 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 gridBagConstraints.ipadx = 147;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
                 gridBagConstraints.insets = new java.awt.Insets(109, 6, 0, 0);
-                add(jTextField1, gridBagConstraints);
+                add(textFieldNamaJabatan, gridBagConstraints);
 
                 jLabel1.setText("NAMA JABATAN");
                 gridBagConstraints = new java.awt.GridBagConstraints();
@@ -87,26 +117,23 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 gridBagConstraints.insets = new java.awt.Insets(114, 36, 0, 0);
                 add(jLabel1, gridBagConstraints);
 
-                jButton1.setText("DELETE");
+                btnHapus.setText("HAPUS");
+                btnHapus.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnHapusActionPerformed(evt);
+                        }
+                });
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 6;
                 gridBagConstraints.gridy = 8;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
                 gridBagConstraints.insets = new java.awt.Insets(51, 6, 0, 0);
-                add(jButton1, gridBagConstraints);
+                add(btnHapus, gridBagConstraints);
 
-                jButton2.setText("UPDATE");
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 5;
-                gridBagConstraints.gridy = 8;
-                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                gridBagConstraints.insets = new java.awt.Insets(51, 4, 0, 0);
-                add(jButton2, gridBagConstraints);
-
-                jButton3.setText("CREATE");
-                jButton3.addActionListener(new java.awt.event.ActionListener() {
+                btnSimpan.setText("SIMPAN");
+                btnSimpan.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton3ActionPerformed(evt);
+                                btnSimpanActionPerformed(evt);
                         }
                 });
                 gridBagConstraints = new java.awt.GridBagConstraints();
@@ -115,25 +142,95 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 gridBagConstraints.gridwidth = 4;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
                 gridBagConstraints.insets = new java.awt.Insets(51, 101, 0, 0);
-                add(jButton3, gridBagConstraints);
+                add(btnSimpan, gridBagConstraints);
         }// </editor-fold>//GEN-END:initComponents
 
-        private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-                // TODO add your handling code here:
-        }//GEN-LAST:event_jButton3ActionPerformed
+        private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+		if (this.textFieldNamaJabatan.getText().isEmpty()) {
+			this.textFieldNamaJabatan.requestFocus();
+			Pesan.tampilkanPeringatan("Pastikan Field Nama Jabatan Terisi!.");
+			return;
+		}
 
-        private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-                // TODO add your handling code here:
-        }//GEN-LAST:event_jTextField1ActionPerformed
+		String namaJabatan = this.textFieldNamaJabatan.getText();
 
+		Jabatan jabatan = null;
+		if ((this.jabatanTerpilih != null && namaJabatan.equals(this.jabatanTerpilih.namaJabatan)) || (this.jabatanTerpilih == null && this.db.isDataJabatanAda(namaJabatan))) {
+			Pesan.tampilkanPeringatan("Tidak ada nilai yang baru atau diubah!.");
+			return;
+		} else if (this.jabatanTerpilih != null && !namaJabatan.equals(this.jabatanTerpilih.namaJabatan)) {
+			jabatan = new Jabatan(this.jabatanTerpilih.idJabatan, namaJabatan);
+		} else {
+			jabatan = new Jabatan(null, namaJabatan);
+		}
+		try {
+
+			this.db.simpanDataJabatan(jabatan);
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataJabatan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		this.updateData();
+
+        }//GEN-LAST:event_btnSimpanActionPerformed
+
+        private void textFieldNamaJabatanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldNamaJabatanActionPerformed
+		// TODO add your handling code here:
+        }//GEN-LAST:event_textFieldNamaJabatanActionPerformed
+
+        private void tabelDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelDataMouseClicked
+		int barisTerpilih = this.tabelData.getSelectedRow();
+		String namaJabatan = (String) this.tabelData.getModel().getValueAt(barisTerpilih, 1);
+		int idJabatan = Integer.valueOf((String) this.tabelData.getModel().getValueAt(barisTerpilih, 0));
+
+		this.jabatanTerpilih = new Jabatan(idJabatan, namaJabatan);
+
+		this.textFieldNamaJabatan.setText(namaJabatan);
+        }//GEN-LAST:event_tabelDataMouseClicked
+
+        private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+		if (this.textFieldNamaJabatan.getText().isEmpty()) {
+			this.textFieldNamaJabatan.requestFocus();
+			Pesan.tampilkanPeringatan("Pastikan Field Nama Jabatan Terisi!.");
+			return;
+		}
+
+		String namaJabatan = this.textFieldNamaJabatan.getText();
+
+		Jabatan jabatan = null;
+		if (this.jabatanTerpilih != null && namaJabatan.equals(this.jabatanTerpilih.namaJabatan)) {
+			jabatan = this.jabatanTerpilih;
+		} else if (this.jabatanTerpilih != null && !namaJabatan.equals(this.jabatanTerpilih.namaJabatan)) {
+			jabatan = new Jabatan(this.jabatanTerpilih.idJabatan, namaJabatan);
+		} else if (this.db.isDataJabatanAda(namaJabatan)) {
+			try {
+				jabatan = this.db.getDataJabatan(namaJabatan);
+			} catch (SQLException ex) {
+				Logger.getLogger(JPanelMasterDataJabatan.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		} else {
+			jabatan = new Jabatan(null, namaJabatan);
+		}
+
+		if (!Pesan.tampilkanKonfirmasi("Konfirmasi Penghapusan", "Apakah anda yakin ingin menghapus data jabatan: " + namaJabatan + "?. ")) {
+			return;
+		}
+
+		try {
+			this.db.deleteDataJabatan(jabatan.idJabatan);
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataJabatan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		this.updateData();
+        }//GEN-LAST:event_btnHapusActionPerformed
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JButton jButton1;
-        private javax.swing.JButton jButton2;
-        private javax.swing.JButton jButton3;
+        private javax.swing.JButton btnHapus;
+        private javax.swing.JButton btnSimpan;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JTable jTable1;
-        private javax.swing.JTextField jTextField1;
+        private javax.swing.JTable tabelData;
+        private javax.swing.JTextField textFieldNamaJabatan;
         // End of variables declaration//GEN-END:variables
 }

@@ -5,6 +5,7 @@
 package sistemabsensi.admin.ui;
 
 import java.awt.CardLayout;
+import sistemabsensi.admin.data.DBAbsensi;
 
 /**
  *
@@ -13,16 +14,32 @@ import java.awt.CardLayout;
 public class JFrameAdmin extends javax.swing.JFrame {
 
 	private CardLayout layoutPanel;
+
+	JPanelMasterDataKaryawan MasterDataKaryawan;
+	JPanelMasterDataRecordAbsen MasterDataRecordAbsen;
+	JPanelMasterDataShift MasterDataShift;
+	JPanelMasterDataProdi MasterDataProdi;
+	JPanelMasterDataJabatan MasterDataJabatan;
+
 	/**
 	 * Creates new form JFrameAdmin
 	 */
 	public JFrameAdmin() {
 		initComponents();
-		this.jPanelUtama.add("MasterDataKaryawan", new JPanelMasterDataKaryawan());
-		this.jPanelUtama.add("MasterDataRecordAbsen", new JPanelMasterDataRecordAbsen());
-		this.jPanelUtama.add("MasterDataShift", new JPanelMasterDataShift());
-		this.jPanelUtama.add("MasterDataProdi", new JPanelMasterDataProdi());
-		this.jPanelUtama.add("MasterDataJabatan", new JPanelMasterDataJabatan());
+		DBAbsensi db = new DBAbsensi();
+		this.MasterDataKaryawan = new JPanelMasterDataKaryawan(db);
+		this.MasterDataRecordAbsen = new JPanelMasterDataRecordAbsen(db);
+		this.MasterDataShift = new JPanelMasterDataShift(db);
+		this.MasterDataProdi = new JPanelMasterDataProdi(db);
+		this.MasterDataJabatan = new JPanelMasterDataJabatan(db);
+
+		this.jPanelUtama.add("MasterDataKaryawan", this.MasterDataKaryawan);
+		this.jPanelUtama.add("MasterDataRecordAbsen", this.MasterDataRecordAbsen);
+		this.jPanelUtama.add("MasterDataShift", this.MasterDataShift);
+		this.jPanelUtama.add("MasterDataProdi", this.MasterDataProdi);
+		this.jPanelUtama.add("MasterDataJabatan", this.MasterDataJabatan);
+		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
+
 		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
 	}
 
@@ -110,25 +127,27 @@ public class JFrameAdmin extends javax.swing.JFrame {
 
         private void jMenuMasterData_KaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_KaryawanActionPerformed
 		this.layoutPanel.show(this.jPanelUtama, "MasterDataKaryawan");
+		this.MasterDataKaryawan.updateData();
         }//GEN-LAST:event_jMenuMasterData_KaryawanActionPerformed
 
         private void jMenuMasterData_RecordAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_RecordAbsenActionPerformed
-                this.layoutPanel.show(this.jPanelUtama, "MasterDataRecordAbsen");
+		this.layoutPanel.show(this.jPanelUtama, "MasterDataRecordAbsen");
         }//GEN-LAST:event_jMenuMasterData_RecordAbsenActionPerformed
 
         private void jMenuMasterData_ShiftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_ShiftActionPerformed
-                 this.layoutPanel.show(this.jPanelUtama, "MasterDataShift");
+		this.layoutPanel.show(this.jPanelUtama, "MasterDataShift");
         }//GEN-LAST:event_jMenuMasterData_ShiftActionPerformed
 
         private void jMenuMasterData_ProdiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_ProdiActionPerformed
-                this.layoutPanel.show(this.jPanelUtama, "MasterDataProdi");
+		this.layoutPanel.show(this.jPanelUtama, "MasterDataProdi");
+		this.MasterDataProdi.updateData();
         }//GEN-LAST:event_jMenuMasterData_ProdiActionPerformed
 
         private void jMenuMasterData_JabatanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_JabatanActionPerformed
-                this.layoutPanel.show(this.jPanelUtama, "MasterDataJabatan");
+		this.layoutPanel.show(this.jPanelUtama, "MasterDataJabatan");
+		this.MasterDataJabatan.updateData();
         }//GEN-LAST:event_jMenuMasterData_JabatanActionPerformed
 
-	
 	/**
 	 * @param args the command line arguments
 	 */

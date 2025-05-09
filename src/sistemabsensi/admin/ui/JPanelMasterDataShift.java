@@ -4,16 +4,21 @@
  */
 package sistemabsensi.admin.ui;
 
+import sistemabsensi.admin.data.DBAbsensi;
+
 /**
  *
  * @author rss
  */
 public class JPanelMasterDataShift extends javax.swing.JPanel {
 
+	private DBAbsensi db;
+
 	/**
 	 * Creates new form JPanelMasterDataShift
 	 */
-	public JPanelMasterDataShift() {
+	public JPanelMasterDataShift(DBAbsensi db) {
+		this.db = db;
 		initComponents();
 	}
 
@@ -37,8 +42,7 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
                 jTextField3 = new javax.swing.JTextField();
                 jLabel4 = new javax.swing.JLabel();
                 jTextField4 = new javax.swing.JTextField();
-                jButton1 = new javax.swing.JButton();
-                jButton2 = new javax.swing.JButton();
+                btnHapus = new javax.swing.JButton();
                 jButton3 = new javax.swing.JButton();
 
                 setMaximumSize(new java.awt.Dimension(991, 599));
@@ -141,23 +145,15 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
                 gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
                 add(jTextField4, gridBagConstraints);
 
-                jButton1.setText("DELETE");
+                btnHapus.setText("HAPUS");
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 6;
                 gridBagConstraints.gridy = 8;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
                 gridBagConstraints.insets = new java.awt.Insets(51, 6, 0, 0);
-                add(jButton1, gridBagConstraints);
+                add(btnHapus, gridBagConstraints);
 
-                jButton2.setText("UPDATE");
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 5;
-                gridBagConstraints.gridy = 8;
-                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                gridBagConstraints.insets = new java.awt.Insets(51, 4, 0, 0);
-                add(jButton2, gridBagConstraints);
-
-                jButton3.setText("CREATE");
+                jButton3.setText("SIMPAN");
                 jButton3.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jButton3ActionPerformed(evt);
@@ -173,13 +169,11 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
         }// </editor-fold>//GEN-END:initComponents
 
         private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-                // TODO add your handling code here:
+		// TODO add your handling code here:
         }//GEN-LAST:event_jButton3ActionPerformed
 
-
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JButton jButton1;
-        private javax.swing.JButton jButton2;
+        private javax.swing.JButton btnHapus;
         private javax.swing.JButton jButton3;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JLabel jLabel2;

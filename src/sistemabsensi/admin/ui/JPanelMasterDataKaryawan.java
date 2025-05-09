@@ -4,6 +4,17 @@
  */
 package sistemabsensi.admin.ui;
 
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import sistemabsensi.admin.data.DBAbsensi;
+import sistemabsensi.admin.data.Jabatan;
+import sistemabsensi.admin.data.Karyawan;
+import sistemabsensi.admin.data.Prodi;
+import sistemabsensi.admin.data.Shift;
+
 /**
  *
  * @author rss
@@ -13,8 +24,17 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 	/**
 	 * Creates new form JPanelMasterDataKaryawan
 	 */
-	public JPanelMasterDataKaryawan() {
+	private DBAbsensi db;
+
+	private Karyawan karyawanTerpilih = null;
+	private Prodi prodiTerpilih = null;
+	private Shift shiftTerpilih = null;
+	private Jabatan jabatanTerpilih = null;
+
+	public JPanelMasterDataKaryawan(DBAbsensi db) {
+		this.db = db;
 		initComponents();
+		this.updateData();
 	}
 
 	/**
@@ -25,34 +45,34 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 	@SuppressWarnings("unchecked")
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
-                java.awt.GridBagConstraints gridBagConstraints;
 
                 jScrollPane1 = new javax.swing.JScrollPane();
-                jTable1 = new javax.swing.JTable();
+                tabelData = new javax.swing.JTable();
                 jLabel1 = new javax.swing.JLabel();
                 jLabel2 = new javax.swing.JLabel();
                 jLabel3 = new javax.swing.JLabel();
                 jLabel4 = new javax.swing.JLabel();
                 jLabel5 = new javax.swing.JLabel();
-                jTextField1 = new javax.swing.JTextField();
-                jTextField4 = new javax.swing.JTextField();
-                jTextField5 = new javax.swing.JTextField();
-                jTextField6 = new javax.swing.JTextField();
+                textFieldNama = new javax.swing.JTextField();
+                textFieldTelp = new javax.swing.JTextField();
+                textFieldAlamat = new javax.swing.JTextField();
+                textFieldID = new javax.swing.JTextField();
                 jLabel6 = new javax.swing.JLabel();
-                jButton1 = new javax.swing.JButton();
-                jButton2 = new javax.swing.JButton();
-                jButton3 = new javax.swing.JButton();
+                btnSimpan = new javax.swing.JButton();
+                btnHapus = new javax.swing.JButton();
                 jLabel7 = new javax.swing.JLabel();
-                jComboBox1 = new javax.swing.JComboBox<>();
-                jComboBox2 = new javax.swing.JComboBox<>();
-                jComboBox3 = new javax.swing.JComboBox<>();
-                jScrollPane2 = new javax.swing.JScrollPane();
-                jList1 = new javax.swing.JList<>();
+                comboBoxShift = new javax.swing.JComboBox<Shift>();
+                comboBoxJabatan = new javax.swing.JComboBox<>();
+                comboBoxProdi = new javax.swing.JComboBox<>();
+                jScrollPane3 = new javax.swing.JScrollPane();
+                tabelJadwalShift = new javax.swing.JTable();
+                textFieldEmail = new javax.swing.JTextField();
+                jLabel8 = new javax.swing.JLabel();
 
                 setMaximumSize(new java.awt.Dimension(991, 599));
                 setPreferredSize(new java.awt.Dimension(991, 599));
 
-                jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null},
                                 {null, null, null, null},
@@ -63,7 +83,13 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
                                 "Title 1", "Title 2", "Title 3", "Title 4"
                         }
                 ));
-                jScrollPane1.setViewportView(jTable1);
+                tabelData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+                tabelData.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                tabelDataMouseClicked(evt);
+                        }
+                });
+                jScrollPane1.setViewportView(tabelData);
 
                 jLabel1.setText("NAMA");
 
@@ -75,80 +101,108 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 
                 jLabel5.setText("ALAMAT");
 
-                jTextField1.addActionListener(new java.awt.event.ActionListener() {
+                textFieldNama.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jTextField1ActionPerformed(evt);
+                                textFieldNamaActionPerformed(evt);
                         }
                 });
 
-                jTextField6.addActionListener(new java.awt.event.ActionListener() {
+                textFieldID.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jTextField6ActionPerformed(evt);
+                                textFieldIDActionPerformed(evt);
                         }
                 });
 
                 jLabel6.setText("ID");
 
-                jButton1.setText("CREATE");
+                btnSimpan.setText("SIMPAN");
+                btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnSimpanActionPerformed(evt);
+                        }
+                });
 
-                jButton2.setText("UPDATE");
-
-                jButton3.setText("DELETE");
+                btnHapus.setText("HAPUS");
+                btnHapus.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnHapusActionPerformed(evt);
+                        }
+                });
 
                 jLabel7.setText("SHIFT");
 
-                jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-                jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-                jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-                jList1.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-                        public int getSize() { return strings.length; }
-                        public String getElementAt(int i) { return strings[i]; }
+                comboBoxShift.setModel(new javax.swing.DefaultComboBoxModel<>());
+                comboBoxShift.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                comboBoxShiftActionPerformed(evt);
+                        }
                 });
-                jScrollPane2.setViewportView(jList1);
+
+                comboBoxJabatan.setModel(new javax.swing.DefaultComboBoxModel<>());
+
+                comboBoxProdi.setModel(new javax.swing.DefaultComboBoxModel<>());
+
+                tabelJadwalShift.setModel(new javax.swing.table.DefaultTableModel(
+                        new Object [][] {
+                                {null, null, null, null},
+                                {null, null, null, null},
+                                {null, null, null, null},
+                                {null, null, null, null}
+                        },
+                        new String [] {
+                                "Title 1", "Title 2", "Title 3", "Title 4"
+                        }
+                ));
+                jScrollPane3.setViewportView(tabelJadwalShift);
+
+                jLabel8.setText("EMAIL");
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
                 layout.setHorizontalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(21, Short.MAX_VALUE)
+                                .addGap(20, 20, 20)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel4)
-                                                        .addComponent(jLabel5)
-                                                        .addComponent(jLabel2)
-                                                        .addComponent(jLabel1)
-                                                        .addComponent(jLabel3)
-                                                        .addComponent(jLabel6))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jTextField1)
-                                                        .addComponent(jTextField5)
-                                                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                                .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addGap(42, 42, 42)
-                                                .addComponent(jLabel7)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jScrollPane2)
-                                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap())
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(349, 349, 349)
-                                                .addComponent(jButton1)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel4)
+                                                                        .addComponent(jLabel5)
+                                                                        .addComponent(jLabel2)
+                                                                        .addComponent(jLabel1)
+                                                                        .addComponent(jLabel6)
+                                                                        .addComponent(jLabel8))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(textFieldID)
+                                                                        .addComponent(textFieldNama)
+                                                                        .addComponent(textFieldAlamat)
+                                                                        .addComponent(textFieldTelp)
+                                                                        .addGroup(layout.createSequentialGroup()
+                                                                                .addComponent(comboBoxJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addGap(18, 18, 18)
+                                                                                .addComponent(jLabel3)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addComponent(comboBoxProdi, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                        .addComponent(textFieldEmail))
+                                                                .addGap(48, 48, 48)
+                                                                .addComponent(jLabel7))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGap(399, 399, 399)
+                                                                .addComponent(btnSimpan)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(btnHapus)
+                                                                .addGap(0, 19, Short.MAX_VALUE)))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton3)))
-                                .addGap(19, 19, 19))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(comboBoxShift, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                                .addGap(116, 116, 116))))
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,61 +210,293 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
                                 .addGap(37, 37, 37)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel6)
-                                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(textFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel7)
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(comboBoxShift, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(11, 11, 11)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel1)
-                                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(textFieldNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel2)
-                                                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(comboBoxJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jLabel3)
-                                                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(comboBoxProdi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel4)
-                                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addComponent(textFieldTelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel5)
-                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(textFieldAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton3)
-                                        .addComponent(jButton2)
-                                        .addComponent(jButton1))
-                                .addContainerGap(44, Short.MAX_VALUE))
+                                        .addComponent(jLabel8)
+                                        .addComponent(textFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(27, 27, 27)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnHapus)
+                                        .addComponent(btnSimpan))
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
         }// </editor-fold>//GEN-END:initComponents
 
-        private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-                // TODO add your handling code here:
-        }//GEN-LAST:event_jTextField1ActionPerformed
+        private void textFieldNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldNamaActionPerformed
+		// TODO add your handling code here:
+        }//GEN-LAST:event_textFieldNamaActionPerformed
 
-        private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
-                // TODO add your handling code here:
-        }//GEN-LAST:event_jTextField6ActionPerformed
+        private void textFieldIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldIDActionPerformed
+		// TODO add your handling code here:
+        }//GEN-LAST:event_textFieldIDActionPerformed
 
+        private void tabelDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelDataMouseClicked
+		int barisTerpilih = this.tabelData.getSelectedRow();
+		String idKaryawan = (String) this.tabelData.getModel().getValueAt(barisTerpilih, 0);
+		this.getDataTerpilih(idKaryawan);
+        }//GEN-LAST:event_tabelDataMouseClicked
+
+        private void comboBoxShiftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxShiftActionPerformed
+		isiTabelDataShift();
+        }//GEN-LAST:event_comboBoxShiftActionPerformed
+
+        private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+		// UPDATE OR INSERT
+
+		if (!isFieldInputTerisiSemua()) {
+			return;
+		}
+		Karyawan dataKaryawanField = dapatkanDataFieldInput();
+
+		try {
+			db.simpanDataKaryawan(dataKaryawanField);
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		this.updateData();
+        }//GEN-LAST:event_btnSimpanActionPerformed
+
+        private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+		if (this.textFieldID.getText().isEmpty()) {
+			this.textFieldID.requestFocus();
+			Pesan.tampilkanPeringatan("Pastikan ID Terisi!");
+			return;
+		}
+
+		if (!this.db.isDataKaryawanAda(this.textFieldID.getText())) {
+			this.textFieldID.requestFocus();
+			Pesan.tampilkanPeringatan("Tidak ditemukan data yang Ber-ID: " + this.textFieldID.getText() + ". Pastikan ID valid!");
+			return;
+		}
+
+		if (!Pesan.tampilkanKonfirmasi("Konfirmasi Penghapusan Data",
+			"Anda Yakin ingin menghapus Data karyawan Ber-ID: " + this.textFieldID.getText() + "?.")) {
+			return;
+		}
+
+		try {
+			this.db.deleteDataKaryawan(this.textFieldID.getText());
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		this.updateData();
+        }//GEN-LAST:event_btnHapusActionPerformed
+
+	public void updateData() {
+		this.karyawanTerpilih = null;
+		this.prodiTerpilih = null;
+		this.shiftTerpilih = null;
+		this.jabatanTerpilih = null;
+		this.textFieldAlamat.setText("");
+		this.textFieldEmail.setText("");
+		this.textFieldID.setText("");
+		this.textFieldNama.setText("");
+		this.textFieldTelp.setText("");
+		dapatkanData();
+	}
+
+	private boolean isFieldInputTerisiSemua() {
+		if (this.textFieldID.getText().isEmpty()) {
+			textFieldID.requestFocus();
+			Pesan.tampilkanPeringatan("ID Masih Kosong");
+			return false;
+		} else if (this.textFieldNama.getText().isEmpty()) {
+			textFieldNama.requestFocus();
+			Pesan.tampilkanPeringatan("Nama masih Kosong");
+			return false;
+		} else if (this.textFieldTelp.getText().isEmpty()) {
+			this.textFieldTelp.requestFocus();
+			Pesan.tampilkanPeringatan("Masukan Nomor Telpon Karyawan");
+			return false;
+		} else if (this.textFieldAlamat.getText().isEmpty()) {
+			this.textFieldAlamat.requestFocus();
+			Pesan.tampilkanPeringatan("Masukan Alamat Rumah Karyawan");
+			return false;
+		} else if (this.textFieldEmail.getText().isEmpty()) {
+			this.textFieldEmail.requestFocus();
+			Pesan.tampilkanPeringatan("Masukan Alamat Email Karyawan");
+			return false;
+		}
+
+		return true;
+	}
+
+	private Karyawan dapatkanDataFieldInput() {
+		Karyawan karyawan = new Karyawan();
+
+		karyawan.idKaryawan = this.textFieldID.getText();
+		karyawan.namaKaryawan = this.textFieldNama.getText();
+		karyawan.alamat = this.textFieldAlamat.getText();
+		karyawan.noTelepon = this.textFieldTelp.getText();
+		karyawan.email = this.textFieldEmail.getText();
+
+		final Jabatan jabatan = (Jabatan) this.comboBoxJabatan.getSelectedItem();
+		final Prodi prodi = (Prodi) this.comboBoxProdi.getSelectedItem();
+		final Shift shift = (Shift) this.comboBoxShift.getSelectedItem();
+
+		karyawan.idJabatan = jabatan.idJabatan;
+		karyawan.idShift = shift.idShift;
+		karyawan.idProdi = prodi.id;
+
+		return karyawan;
+	}
+
+	private void isiTabelDataShift() {
+		Shift shift = (Shift) this.comboBoxShift.getSelectedItem();
+
+		if (shift == null) {
+			return;
+		}
+
+		DefaultTableModel model = new DefaultTableModel();
+
+		model.addColumn("SHIFT");
+		model.addColumn("JAM");
+		model.addRow(new Object[]{"JAM KERJA", shift.jadwalKerja()});
+		model.addRow(new Object[]{"JAM ISTIRAHAT", shift.jadwalIstirahat()});
+
+		this.tabelJadwalShift.setModel(model);
+	}
+
+	private void tampilkanDataTerpilih() {
+		this.textFieldID.setText(this.karyawanTerpilih.idKaryawan);
+		this.textFieldNama.setText(this.karyawanTerpilih.namaKaryawan);
+		this.textFieldAlamat.setText(this.karyawanTerpilih.alamat);
+		this.textFieldTelp.setText(this.karyawanTerpilih.noTelepon);
+		this.textFieldEmail.setText(this.karyawanTerpilih.email);
+	}
+
+	private void getDataTerpilih(String idKaryawan) {
+		try {
+			Object[] data = this.db.getDataKaryawan(idKaryawan);
+
+			this.karyawanTerpilih = (Karyawan) data[0];
+			this.prodiTerpilih = (Prodi) data[1];
+			this.jabatanTerpilih = (Jabatan) data[2];
+			this.shiftTerpilih = (Shift) data[3];
+
+			this.tampilkanDataTerpilih();
+			this.isiDataDataComboBox();
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	private void isiDataComboBoxShift() {
+		this.comboBoxShift.removeAllItems();
+		try {
+			LinkedList<Shift> dataShift = db.getDaftarDataShift();
+
+			for (Shift shift : dataShift) {
+				if (this.shiftTerpilih != null && this.shiftTerpilih.equals(shift)) {
+					continue;
+				}
+				this.comboBoxShift.addItem(shift);
+			}
+			if (this.shiftTerpilih != null) {
+				this.comboBoxShift.addItem(this.shiftTerpilih);
+				this.comboBoxShift.setSelectedItem(this.shiftTerpilih);
+			}
+
+			isiTabelDataShift();
+
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	private void isiDataComboBoxJabatan() {
+		this.comboBoxJabatan.removeAllItems();
+		try {
+			LinkedList<Jabatan> dataJabatan;
+			dataJabatan = db.getDaftarDataJabatan();
+			for (Jabatan jabatan : dataJabatan) {
+				if (this.jabatanTerpilih != null && this.jabatanTerpilih.equals(jabatan)) {
+					continue;
+				}
+				this.comboBoxJabatan.addItem(jabatan);
+			}
+			if (this.jabatanTerpilih != null) {
+				this.comboBoxJabatan.addItem(this.jabatanTerpilih);
+				this.comboBoxJabatan.setSelectedItem(this.jabatanTerpilih);
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	private void isiDataComboBoxProdi() {
+		this.comboBoxProdi.removeAllItems();
+		try {
+			LinkedList<Prodi> dataProdi;
+			dataProdi = db.getDaftarDataProdi();
+			for (Prodi prodi : dataProdi) {
+				if (this.prodiTerpilih != null && this.prodiTerpilih.equals(prodi)) {
+					continue;
+				}
+				this.comboBoxProdi.addItem(prodi);
+			}
+
+			if (this.prodiTerpilih != null) {
+				this.comboBoxProdi.addItem(this.prodiTerpilih);
+				this.comboBoxProdi.setSelectedItem(this.prodiTerpilih);
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	private void isiDataDataComboBox() {
+		this.isiDataComboBoxShift();
+		this.isiDataComboBoxJabatan();
+		this.isiDataComboBoxProdi();
+	}
+
+	private void dapatkanData() {
+		try {
+			this.tabelData.setModel(db.getModelTabel_Karyawan());
+			this.isiDataDataComboBox();
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JButton jButton1;
-        private javax.swing.JButton jButton2;
-        private javax.swing.JButton jButton3;
-        private javax.swing.JComboBox<String> jComboBox1;
-        private javax.swing.JComboBox<String> jComboBox2;
-        private javax.swing.JComboBox<String> jComboBox3;
+        private javax.swing.JButton btnHapus;
+        private javax.swing.JButton btnSimpan;
+        private javax.swing.JComboBox<Jabatan> comboBoxJabatan;
+        private javax.swing.JComboBox<Prodi> comboBoxProdi;
+        private javax.swing.JComboBox<Shift> comboBoxShift;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JLabel jLabel2;
         private javax.swing.JLabel jLabel3;
@@ -218,13 +504,15 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
         private javax.swing.JLabel jLabel5;
         private javax.swing.JLabel jLabel6;
         private javax.swing.JLabel jLabel7;
-        private javax.swing.JList<String> jList1;
+        private javax.swing.JLabel jLabel8;
         private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JScrollPane jScrollPane2;
-        private javax.swing.JTable jTable1;
-        private javax.swing.JTextField jTextField1;
-        private javax.swing.JTextField jTextField4;
-        private javax.swing.JTextField jTextField5;
-        private javax.swing.JTextField jTextField6;
+        private javax.swing.JScrollPane jScrollPane3;
+        private javax.swing.JTable tabelData;
+        private javax.swing.JTable tabelJadwalShift;
+        private javax.swing.JTextField textFieldAlamat;
+        private javax.swing.JTextField textFieldEmail;
+        private javax.swing.JTextField textFieldID;
+        private javax.swing.JTextField textFieldNama;
+        private javax.swing.JTextField textFieldTelp;
         // End of variables declaration//GEN-END:variables
 }

@@ -4,16 +4,21 @@
  */
 package sistemabsensi.admin.ui;
 
+import sistemabsensi.admin.data.DBAbsensi;
+
 /**
  *
  * @author rss
  */
 public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 
+	private DBAbsensi db;
+
 	/**
 	 * Creates new form JPanelMasterDataRecordAbsen
 	 */
-	public JPanelMasterDataRecordAbsen() {
+	public JPanelMasterDataRecordAbsen(DBAbsensi db) {
+		this.db = db;
 		initComponents();
 	}
 
@@ -40,8 +45,7 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                 jLabel5 = new javax.swing.JLabel();
                 jTextField4 = new javax.swing.JTextField();
                 jLabel6 = new javax.swing.JLabel();
-                jButton1 = new javax.swing.JButton();
-                jButton2 = new javax.swing.JButton();
+                btnHapus = new javax.swing.JButton();
                 jButton3 = new javax.swing.JButton();
 
                 setMaximumSize(new java.awt.Dimension(991, 599));
@@ -75,20 +79,18 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 
                 jLabel6.setText("ABSEN PULANG");
 
-                jButton1.setText("DELETE");
+                btnHapus.setText("HAPUS");
 
-                jButton2.setText("UPDATE");
-
-                jButton3.setText("CREATE");
+                jButton3.setText("SIMPAN");
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
                 layout.setHorizontalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(69, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addContainerGap(69, Short.MAX_VALUE)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,16 +112,15 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                                                                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                         .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                         .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                                .addGap(45, 45, 45)
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(52, 52, 52))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addGap(45, 45, 45))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(154, 154, 154)
                                                 .addComponent(jButton3)
-                                                .addGap(1, 1, 1)
-                                                .addComponent(jButton2)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton1)
-                                                .addGap(367, 367, 367))))
+                                                .addComponent(btnHapus)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(52, 52, 52))
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,21 +151,18 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel6)
                                                         .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(32, 32, 32)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jButton3)
+                                                        .addComponent(btnHapus))
                                                 .addGap(0, 0, Short.MAX_VALUE))
                                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE))
-                                .addGap(26, 26, 26)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton3)
-                                        .addComponent(jButton2)
-                                        .addComponent(jButton1))
-                                .addGap(18, 18, 18))
+                                .addGap(73, 73, 73))
                 );
         }// </editor-fold>//GEN-END:initComponents
 
-
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JButton jButton1;
-        private javax.swing.JButton jButton2;
+        private javax.swing.JButton btnHapus;
         private javax.swing.JButton jButton3;
         private javax.swing.JComboBox<String> jComboBox1;
         private javax.swing.JComboBox<String> jComboBox2;

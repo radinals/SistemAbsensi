@@ -9,5 +9,31 @@ package sistemabsensi.admin.data;
  * @author rss
  */
 public class Prodi {
-	
+
+	public Integer id;
+	public String namaProdi;
+
+	public Prodi() {
+		this(null, null);
+	}
+
+	public Prodi(Integer id, String namaProdi) {
+		this.id = id;
+		this.namaProdi = namaProdi;
+	}
+
+	@Override
+	public String toString() {
+		return namaProdi;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Prodi) {
+			return this.id == ((Prodi) obj).id;
+		} else {
+			return super.equals(obj);
+		}
+	}
+
 }
