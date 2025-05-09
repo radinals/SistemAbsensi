@@ -392,16 +392,15 @@ public class DBAbsensi {
 	public Karyawan getDataKaryawan(String idKaryawan) throws SQLException {
 		final String sql
 			= "SELECT "
-			+ "a.id_karyawan, a.nama_karyawan, a.password, b.nama_prodi,"
-			+ " c.nama_jabatan, d.role, e.jamMasukKerja, e.jamPulangKerja,"
+			+ "a.id_karyawan, a.nama_karyawan,"
+			+ " c.nama_jabatan, e.jamMasukKerja, e.jamPulangKerja,"
 			+ " e.jamIstirahat, e.jamSelesaiIstirahat"
 			+ " FROM"
-			+ " tkaryawan a, tprodi b, tjabatan c, trole d, tshift e"
+			+ " tkaryawan a, tprodi b, tjabatan c, tshift e"
 			+ " WHERE"
 			+ " a.id_karyawan = ? "
 			+ "AND a.id_prodi = b.id_prodi "
 			+ "AND a.id_jabatan = c.id_jabatan "
-			+ "AND a.id_role = d.id_role "
 			+ "AND a.id_shift = e.id_shift;";
 
 		try {
@@ -416,10 +415,6 @@ public class DBAbsensi {
 
 				karyawan.setIdKaryawan(result.getString("id_karyawan"));
 				karyawan.setNamaKaryawan(result.getString("nama_karyawan"));
-				karyawan.setPassword(result.getString("password"));
-				karyawan.setNamaProdi(result.getString("nama_prodi"));
-				karyawan.setRole(result.getString("role"));
-				karyawan.setJabatan(result.getString("nama_jabatan"));
 
 				karyawan.setShift(new Shift(
 					result.getTime("jamMasukKerja"),
