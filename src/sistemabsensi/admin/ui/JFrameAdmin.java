@@ -18,8 +18,6 @@ public class JFrameAdmin extends javax.swing.JFrame {
 	JPanelMasterDataKaryawan MasterDataKaryawan;
 	JPanelMasterDataRecordAbsen MasterDataRecordAbsen;
 	JPanelMasterDataShift MasterDataShift;
-	JPanelMasterDataProdi MasterDataProdi;
-	JPanelMasterDataJabatan MasterDataJabatan;
 
 	/**
 	 * Creates new form JFrameAdmin
@@ -30,14 +28,11 @@ public class JFrameAdmin extends javax.swing.JFrame {
 		this.MasterDataKaryawan = new JPanelMasterDataKaryawan(db);
 		this.MasterDataRecordAbsen = new JPanelMasterDataRecordAbsen(db);
 		this.MasterDataShift = new JPanelMasterDataShift(db);
-		this.MasterDataProdi = new JPanelMasterDataProdi(db);
-		this.MasterDataJabatan = new JPanelMasterDataJabatan(db);
+	
 
 		this.jPanelUtama.add("MasterDataKaryawan", this.MasterDataKaryawan);
 		this.jPanelUtama.add("MasterDataRecordAbsen", this.MasterDataRecordAbsen);
 		this.jPanelUtama.add("MasterDataShift", this.MasterDataShift);
-		this.jPanelUtama.add("MasterDataProdi", this.MasterDataProdi);
-		this.jPanelUtama.add("MasterDataJabatan", this.MasterDataJabatan);
 		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
 
 		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
@@ -52,31 +47,45 @@ public class JFrameAdmin extends javax.swing.JFrame {
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
+                jMenuItem1 = new javax.swing.JMenuItem();
+                jMenuBar2 = new javax.swing.JMenuBar();
+                jMenu2 = new javax.swing.JMenu();
+                jMenu3 = new javax.swing.JMenu();
+                jMenuItem2 = new javax.swing.JMenuItem();
                 jPanelUtama = new javax.swing.JPanel();
                 jMenuBar1 = new javax.swing.JMenuBar();
                 jMenu1 = new javax.swing.JMenu();
                 jMenu4 = new javax.swing.JMenu();
                 jMenuMasterData_Karyawan = new javax.swing.JMenuItem();
-                jMenuMasterData_Prodi = new javax.swing.JMenuItem();
-                jMenuMasterData_Jabatan = new javax.swing.JMenuItem();
-                jMenuMasterData_Shift = new javax.swing.JMenuItem();
+                jMenu5 = new javax.swing.JMenu();
                 jMenuMasterData_RecordAbsen = new javax.swing.JMenuItem();
+                jMenuMasterData_Shift = new javax.swing.JMenuItem();
+                jMenuItem3 = new javax.swing.JMenuItem();
+
+                jMenuItem1.setText("jMenuItem1");
+
+                jMenu2.setText("File");
+                jMenuBar2.add(jMenu2);
+
+                jMenu3.setText("Edit");
+                jMenuBar2.add(jMenu3);
+
+                jMenuItem2.setText("jMenuItem2");
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                setMaximumSize(new java.awt.Dimension(1024, 768));
-                setMinimumSize(new java.awt.Dimension(1024, 768));
+                setMaximumSize(new java.awt.Dimension(1366, 768));
+                setMinimumSize(new java.awt.Dimension(1366, 768));
                 setPreferredSize(new java.awt.Dimension(1024, 768));
                 setResizable(false);
                 getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
-                jPanelUtama.setMaximumSize(new java.awt.Dimension(991, 599));
                 jPanelUtama.setLayout(new java.awt.CardLayout());
                 getContentPane().add(jPanelUtama);
 
                 jMenu1.setText("File");
                 jMenuBar1.add(jMenu1);
 
-                jMenu4.setText("Master Data");
+                jMenu4.setText("Maintenence Karyawan");
 
                 jMenuMasterData_Karyawan.setText("Karyawan");
                 jMenuMasterData_Karyawan.addActionListener(new java.awt.event.ActionListener() {
@@ -86,29 +95,9 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 });
                 jMenu4.add(jMenuMasterData_Karyawan);
 
-                jMenuMasterData_Prodi.setText("Prodi");
-                jMenuMasterData_Prodi.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jMenuMasterData_ProdiActionPerformed(evt);
-                        }
-                });
-                jMenu4.add(jMenuMasterData_Prodi);
+                jMenuBar1.add(jMenu4);
 
-                jMenuMasterData_Jabatan.setText("Jabatan");
-                jMenuMasterData_Jabatan.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jMenuMasterData_JabatanActionPerformed(evt);
-                        }
-                });
-                jMenu4.add(jMenuMasterData_Jabatan);
-
-                jMenuMasterData_Shift.setText("Shift");
-                jMenuMasterData_Shift.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jMenuMasterData_ShiftActionPerformed(evt);
-                        }
-                });
-                jMenu4.add(jMenuMasterData_Shift);
+                jMenu5.setText("Maintenence Absensi");
 
                 jMenuMasterData_RecordAbsen.setText("Record Absen");
                 jMenuMasterData_RecordAbsen.addActionListener(new java.awt.event.ActionListener() {
@@ -116,9 +105,25 @@ public class JFrameAdmin extends javax.swing.JFrame {
                                 jMenuMasterData_RecordAbsenActionPerformed(evt);
                         }
                 });
-                jMenu4.add(jMenuMasterData_RecordAbsen);
+                jMenu5.add(jMenuMasterData_RecordAbsen);
 
-                jMenuBar1.add(jMenu4);
+                jMenuMasterData_Shift.setText("Shift");
+                jMenuMasterData_Shift.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuMasterData_ShiftActionPerformed(evt);
+                        }
+                });
+                jMenu5.add(jMenuMasterData_Shift);
+
+                jMenuItem3.setText("Laporan Absen");
+                jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuItem3ActionPerformed(evt);
+                        }
+                });
+                jMenu5.add(jMenuItem3);
+
+                jMenuBar1.add(jMenu5);
 
                 setJMenuBar(jMenuBar1);
 
@@ -138,15 +143,9 @@ public class JFrameAdmin extends javax.swing.JFrame {
 		this.layoutPanel.show(this.jPanelUtama, "MasterDataShift");
         }//GEN-LAST:event_jMenuMasterData_ShiftActionPerformed
 
-        private void jMenuMasterData_ProdiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_ProdiActionPerformed
-		this.layoutPanel.show(this.jPanelUtama, "MasterDataProdi");
-		this.MasterDataProdi.updateData();
-        }//GEN-LAST:event_jMenuMasterData_ProdiActionPerformed
-
-        private void jMenuMasterData_JabatanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_JabatanActionPerformed
-		this.layoutPanel.show(this.jPanelUtama, "MasterDataJabatan");
-		this.MasterDataJabatan.updateData();
-        }//GEN-LAST:event_jMenuMasterData_JabatanActionPerformed
+        private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+                // TODO add your handling code here:
+        }//GEN-LAST:event_jMenuItem3ActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -185,11 +184,16 @@ public class JFrameAdmin extends javax.swing.JFrame {
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JMenu jMenu1;
+        private javax.swing.JMenu jMenu2;
+        private javax.swing.JMenu jMenu3;
         private javax.swing.JMenu jMenu4;
+        private javax.swing.JMenu jMenu5;
         private javax.swing.JMenuBar jMenuBar1;
-        private javax.swing.JMenuItem jMenuMasterData_Jabatan;
+        private javax.swing.JMenuBar jMenuBar2;
+        private javax.swing.JMenuItem jMenuItem1;
+        private javax.swing.JMenuItem jMenuItem2;
+        private javax.swing.JMenuItem jMenuItem3;
         private javax.swing.JMenuItem jMenuMasterData_Karyawan;
-        private javax.swing.JMenuItem jMenuMasterData_Prodi;
         private javax.swing.JMenuItem jMenuMasterData_RecordAbsen;
         private javax.swing.JMenuItem jMenuMasterData_Shift;
         private javax.swing.JPanel jPanelUtama;

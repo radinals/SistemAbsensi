@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.util.LinkedList;
 import javax.swing.table.DefaultTableModel;
 import sistemabsensi.admin.ui.Pesan;
@@ -234,99 +233,6 @@ public class DBAbsensi {
 		}
 	}
 
-	public LinkedList<RecordAbsen> getDaftarDataRecordAbsen() throws SQLException {
-		final String sql = "SELECT * FROM tprodi ";
-
-		LinkedList<RecordAbsen> data = new LinkedList<>();
-
-		try {
-			PreparedStatement query = this.getConnection().prepareStatement(sql);
-
-			ResultSet result = query.executeQuery();
-
-			while (result.next()) {
-				RecordAbsen record = new RecordAbsen();
-				record.idKaryawan = result.getString("id_karyawan");
-				record.idRecord = result.getInt("id_recordabsen");
-				record.jamAbsenIstirahat = result.getTime("jamAbsenMulaiIstirahat");
-				record.jamAbsenKembaliIstirahat = result.getTime("jamAbsenKembaliIstirahat");
-				record.jamAbsenPulang = result.getTime("jamAbsenPulang");
-				record.jamAbsenMasuk = result.getTime("jamAbsenMasuk");
-				record.tanggalRecord = result.getDate("tanggalRecord");
-				data.add(record);
-			}
-
-			return data;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	public LinkedList<RecordAbsen> getDaftarDataRecordAbsen(String idKaryawan) throws SQLException {
-		final String sql = "SELECT * FROM trecordabsen WHERE id_karyawan = ?";
-
-		LinkedList<RecordAbsen> data = new LinkedList<>();
-
-		try {
-			PreparedStatement query = this.getConnection().prepareStatement(sql);
-
-			query.setString(1, idKaryawan);
-
-			ResultSet result = query.executeQuery();
-
-			while (result.next()) {
-				RecordAbsen record = new RecordAbsen();
-				record.idKaryawan = result.getString("id_karyawan");
-				record.idRecord = result.getInt("id_recordabsen");
-				record.jamAbsenIstirahat = result.getTime("jamAbsenMulaiIstirahat");
-				record.jamAbsenKembaliIstirahat = result.getTime("jamAbsenKembaliIstirahat");
-				record.jamAbsenPulang = result.getTime("jamAbsenPulang");
-				record.jamAbsenMasuk = result.getTime("jamAbsenMasuk");
-				record.tanggalRecord = result.getDate("tanggalRecord");
-				data.add(record);
-			}
-
-			return data;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	public LinkedList<DetailRecord> getDaftarDataCatatanRecord(int idRecordAbsen) throws SQLException {
-		final String sql = "SELECT * FROM tdetailrecord WHERE id_recordabsen = ?";
-
-		LinkedList<DetailRecord> data = new LinkedList<>();
-
-		try {
-			PreparedStatement query = this.getConnection().prepareStatement(sql);
-
-			query.setInt(1, idRecordAbsen);
-
-			ResultSet result = query.executeQuery();
-
-			while (result.next()) {
-				DetailRecord detail = new DetailRecord();
-
-				detail.catatanAbsen = result.getString("catatan_absen");
-				detail.kdKategori = result.getString("kd_kategori");
-				detail.idDetailRecord = result.getInt("id_detailabsen");
-				detail.idRecordAbsen = result.getInt("id_recordabsen");
-
-				data.add(detail);
-			}
-
-			return null;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
 	public LinkedList<Shift> getDaftarDataShift() throws SQLException {
 		final String sql = "SELECT * FROM tshift";
 
@@ -341,10 +247,9 @@ public class DBAbsensi {
 				Shift shift = new Shift();
 
 				shift.idShift = result.getInt("id_shift");
-				shift.jamIstirahat = result.getTime("jamIstirahat");
-				shift.jamMasukKerja = result.getTime("jamMasukKerja");
-				shift.jamPulangKerja = result.getTime("jamPulangKerja");
-				shift.jamSelesaiIstirahat = result.getTime("jamSelesaiIstirahat");
+				shift.shift_start = result.getTime("shift_start");
+				shift.shift_end = result.getTime("shift_end");
+				shift.deskripsi = result.getString("deskripsi");
 
 				data.add(shift);
 			}
@@ -363,8 +268,8 @@ public class DBAbsensi {
 			= "SELECT "
 			+ "a.id_karyawan, a.nama_karyawan, a.id_prodi, b.nama_prodi, "
 			+ "a.id_jabatan, c.nama_jabatan, "
-			+ "a.id_shift, e.jamMasukKerja, e.jamPulangKerja, "
-			+ "e.jamIstirahat, e.jamSelesaiIstirahat, "
+			+ "a.id_shift, e.deskripsi, "
+			+ "e.shift_start, e.shift_end, "
 			+ "a.email, a.no_telp, a.alamat "
 			+ "FROM tkaryawan a "
 			+ "LEFT JOIN tprodi b ON a.id_prodi = b.id_prodi "
@@ -377,44 +282,41 @@ public class DBAbsensi {
 			ResultSet result = query.executeQuery();
 
 			if (result.next()) {
+
 				Karyawan karyawan = new Karyawan();
-				karyawan.idKaryawan = result.getString("id_karyawan");
+				karyawan.alamat = result.getString("alamat");
 				karyawan.namaKaryawan = result.getString("nama_karyawan");
-
-				int idProdi = result.getInt("id_prodi");
-				karyawan.idProdi = result.wasNull() ? null : idProdi;
-
-				int idJabatan = result.getInt("id_jabatan");
-				karyawan.idJabatan = result.wasNull() ? null : idJabatan;
-
-				int idShift = result.getInt("id_shift");
-				karyawan.idShift = result.wasNull() ? null : idShift;
-
 				karyawan.email = result.getString("email");
 				karyawan.noTelepon = result.getString("no_telp");
-				karyawan.alamat = result.getString("alamat");
+				karyawan.idKaryawan = result.getString("id_karyawan");
+				karyawan.idJabatan = null;
+				karyawan.idProdi = null;
+				karyawan.idShift = null;
 
 				Prodi prodi = null;
-				if (result.getString("nama_prodi") != null) {
+				int idProdi = result.getInt("id_prodi");
+				if (!result.wasNull() && result.getString("nama_prodi") != null) {
+					karyawan.idProdi = idProdi;
 					prodi = new Prodi(idProdi, result.getString("nama_prodi"));
 				}
 
 				Jabatan jabatan = null;
-				if (result.getString("nama_jabatan") != null) {
+				int idJabatan = result.getInt("id_jabatan");
+				if (!result.wasNull() && result.getString("nama_jabatan") != null) {
+					karyawan.idJabatan = idJabatan;
 					jabatan = new Jabatan(idJabatan, result.getString("nama_jabatan"));
 				}
 
 				Shift shift = null;
-				if (!result.wasNull()) {
-					Time jamMasuk = result.getTime("jamMasukKerja");
-					if (jamMasuk != null) { // Pastikan setidaknya ada satu data shift
-						shift = new Shift();
-						shift.idShift = idShift;
-						shift.jamMasukKerja = jamMasuk;
-						shift.jamPulangKerja = result.getTime("jamPulangKerja");
-						shift.jamIstirahat = result.getTime("jamIstirahat");
-						shift.jamSelesaiIstirahat = result.getTime("jamSelesaiIstirahat");
-					}
+				int idShift = result.getInt("id_shift");
+				if (!result.wasNull() && result.getTime("shift_start") != null) {
+					shift = new Shift();
+					karyawan.idShift = idShift;
+					shift.idShift = idShift;
+					shift.shift_start = result.getTime("shift_start");
+					shift.shift_end = result.getTime("shift_end");
+					shift.deskripsi = result.getString("deskripsi");
+
 				}
 
 				return new Object[]{karyawan, prodi, jabatan, shift};
@@ -480,8 +382,7 @@ public class DBAbsensi {
 			= "SELECT "
 			+ "a.id_karyawan, a.nama_karyawan, a.id_prodi, b.nama_prodi, "
 			+ "a.id_jabatan, c.nama_jabatan, "
-			+ "a.id_shift, e.jamMasukKerja, e.jamPulangKerja, "
-			+ "e.jamIstirahat, e.jamSelesaiIstirahat, "
+			+ "a.id_shift, e.shift_start, e.shift_end, e.deskripsi,"
 			+ "a.email, a.no_telp, a.alamat "
 			+ "FROM tkaryawan a "
 			+ "LEFT JOIN tprodi b ON a.id_prodi = b.id_prodi "
@@ -517,14 +418,13 @@ public class DBAbsensi {
 
 				Shift shift = null;
 				int idShift = result.getInt("id_shift");
-				Time jamMasuk = result.getTime("jamMasukKerja");
-				if (!result.wasNull() && jamMasuk != null) {
+				if (!result.wasNull() && result.getTime("shift_start") != null) {
 					shift = new Shift();
 					shift.idShift = idShift;
-					shift.jamMasukKerja = jamMasuk;
-					shift.jamPulangKerja = result.getTime("jamPulangKerja");
-					shift.jamIstirahat = result.getTime("jamIstirahat");
-					shift.jamSelesaiIstirahat = result.getTime("jamSelesaiIstirahat");
+					shift.shift_start = result.getTime("shift_start");
+					shift.shift_end = result.getTime("shift_end");
+					shift.deskripsi = result.getString("deskripsi");
+
 				}
 
 				Object[] row = {
@@ -537,6 +437,7 @@ public class DBAbsensi {
 					result.getString("no_telp"),
 					result.getString("email")
 				};
+
 				model.addRow(row);
 			}
 
@@ -774,10 +675,6 @@ public class DBAbsensi {
 	}
 
 	public void updateDataRecordAbsen(final RecordAbsen record) {
-
-	}
-
-	public void updateDataCatatanRecord(final DetailRecord catatan) {
 
 	}
 

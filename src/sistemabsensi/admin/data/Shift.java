@@ -13,21 +13,19 @@ import java.sql.Time;
 public class Shift {
 
 	public Integer idShift;
-	public Time jamMasukKerja;
-	public Time jamPulangKerja;
-	public Time jamIstirahat;
-	public Time jamSelesaiIstirahat;
+	public Time shift_start;
+	public Time shift_end;
+	public String deskripsi;
 
 	public Shift() {
-		this(null, null, null, null, null);
+		this(null, null, null, null);
 	}
 
-	public Shift(Integer idShift, Time jamMasukKerja, Time jamPulangKerja, Time JamIstirahat, Time jamSelesaiIstirahat) {
+	public Shift(Integer idShift, Time shift_start, Time shift_end, String deskripsi) {
 		this.idShift = idShift;
-		this.jamMasukKerja = jamMasukKerja;
-		this.jamPulangKerja = jamPulangKerja;
-		this.jamIstirahat = jamIstirahat;
-		this.jamSelesaiIstirahat = jamSelesaiIstirahat;
+		this.shift_end = shift_end;
+		this.shift_start = shift_start;
+		this.deskripsi = deskripsi;
 	}
 
 	@Override
@@ -39,16 +37,12 @@ public class Shift {
 		}
 	}
 
-	public String jadwalKerja() {
-		return String.format("%s - %s", this.jamMasukKerja, this.jamPulangKerja);
-	}
-
-	public String jadwalIstirahat() {
-		return String.format("%s - %s", this.jamIstirahat, this.jamSelesaiIstirahat);
+	public String jadwal() {
+		return String.format("%s - %s", this.shift_start, this.shift_end);
 	}
 
 	@Override
 	public String toString() {
-		return this.idShift.toString();
+		return String.format("(%s) %s [%s]", this.idShift.toString(), this.deskripsi, jadwal());
 	}
 }

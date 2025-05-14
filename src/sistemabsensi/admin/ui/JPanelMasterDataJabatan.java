@@ -19,17 +19,20 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
 	private DBAbsensi db;
 
 	private Jabatan jabatanTerpilih;
+	private final JPanelMasterDataKaryawan panelKaryawan;
 
 	/**
 	 * Creates new form JPanelMasterDataShift
 	 */
-	public JPanelMasterDataJabatan(DBAbsensi db) {
+	public JPanelMasterDataJabatan(DBAbsensi db, JPanelMasterDataKaryawan panelKaryawan) {
 		this.db = db;
+		this.panelKaryawan = panelKaryawan;
 		initComponents();
 		this.updateData();
 	}
 
 	public void updateData() {
+		this.panelKaryawan.updateData();
 		this.jabatanTerpilih = null;
 		this.textFieldNamaJabatan.setText("");
 		this.dapatkanData();
@@ -51,17 +54,18 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
 	@SuppressWarnings("unchecked")
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
-                java.awt.GridBagConstraints gridBagConstraints;
 
                 jScrollPane1 = new javax.swing.JScrollPane();
                 tabelData = new javax.swing.JTable();
-                textFieldNamaJabatan = new javax.swing.JTextField();
+                jPanel1 = new javax.swing.JPanel();
                 jLabel1 = new javax.swing.JLabel();
-                btnHapus = new javax.swing.JButton();
+                textFieldNamaJabatan = new javax.swing.JTextField();
+                jPanel2 = new javax.swing.JPanel();
                 btnSimpan = new javax.swing.JButton();
+                btnHapus = new javax.swing.JButton();
 
                 setMaximumSize(new java.awt.Dimension(991, 599));
-                setLayout(new java.awt.GridBagLayout());
+                setLayout(null);
 
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
@@ -81,54 +85,25 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 });
                 jScrollPane1.setViewportView(tabelData);
 
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 8;
-                gridBagConstraints.gridy = 0;
-                gridBagConstraints.gridheight = 10;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-                gridBagConstraints.ipadx = 463;
-                gridBagConstraints.ipady = 213;
-                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.weighty = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(109, 34, 251, 68);
-                add(jScrollPane1, gridBagConstraints);
+                add(jScrollPane1);
+                jScrollPane1.setBounds(20, 130, 710, 190);
+
+                jPanel1.setLayout(new java.awt.GridLayout());
+
+                jLabel1.setText("NAMA JABATAN");
+                jPanel1.add(jLabel1);
 
                 textFieldNamaJabatan.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 textFieldNamaJabatanActionPerformed(evt);
                         }
                 });
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 5;
-                gridBagConstraints.gridy = 0;
-                gridBagConstraints.gridwidth = 3;
-                gridBagConstraints.gridheight = 2;
-                gridBagConstraints.ipadx = 147;
-                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                gridBagConstraints.insets = new java.awt.Insets(109, 6, 0, 0);
-                add(textFieldNamaJabatan, gridBagConstraints);
+                jPanel1.add(textFieldNamaJabatan);
 
-                jLabel1.setText("NAMA JABATAN");
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 0;
-                gridBagConstraints.gridy = 0;
-                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                gridBagConstraints.insets = new java.awt.Insets(114, 36, 0, 0);
-                add(jLabel1, gridBagConstraints);
+                add(jPanel1);
+                jPanel1.setBounds(30, 20, 700, 40);
 
-                btnHapus.setText("HAPUS");
-                btnHapus.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnHapusActionPerformed(evt);
-                        }
-                });
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 6;
-                gridBagConstraints.gridy = 8;
-                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                gridBagConstraints.insets = new java.awt.Insets(51, 6, 0, 0);
-                add(btnHapus, gridBagConstraints);
+                jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
                 btnSimpan.setText("SIMPAN");
                 btnSimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -136,13 +111,18 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                                 btnSimpanActionPerformed(evt);
                         }
                 });
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 0;
-                gridBagConstraints.gridy = 8;
-                gridBagConstraints.gridwidth = 4;
-                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                gridBagConstraints.insets = new java.awt.Insets(51, 101, 0, 0);
-                add(btnSimpan, gridBagConstraints);
+                jPanel2.add(btnSimpan);
+
+                btnHapus.setText("HAPUS");
+                btnHapus.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnHapusActionPerformed(evt);
+                        }
+                });
+                jPanel2.add(btnHapus);
+
+                add(jPanel2);
+                jPanel2.setBounds(210, 80, 340, 40);
         }// </editor-fold>//GEN-END:initComponents
 
         private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
@@ -229,6 +209,8 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
         private javax.swing.JButton btnHapus;
         private javax.swing.JButton btnSimpan;
         private javax.swing.JLabel jLabel1;
+        private javax.swing.JPanel jPanel1;
+        private javax.swing.JPanel jPanel2;
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JTable tabelData;
         private javax.swing.JTextField textFieldNamaJabatan;

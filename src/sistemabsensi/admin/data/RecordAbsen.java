@@ -4,8 +4,7 @@
  */
 package sistemabsensi.admin.data;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.sql.Timestamp;
 
 /**
  *
@@ -13,31 +12,29 @@ import java.sql.Time;
  */
 public class RecordAbsen {
 
-	public Integer idRecord;
-	public String idKaryawan;
-	public Time jamAbsenMasuk;
-	public Time jamAbsenIstirahat;
-	public Time jamAbsenKembaliIstirahat;
-	public Time jamAbsenPulang;
-	public Date tanggalRecord;
-
+	public enum TipeAbsen {
+		ABSEN_MASUK,
+		ABSEN_PULANG,
+		ABSEN_ISTIRAHAT,
+		ABSEN_KEMBALI_ISTIRAHAT;
+	};
+	
+	public int id_recordabsen;
+	public Timestamp waktu_absen;
+	public String id_karyawan;
+	public String catatan_absen;
+	public TipeAbsen tipe_absen;
+	
 	public RecordAbsen() {
-		this(null, null, null, null, null, null, null);
+		this(-1, null, null, null, null);
 	}
-
-	public RecordAbsen(
-		Integer idRecord, String idKaryawan,
-		Time jamAbsenMasuk, Time jamAbsenIstirahat,
-		Time jamAbsenKembaliIstirahat, Time jamAbsenPulang,
-		Date tanggalRecord
-	) {
-		this.idRecord = idRecord;
-		this.idKaryawan = idKaryawan;
-		this.jamAbsenMasuk = jamAbsenMasuk;
-		this.jamAbsenIstirahat = jamAbsenIstirahat;
-		this.jamAbsenKembaliIstirahat = jamAbsenKembaliIstirahat;
-		this.jamAbsenPulang = jamAbsenPulang;
-		this.tanggalRecord = tanggalRecord;
+	
+	public RecordAbsen(int id_recordabsen, Timestamp waktu_absen, String id_karyawan, String catatan_absen, TipeAbsen tipe_absen) {
+		this.id_recordabsen = id_recordabsen;
+		this.id_karyawan = id_karyawan;
+		this.catatan_absen = catatan_absen;
+		this.waktu_absen = waktu_absen;
+		this.tipe_absen = tipe_absen;
 	}
 
 }

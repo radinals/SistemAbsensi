@@ -36,4 +36,70 @@ public class Karyawan {
 		this.noTelepon = noTelepon;
 		this.email = email;
 	}
+
+	public String getIdKaryawan() {
+		return idKaryawan;
+	}
+
+	public void setIdKaryawan(String idKaryawan) {
+		this.idKaryawan = idKaryawan;
+	}
+
+	public String getNamaKaryawan() {
+		return namaKaryawan;
+	}
+
+	public void setNamaKaryawan(String namaKaryawan) {
+		this.namaKaryawan = namaKaryawan;
+	}
+
+	public Integer getIdProdi() {
+		return idProdi;
+	}
+
+	public void setIdProdi(Integer idProdi) {
+		this.idProdi = idProdi;
+	}
+
+	public Integer getIdShift() {
+		return idShift;
+	}
+
+	public void setIdShift(Integer idShift) {
+		this.idShift = idShift;
+	}
+
+	public Integer getIdJabatan() {
+		return idJabatan;
+	}
+
+	public void setIdJabatan(Integer idJabatan) {
+		this.idJabatan = idJabatan;
+	}
+
+	public String getAlamat() {
+		return alamat;
+	}
+
+	public void setAlamat(String alamat) {
+		this.alamat = alamat;
+	}
+
+	public String getNoTelepon() {
+		return noTelepon;
+	}
+
+	public void setNoTelepon(String noTelepon) {
+		this.noTelepon = noTelepon;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
 }
