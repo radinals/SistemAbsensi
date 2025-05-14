@@ -10,11 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import sistemabsensi.database.connection.DBConnection;
+import sistemabsensi.user.data.RecordAbsen.TipeAbsen;
 
 /**
  *
@@ -137,247 +136,101 @@ public class DBAbsensi {
 		}
 		return false;
 	}
-
-	//------------------------------------------------------------------------------------------------------------//
-	// Buatkan detail record baru untuk sebuah record                                                             //
-	//------------------------------------------------------------------------------------------------------------//
-	public void buatDetailRecord(int idRecord, String catatan, KategoriCatatanAbsen kd_kategori) {
-
-		final String sql
-			= "INSERT INTO tdetailabsen("
-			+ "id_recordabsen,"
-			+ " catatan_absen,"
-			+ " kd_kategoriAbsen,"
-			+ " time_created,"
-			+ " time_modified)"
-			+ " VALUES (?,?,?,?,?);";
+	
+	public void tambahkanRecordAbsen(String id_karyawan, TipeAbsen tipe_absen, String catatan) throws SQLException {
+		final String sql = "INSERT INTO trecordabsen values (default,?,?,?,?);";
 
 		try {
+			LinkedList<RecordAbsen> daftarTanggal = new LinkedList<>();
 			PreparedStatement query = this.getConnection().prepareStatement(sql);
-
-			final Timestamp timestampSekarang = Timestamp.valueOf(LocalDateTime.now());
-
-			query.setInt(1, idRecord);
-			query.setString(2, catatan);
-			query.setString(3, kd_kategori.toString());
-			query.setTimestamp(4, timestampSekarang);
-			query.setTimestamp(5, timestampSekarang);
 			
-			int affected = query.executeUpdate();
+			Date tanggalSekarang = Date.valueOf(LocalDate.now());
 
-			System.out.println("MENAMBAHKAN DETAIL ABSEN BARU: " + affected);
+			RecordAbsen record = RecordAbsen.buatRecordAbsen(tipe_absen, id_karyawan, catatan);
+			
+			query.setTimestamp(1, record.waktu_absen);
+			query.setString(2, record.id_karyawan);
+			query.setString(3, record.catatan_absen);
+			query.setString(4, record.tipe_absen.toString());
+
+			int affected = query.executeUpdate();
+			
+			System.out.println("MENGINSERT " + affected + " recordabsen.");
 
 		} catch (SQLException e) {
-			exitError("Gagal Membuat Detail Record", e);
+			e.printStackTrace();
+			throw e;
 		}
 	}
 	
-	//-----------------------------------------------------------------------------------------------------------------//
-	// Dapatkan Data catatan detail record absen                                                                       //
-	//-----------------------------------------------------------------------------------------------------------------//
 	
-	public String getCatatanDetailRecord(final RecordAbsen record, KategoriCatatanAbsen kategori) throws SQLException {
-		final String sql = "SELECT catatan_absen FROM tdetailabsen WHERE id_recordabsen = ? AND kd_kategoriAbsen = ?;";
-		try {
-			PreparedStatement query = this.getConnection().prepareStatement(sql);
+	public boolean adaDataRecordAbsenHariIni(String idKaryawan, TipeAbsen tipe) throws SQLException {
+		final String sql = "SELECT * FROM trecordabsen WHERE id_karyawan = ? AND DATE(waktu_absen) = ? AND tipe_absen = ?;";
 
-			query.setInt(1, record.getIdRecord());
-			query.setString(2, kategori.toString());
+		try {
+			LinkedList<RecordAbsen> daftarTanggal = new LinkedList<>();
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			
+			Date tanggalSekarang = Date.valueOf(LocalDate.now());
+
+			query.setString(1, idKaryawan);
+			query.setDate(2, tanggalSekarang);
+			query.setString(3, tipe.toString());
 
 			ResultSet result = query.executeQuery();
 
-			if (result.next()) {
-				return result.getString("catatan_absen");
-			}
-
-			return "";
+			return result.next();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
 		}
-		
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------//
-	// Lakukan UPDATE pada sebuah data tabel record abse menggunakan data yang disimpan pada sebuah RecordAbsen        //
-	//-----------------------------------------------------------------------------------------------------------------//
-	public void updateRecordAbsenKaryawan(final RecordAbsen recordAbsen) throws SQLException {
-		final String sql
-			= "UPDATE trecordabsen"
-			+ " SET "
-			+ "jamAbsenMasuk = ?,"
-			+ " jamAbsenPulang = ?,"
-			+ " jamAbsenMulaiIstirahat = ?,"
-			+ " jamAbsenKembaliIstirahat = ?,"
-			+ " time_modified = ?"
-			+ " WHERE"
-			+ " id_recordabsen = ?;";
-		try {
-			PreparedStatement query = this.getConnection().prepareStatement(sql);
-
-			final Timestamp timestampSekarang = Timestamp.valueOf(LocalDateTime.now());
-
-			query.setTime(1, recordAbsen.getWaktuMasuk());
-			query.setTime(2, recordAbsen.getWaktuPulang());
-			query.setTime(3, recordAbsen.getWaktuIstirahat());
-			query.setTime(4, recordAbsen.getWaktuSelesaiIstirahat());
-			query.setTimestamp(5, timestampSekarang);
-			query.setInt(6, recordAbsen.getIdRecord());
-
-			int affected = query.executeUpdate();
-
-			System.out.println("UPDATE RECORD ABSEN: " + affected);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		}
-
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------//
 	// Kembalikan Sebuah Linked List / Daftar semua data record yang dimiliki seorang karyawan                            //
 	//--------------------------------------------------------------------------------------------------------------------//
-	public LinkedList<RecordAbsen> getDaftarRecordAbsenKaryawan(String idKaryawan) throws SQLException {
-		final String sql = "SELECT * FROM trecordabsen where id_karyawan = ?;";
+	public LinkedList<RecordAbsen> getDaftarRecordAbsenKaryawanHariIni(String idKaryawan) throws SQLException {
+		final String sql = "SELECT * FROM trecordabsen WHERE id_karyawan = ? AND DATE(waktu_absen) = ?;";
 
 		try {
 			LinkedList<RecordAbsen> daftarTanggal = new LinkedList<>();
 			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			
+			Date tanggalSekarang = Date.valueOf(LocalDate.now());
 
 			query.setString(1, idKaryawan);
+			query.setDate(2, tanggalSekarang);
 
 			ResultSet result = query.executeQuery();
 
 			while (result.next()) {
 				RecordAbsen record = new RecordAbsen();
-				record.setIdKaryawan(result.getString("id_karyawan"));
-				record.setIdRecord(result.getInt("id_recordabsen"));
-				record.setWaktuMasuk(result.getTime("jamAbsenMasuk"));
-				record.setWaktuPulang(result.getTime("jamAbsenPulang"));
-				record.setWaktuIstirahat(result.getTime("jamAbsenMulaiIstirahat"));
-				record.setWaktuSelesaiIstirahat(result.getTime("jamAbsenKembaliIstirahat"));
-				record.setTglRecord(result.getDate("tanggalrecord"));
-				record.setCatatanRecord(this);
+				record.id_recordabsen = result.getInt("id_recordabsen");
+				record.id_karyawan = result.getString("id_karyawan");
+				record.waktu_absen = result.getTimestamp("waktu_absen");
+				
+				switch(result.getString("tipe_absen")) {
+					case "ABSEN_MASUK":
+						record.tipe_absen = TipeAbsen.ABSEN_MASUK;
+						break;
+					case "ABSEN_PULANG":
+						record.tipe_absen = TipeAbsen.ABSEN_PULANG;
+						break;
+					case "ABSEN_ISTIRAHAT":
+						record.tipe_absen = TipeAbsen.ABSEN_ISTIRAHAT;
+						break;
+					case "ABSEN_KEMBALI_ISTIRAHAT":
+						record.tipe_absen = TipeAbsen.ABSEN_KEMBALI_ISTIRAHAT;
+						break;
+					
+				}
+				
+				record.catatan_absen = result.getString("catatan_absen");
 				daftarTanggal.add(record);
 			}
 
 			return daftarTanggal;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------//
-	// Dapatkan sebuah data record absen karyawan pada suatu tanggal                                       //
-	// (hanya akan ada 1 record untuk tiap tanggal)                                                        //
-	//-----------------------------------------------------------------------------------------------------//
-	public RecordAbsen getRecordAbsenKaryawan(String idKaryawan, Date tanggalRecord) throws SQLException {
-		final String sql = "SELECT * FROM trecordabsen where id_karyawan = ? and tanggalrecord = ?;";
-
-		try {
-			PreparedStatement query = this.getConnection().prepareStatement(sql);
-
-			query.setString(1, idKaryawan);
-			query.setDate(2, tanggalRecord);
-
-			ResultSet result = query.executeQuery();
-
-			if (!result.next()) {
-				throw new SQLException("DATA TIDAK DITEMUKAN");
-			}
-
-			RecordAbsen record = new RecordAbsen();
-			record.setIdKaryawan(result.getString("id_karyawan"));
-			record.setIdRecord(result.getInt("id_recordabsen"));
-			record.setWaktuMasuk(result.getTime("jamAbsenMasuk"));
-			record.setWaktuPulang(result.getTime("jamAbsenPulang"));
-			record.setWaktuIstirahat(result.getTime("jamAbsenMulaiIstirahat"));
-			record.setWaktuSelesaiIstirahat(result.getTime("jamAbsenKembaliIstirahat"));
-			record.setTglRecord(result.getDate("tanggalrecord"));
-			record.setCatatanRecord(this);
-
-			return record;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------------------//
-	// Buatkan Record Absen untuk seorang karyawan                                                                                   // 
-	//-------------------------------------------------------------------------------------------------------------------------------//
-	private void createRecordAbsenBaruKaryawan(String idKaryawan) throws SQLException {
-		final String sql
-			= "INSERT INTO "
-			+ "trecordabsen("
-			+ "id_karyawan,"
-			+ " tanggalrecord,"
-			+ " time_created,"
-			+ " time_modified)"
-			+ " values "
-			+ "	(?,?,?,?);";
-
-		try {
-			PreparedStatement query = this.getConnection().prepareStatement(sql);
-
-			final Timestamp timestampSekarang = Timestamp.valueOf(LocalDateTime.now());
-			final Date tanggalSekarang = Date.valueOf(LocalDate.now());
-
-			query.setString(1, idKaryawan);
-			query.setDate(2, tanggalSekarang);
-			query.setTimestamp(3, timestampSekarang);
-			query.setTimestamp(4, timestampSekarang);
-
-			int affected = query.executeUpdate();
-
-			System.out.println("MENAMBAHKAN RECORD ABSEN BARU: " + affected);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	//--------------------------------------------------------------------------------------------------------------------------------//
-	// Dapakan record seorang karyawan, jika tidak ada, buatkan yang baru                                                             //
-	// (HANYA BOLEH ADA SATU RECORD ABSEN PER HARI NYA)                                                                               //
-	//--------------------------------------------------------------------------------------------------------------------------------//
-	public RecordAbsen getDataRecordAbsenTerkini(String idKaryawan) throws SQLException {
-		final String sql
-			= "SELECT * FROM trecordabsen"
-			+ " WHERE "
-			+ "id_karyawan = ? AND tanggalrecord = ?;";
-
-		try {
-			PreparedStatement query = this.getConnection().prepareStatement(sql);
-
-			query.setString(1, idKaryawan);
-			query.setDate(2, Date.valueOf(LocalDate.now()));
-
-			ResultSet result = query.executeQuery();
-
-			if (result.next()) {
-				RecordAbsen record = new RecordAbsen();
-				record.setIdKaryawan(result.getString("id_karyawan"));
-				record.setIdRecord(result.getInt("id_recordabsen"));
-				record.setWaktuMasuk(result.getTime("jamAbsenMasuk"));
-				record.setWaktuPulang(result.getTime("jamAbsenPulang"));
-				record.setWaktuIstirahat(result.getTime("jamAbsenMulaiIstirahat"));
-				record.setWaktuSelesaiIstirahat(result.getTime("jamAbsenKembaliIstirahat"));
-				record.setTglRecord(result.getDate("tanggalrecord"));
-				record.setCatatanRecord(this);
-				return record;
-			} else {
-				createRecordAbsenBaruKaryawan(idKaryawan);
-				getDataRecordAbsenTerkini(idKaryawan);
-			}
-
-			return null;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -393,8 +246,7 @@ public class DBAbsensi {
 		final String sql
 			= "SELECT "
 			+ "a.id_karyawan, a.nama_karyawan,"
-			+ " c.nama_jabatan, e.jamMasukKerja, e.jamPulangKerja,"
-			+ " e.jamIstirahat, e.jamSelesaiIstirahat"
+			+ " c.nama_jabatan, e.id_shift, e.deskripsi, e.shift_start, e.shift_end"
 			+ " FROM"
 			+ " tkaryawan a, tprodi b, tjabatan c, tshift e"
 			+ " WHERE"
@@ -417,15 +269,11 @@ public class DBAbsensi {
 				karyawan.setNamaKaryawan(result.getString("nama_karyawan"));
 
 				karyawan.setShift(new Shift(
-					result.getTime("jamMasukKerja"),
-					result.getTime("jamPulangKerja"),
-					result.getTime("jamIstirahat"),
-					result.getTime("jamSelesaiIstirahat")
+					result.getInt("id_shift"),
+					result.getTime("shift_start"),
+					result.getTime("shift_end"),
+					result.getString("deskripsi")
 				));
-
-				karyawan.setRecordAbsen(
-					getDataRecordAbsenTerkini(karyawan.getIdKaryawan())
-				);
 
 				return karyawan;
 			}
@@ -437,61 +285,4 @@ public class DBAbsensi {
 			throw e;
 		}
 	}
-	
-	//-----------------------------------------------------------------------------------------------------//
-	// Method-Method yang mengupdate status login karyawan                                                 //
-	//-----------------------------------------------------------------------------------------------------//
-
-	private void setNilaiStatusLoginKaryawan(String idKaryawan, boolean status) throws SQLException {
-		final String sql = "UPDATE tkaryawan SET sedang_login = ? WHERE id_karyawan = ?";
-		try {
-			PreparedStatement query = this.getConnection().prepareStatement(sql);
-
-			final Timestamp timestampSekarang = Timestamp.valueOf(LocalDateTime.now());
-
-			query.setBoolean(1, status);
-			query.setString(2, idKaryawan);
-
-			int affected = query.executeUpdate();
-
-			System.out.println("UPDATE TKARYAWAN: " + affected);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	public void tandaiKaryawanSedangLogin(String idKaryawan) {
-		try {
-			setNilaiStatusLoginKaryawan(idKaryawan, true);
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-			System.exit(-1);
-		}
-	}
-
-	public void tandaiKaryawanTerLogout(String idKaryawan) {
-		try {
-			setNilaiStatusLoginKaryawan(idKaryawan, false);
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-			System.exit(-1);
-		}
-	}
-
-	public boolean isKaryawanTerlogin(String idKaryawan) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT sedang_login FROM tkaryawan WHERE id_karyawan = '%s'", idKaryawan));
-			if (result.next()) {
-				System.out.println(result.getBoolean("sedang_login"));
-				return result.getBoolean("sedang_login");
-			}
-		} catch (SQLException e) {
-			exitError("Gagal Melakukan Query", e);
-		}
-		return false;
-	}
-
 }

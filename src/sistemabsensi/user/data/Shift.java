@@ -11,36 +11,20 @@ import java.sql.Time;
  * @author rss
  */
 public class Shift {
-	private final Time waktuMasuk;
-	private final Time waktuPulang;
-	private final Time waktuIstirahat;
-	private final Time waktuSelesaiIstirahat;
-
-	public Shift(Time waktuMasuk, Time waktuPulang, Time waktuIstirahat, Time waktuSelesaiIstirahat) {
-		this.waktuMasuk = waktuMasuk;
-		this.waktuPulang = waktuPulang;
-		this.waktuIstirahat = waktuIstirahat;
-		this.waktuSelesaiIstirahat = waktuSelesaiIstirahat;
+	public int id_shift;
+	public Time start;
+	public Time end;
+	public String deskripsi;
+	
+	public Shift() {
+		this(-1, null, null, null);
 	}
 	
-	// getter
-	// (Tidak memerlukan setter karena user tidak
-	//  memiliki kemampuan untuk merubah shift)
-
-	public Time getWaktuMasuk() {
-		return waktuMasuk;
-	}
-
-	public Time getWaktuPulang() {
-		return waktuPulang;
-	}
-
-	public Time getWaktuIstirahat() {
-		return waktuIstirahat;
-	}
-
-	public Time getWaktuSelesaiIstirahat() {
-		return waktuSelesaiIstirahat;
+	public Shift(int id_shift, Time start, Time end, String deskripsi) {
+		this.id_shift = id_shift;
+		this.start = start;
+		this.end = end;
+		this.deskripsi = deskripsi;
 	}
 	
 }

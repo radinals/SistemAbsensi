@@ -21,19 +21,17 @@ public class Karyawan {
 	private String namaProdi;
 	private String jabatan;
 	private Shift shift;
-	private RecordAbsen recordAbsen;
 
 	public Karyawan() {
-		this(null, null, null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
-	public Karyawan(String idKaryawan, String namaKaryawan, String namaProdi, String jabatan, Shift shift, RecordAbsen recordAbsen) {
+	public Karyawan(String idKaryawan, String namaKaryawan, String namaProdi, String jabatan, Shift shift) {
 		this.idKaryawan = idKaryawan;
 		this.namaKaryawan = namaKaryawan;
 		this.namaProdi = namaProdi;
 		this.jabatan = jabatan;
 		this.shift = shift;
-		this.recordAbsen = recordAbsen;
 	}
 
 	public void setIdKaryawan(String idKaryawan) {
@@ -56,10 +54,6 @@ public class Karyawan {
 		this.shift = shift;
 	}
 
-	public void setRecordAbsen(RecordAbsen recordAbsen) {
-		this.recordAbsen = recordAbsen;
-	}
-
 	public String getNamaKaryawan() {
 		return namaKaryawan;
 	}
@@ -78,9 +72,5 @@ public class Karyawan {
 
 	public String getIdKaryawan() {
 		return idKaryawan;
-	}
-
-	public RecordAbsen getRecordAbsen() {
-		return recordAbsen;
 	}
 }

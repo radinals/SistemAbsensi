@@ -4,133 +4,49 @@
  */
 package sistemabsensi.user.data;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalTime;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  *
  * @author rss
  */
 public class RecordAbsen {
-	private int idRecord;
-	private String idKaryawan;
-	private Time waktuMasuk;
-	private Time waktuPulang;
-	private Time waktuIstirahat;
-	private Time waktuSelesaiIstirahat;
-	private Date tglRecord;
-	private CatatanRecord catatanRecord;
-
-	public RecordAbsen(int idRecord, int idKaryawan, Time waktuMasuk, Time waktuPulang, Time waktuIstirahat, Time waktuSelesaiIstirahat, Date tglRecord, DBAbsensi db) {
-		this.waktuMasuk = waktuMasuk;
-		this.waktuPulang = waktuPulang;
-		this.waktuIstirahat = waktuIstirahat;
-		this.waktuSelesaiIstirahat = waktuSelesaiIstirahat;
-		this.tglRecord = tglRecord;
-		this.catatanRecord = new CatatanRecord(db, idRecord);
-	}
-
+	public enum TipeAbsen {
+		ABSEN_MASUK,
+		ABSEN_PULANG,
+		ABSEN_ISTIRAHAT,
+		ABSEN_KEMBALI_ISTIRAHAT;
+	};
+	
+	public int id_recordabsen;
+	public Timestamp waktu_absen;
+	public String id_karyawan;
+	public String catatan_absen;
+	public TipeAbsen tipe_absen;
+	
 	public RecordAbsen() {
-		this(-1, -1, null, null, null, null, null, null);
+		this(-1, null, null, null, null);
 	}
 	
-	//--------------------------------------------------------------------------//
-	// digunakan untuk membuat catatan absen (liat tdetailabsen)                //
-	//--------------------------------------------------------------------------//
-	
-	public void tambahkanCatatanAbsen(String catatan, KategoriCatatanAbsen kategori) {
-		assert(catatan.length() <= 30);
-		this.catatanRecord.tambahkanCatatan(catatan, kategori);
+	public RecordAbsen(int id_recordabsen, Timestamp waktu_absen, String id_karyawan, String catatan_absen, TipeAbsen tipe_absen) {
+		this.id_recordabsen = id_recordabsen;
+		this.id_karyawan = id_karyawan;
+		this.catatan_absen = catatan_absen;
+		this.waktu_absen = waktu_absen;
+		this.tipe_absen = tipe_absen;
 	}
 	
-	// waktu sekarang terformat dengan SQL
-	
-	private Time getWaktuTerkini() {
-		return Time.valueOf(LocalTime.now());
+	public static RecordAbsen buatRecordAbsen(TipeAbsen tipe, String id_karyawan, String catatan) {
+		RecordAbsen record = new RecordAbsen();
+		
+		LocalDateTime waktuTerkini = LocalDateTime.now();
+		
+		record.waktu_absen = Timestamp.valueOf(waktuTerkini);
+		record.id_karyawan = id_karyawan;
+		record.tipe_absen = tipe;
+		record.catatan_absen = catatan;
+		
+		return record;
 	}
-	
-	//------------------------------------------------------------------------------//
-	// method untuk dengan mudah mencatat waktu absen sesuai waktu sekarang         //
-	//------------------------------------------------------------------------------//
-	
-	public void catatWaktuMasuk() {
-		this.waktuMasuk = getWaktuTerkini();
-	}
-	
-	public void catatWaktuPulang() {
-		this.waktuPulang = getWaktuTerkini();
-	}
-	
-	public void catatWaktuIstirahat() {
-		this.waktuIstirahat = getWaktuTerkini();
-	}
-	
-	public void catatWaktuSelesaiIstirahat() {
-		this.waktuSelesaiIstirahat = getWaktuTerkini();
-	}
-	
-	// getter & setter
-
-	public void setCatatanRecord(DBAbsensi db) {
-		this.catatanRecord = new CatatanRecord(db, this.idRecord);
-	}
-	
-	public void setWaktuMasuk(Time waktuMasuk) {
-		this.waktuMasuk = waktuMasuk;
-	}
-
-	public void setWaktuPulang(Time waktuPulang) {
-		this.waktuPulang = waktuPulang;
-	}
-
-	public void setWaktuIstirahat(Time waktuIstirahat) {
-		this.waktuIstirahat = waktuIstirahat;
-	}
-
-	public void setWaktuSelesaiIstirahat(Time waktuSelesaiIstirahat) {
-		this.waktuSelesaiIstirahat = waktuSelesaiIstirahat;
-	}
-
-	public int getIdRecord() {
-		return idRecord;
-	}
-
-	public void setIdRecord(int idRecord) {
-		this.idRecord = idRecord;
-	}
-
-	public String getIdKaryawan() {
-		return idKaryawan;
-	}
-
-	public void setIdKaryawan(String idKaryawan) {
-		this.idKaryawan = idKaryawan;
-	}
-	
-	public Date getTglRecord() {
-		return tglRecord;
-	}
-
-	public void setTglRecord(Date tglRecord) {
-		this.tglRecord = tglRecord;
-	}
-
-	public Time getWaktuMasuk() {
-		return waktuMasuk;
-	}
-
-	public Time getWaktuPulang() {
-		return waktuPulang;
-	}
-
-	public Time getWaktuIstirahat() {
-		return waktuIstirahat;
-	}
-
-	public Time getWaktuSelesaiIstirahat() {
-		return waktuSelesaiIstirahat;
-	}
-	
-	
 }
