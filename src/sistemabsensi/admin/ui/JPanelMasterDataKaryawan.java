@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import sistemabsensi.admin.data.DBAbsensi;
 import sistemabsensi.admin.data.Jabatan;
 import sistemabsensi.admin.data.Karyawan;
+import sistemabsensi.admin.data.KolomPencarian;
 import sistemabsensi.admin.data.Prodi;
 import sistemabsensi.admin.data.Shift;
 
@@ -31,11 +32,13 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 	private Jabatan jabatanTerpilih = null;
 	private final JPanelMasterDataJabatan MasterDataJabatan;
 	private final JPanelMasterDataProdi MasterDataProdi;
-	
+	private char defaultEchoChar;
 
 	public JPanelMasterDataKaryawan(DBAbsensi db) {
 		this.db = db;
+		
 		initComponents();
+		this.defaultEchoChar = this.fieldPassword.getEchoChar();
 		this.MasterDataProdi = new JPanelMasterDataProdi(db, this);
 		this.MasterDataJabatan = new JPanelMasterDataJabatan(db, this);
 		this.tabbedPane.add(this.MasterDataJabatan, "MasterData Jabatan");
@@ -52,6 +55,7 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
+                jButton1 = new javax.swing.JButton();
                 jPanel1 = new javax.swing.JPanel();
                 jScrollPane1 = new javax.swing.JScrollPane();
                 tabelData = new javax.swing.JTable();
@@ -72,14 +76,36 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
                 textFieldAlamat = new javax.swing.JTextField();
                 jLabel8 = new javax.swing.JLabel();
                 textFieldEmail = new javax.swing.JTextField();
+                tabbedPane = new javax.swing.JTabbedPane();
+                jLabel9 = new javax.swing.JLabel();
+                jPanel7 = new javax.swing.JPanel();
+                textFieldPencarian = new javax.swing.JTextField();
+                btnPencarian = new javax.swing.JButton();
+                jPanel2 = new javax.swing.JPanel();
+                cbxFilter_Id = new javax.swing.JCheckBox();
+                cbxFilter_Nama = new javax.swing.JCheckBox();
+                cbxFilter_Jabatan = new javax.swing.JCheckBox();
+                cbxFilter_Shift = new javax.swing.JCheckBox();
+                cbxFilter_Telp = new javax.swing.JCheckBox();
+                cbxFilter_Alamat = new javax.swing.JCheckBox();
+                cbxFilter_Email = new javax.swing.JCheckBox();
+                cbxFilter_Prodi = new javax.swing.JCheckBox();
+                cbxFilter_Semua = new javax.swing.JCheckBox();
                 btnSimpan = new javax.swing.JButton();
                 btnHapus = new javax.swing.JButton();
-                tabbedPane = new javax.swing.JTabbedPane();
+                chbx_isAdminUser = new javax.swing.JCheckBox();
+                panelFieldPassword = new javax.swing.JPanel();
+                jLabel10 = new javax.swing.JLabel();
+                fieldPassword = new javax.swing.JPasswordField();
+                btnLihatPassword = new javax.swing.JButton();
+
+                jButton1.setText("jButton1");
 
                 setMaximumSize(new java.awt.Dimension(991, 599));
                 setPreferredSize(new java.awt.Dimension(991, 599));
                 setLayout(new java.awt.BorderLayout());
 
+                jPanel1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jPanel1.setLayout(null);
 
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
@@ -94,6 +120,7 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
                         }
                 ));
                 tabelData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+                tabelData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 tabelData.setShowGrid(true);
                 tabelData.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -103,9 +130,10 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
                 jScrollPane1.setViewportView(tabelData);
 
                 jPanel1.add(jScrollPane1);
-                jScrollPane1.setBounds(40, 430, 1290, 250);
+                jScrollPane1.setBounds(10, 480, 1000, 230);
 
-                jPanel9.setLayout(new java.awt.GridLayout(9, 2));
+                jPanel9.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 0, true));
+                jPanel9.setLayout(new java.awt.GridLayout(8, 2));
 
                 jLabel6.setText("ID");
                 jPanel9.add(jLabel6);
@@ -149,7 +177,94 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
                 jPanel9.add(textFieldEmail);
 
                 jPanel1.add(jPanel9);
-                jPanel9.setBounds(54, 50, 440, 310);
+                jPanel9.setBounds(14, 50, 480, 310);
+
+                tabbedPane.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+                tabbedPane.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+                jPanel1.add(tabbedPane);
+                tabbedPane.setBounds(540, 50, 770, 350);
+
+                jLabel9.setFont(jLabel9.getFont().deriveFont((jLabel9.getFont().getStyle() | java.awt.Font.ITALIC) | java.awt.Font.BOLD, jLabel9.getFont().getSize()+8));
+                jLabel9.setText("MAINTENENCE KARYAWAN");
+                jPanel1.add(jLabel9);
+                jLabel9.setBounds(50, 10, 440, 30);
+
+                textFieldPencarian.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                textFieldPencarianActionPerformed(evt);
+                        }
+                });
+
+                btnPencarian.setText("Cari");
+                btnPencarian.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnPencarianActionPerformed(evt);
+                        }
+                });
+
+                jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Kolom Pencarian"));
+                jPanel2.setLayout(new java.awt.GridLayout(3, 3));
+
+                cbxFilter_Id.setText("ID");
+                jPanel2.add(cbxFilter_Id);
+
+                cbxFilter_Nama.setText("NAMA");
+                jPanel2.add(cbxFilter_Nama);
+
+                cbxFilter_Jabatan.setText("JABATAN");
+                jPanel2.add(cbxFilter_Jabatan);
+
+                cbxFilter_Shift.setText("SHIFT");
+                jPanel2.add(cbxFilter_Shift);
+
+                cbxFilter_Telp.setText("NO TELP");
+                jPanel2.add(cbxFilter_Telp);
+
+                cbxFilter_Alamat.setText("ALAMAT");
+                jPanel2.add(cbxFilter_Alamat);
+
+                cbxFilter_Email.setText("EMAIL");
+                jPanel2.add(cbxFilter_Email);
+
+                cbxFilter_Prodi.setText("PRODI");
+                jPanel2.add(cbxFilter_Prodi);
+
+                cbxFilter_Semua.setText("Semua");
+                cbxFilter_Semua.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                cbxFilter_SemuaActionPerformed(evt);
+                        }
+                });
+                jPanel2.add(cbxFilter_Semua);
+
+                javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+                jPanel7.setLayout(jPanel7Layout);
+                jPanel7Layout.setHorizontalGroup(
+                        jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                                        .addGroup(jPanel7Layout.createSequentialGroup()
+                                                .addComponent(btnPencarian)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(textFieldPencarian)))
+                                .addContainerGap())
+                );
+                jPanel7Layout.setVerticalGroup(
+                        jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnPencarian)
+                                        .addComponent(textFieldPencarian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+                );
+
+                jPanel1.add(jPanel7);
+                jPanel7.setBounds(1020, 470, 320, 240);
 
                 btnSimpan.setText("SIMPAN");
                 btnSimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -158,7 +273,7 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
                         }
                 });
                 jPanel1.add(btnSimpan);
-                btnSimpan.setBounds(50, 360, 220, 42);
+                btnSimpan.setBounds(260, 430, 240, 38);
 
                 btnHapus.setText("HAPUS");
                 btnHapus.addActionListener(new java.awt.event.ActionListener() {
@@ -167,9 +282,54 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
                         }
                 });
                 jPanel1.add(btnHapus);
-                btnHapus.setBounds(280, 360, 220, 42);
-                jPanel1.add(tabbedPane);
-                tabbedPane.setBounds(510, 50, 810, 350);
+                btnHapus.setBounds(20, 430, 240, 38);
+
+                chbx_isAdminUser.setText("Adalah Admin");
+                chbx_isAdminUser.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                chbx_isAdminUserActionPerformed(evt);
+                        }
+                });
+                jPanel1.add(chbx_isAdminUser);
+                chbx_isAdminUser.setBounds(190, 360, 120, 23);
+
+                jLabel10.setText("PASSWORD");
+
+                fieldPassword.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                fieldPasswordActionPerformed(evt);
+                        }
+                });
+
+                btnLihatPassword.setText("LIHAT");
+                btnLihatPassword.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnLihatPasswordActionPerformed(evt);
+                        }
+                });
+
+                javax.swing.GroupLayout panelFieldPasswordLayout = new javax.swing.GroupLayout(panelFieldPassword);
+                panelFieldPassword.setLayout(panelFieldPasswordLayout);
+                panelFieldPasswordLayout.setHorizontalGroup(
+                        panelFieldPasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelFieldPasswordLayout.createSequentialGroup()
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45)
+                                .addComponent(btnLihatPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(57, Short.MAX_VALUE))
+                );
+                panelFieldPasswordLayout.setVerticalGroup(
+                        panelFieldPasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelFieldPasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(fieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnLihatPassword))
+                );
+
+                jPanel1.add(panelFieldPassword);
+                panelFieldPassword.setBounds(30, 390, 470, 30);
 
                 add(jPanel1, java.awt.BorderLayout.CENTER);
         }// </editor-fold>//GEN-END:initComponents
@@ -186,13 +346,19 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 		if (!isFieldInputTerisiSemua()) {
 			return;
 		}
-		
+
 		Karyawan dataKaryawanField = dapatkanDataFieldInput();
 
 		try {
 			db.simpanDataKaryawan(dataKaryawanField);
 		} catch (SQLException ex) {
 			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		if (this.chbx_isAdminUser.isSelected() && !db.isKaryawanAdmin(dataKaryawanField.idKaryawan)) {
+			db.tambahKaryawanAdmin(dataKaryawanField.idKaryawan, this.fieldPassword.getText());
+		} else if (!this.chbx_isAdminUser.isSelected() && db.isKaryawanAdmin(dataKaryawanField.idKaryawan)) {
+			db.hapusKaryawanAdmin(dataKaryawanField.idKaryawan);
 		}
 
 		this.updateData();
@@ -225,6 +391,97 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 		this.updateData();
         }//GEN-LAST:event_btnHapusActionPerformed
 
+        private void btnPencarianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPencarianActionPerformed
+		if (this.textFieldPencarian.getText().isEmpty()) {
+			this.textFieldPencarian.requestFocus();
+			dapatkanData();
+			Pesan.tampilkanPeringatan("Field Pencarian Masih Home!");
+			return;
+		}
+
+		LinkedList<KolomPencarian> kolomPencarian = new LinkedList<>();
+
+		if (this.cbxFilter_Id.isSelected()) {
+			kolomPencarian.add(KolomPencarian.ID);
+		}
+		if (this.cbxFilter_Alamat.isSelected()) {
+			kolomPencarian.add(KolomPencarian.ALAMAT);
+		}
+		if (this.cbxFilter_Email.isSelected()) {
+			kolomPencarian.add(KolomPencarian.EMAIL);
+		}
+		if (this.cbxFilter_Jabatan.isSelected()) {
+			kolomPencarian.add(KolomPencarian.JABATAN);
+		}
+		if (this.cbxFilter_Nama.isSelected()) {
+			kolomPencarian.add(KolomPencarian.NAMA);
+		}
+		if (this.cbxFilter_Shift.isSelected()) {
+			kolomPencarian.add(KolomPencarian.SHIFT);
+		}
+		if (this.cbxFilter_Telp.isSelected()) {
+			kolomPencarian.add(KolomPencarian.NO_TELP);
+		}
+		if (this.cbxFilter_Prodi.isSelected()) {
+			kolomPencarian.add(KolomPencarian.PRODI);
+		}
+
+		if (kolomPencarian.isEmpty()) {
+			this.dapatkanData();
+			Pesan.tampilkanPeringatan("Pilih Setidaknya Satu Target Kolom Untuk Pencarian");
+			return;
+		}
+
+		try {
+			this.tabelData.setModel(db.getModelTabel_PencarianKaryawan(this.textFieldPencarian.getText(), kolomPencarian));
+			this.isiDataDataComboBox();
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
+		}
+        }//GEN-LAST:event_btnPencarianActionPerformed
+
+        private void textFieldPencarianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldPencarianActionPerformed
+		if (this.textFieldPencarian.getText().isEmpty())
+			this.dapatkanData();
+        }//GEN-LAST:event_textFieldPencarianActionPerformed
+
+        private void cbxFilter_SemuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxFilter_SemuaActionPerformed
+		boolean selected = this.cbxFilter_Semua.isSelected();
+		cbxFilter_Alamat.setSelected(selected);
+		cbxFilter_Email.setSelected(selected);
+		cbxFilter_Id.setSelected(selected);
+		cbxFilter_Jabatan.setSelected(selected);
+		cbxFilter_Nama.setSelected(selected);
+		cbxFilter_Prodi.setSelected(selected);
+		cbxFilter_Semua.setSelected(selected);
+		cbxFilter_Shift.setSelected(selected);
+		cbxFilter_Telp.setSelected(selected);
+
+        }//GEN-LAST:event_cbxFilter_SemuaActionPerformed
+
+        private void chbx_isAdminUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbx_isAdminUserActionPerformed
+		if (this.chbx_isAdminUser.isSelected()) {
+			this.panelFieldPassword.setVisible(true);
+		} else {
+			this.panelFieldPassword.setVisible(false);
+		}
+        }//GEN-LAST:event_chbx_isAdminUserActionPerformed
+
+        private void fieldPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldPasswordActionPerformed
+		// TODO add your handling code here:
+        }//GEN-LAST:event_fieldPasswordActionPerformed
+
+        private void btnLihatPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLihatPasswordActionPerformed
+		if (this.fieldPassword.getEchoChar() != 0) {
+			this.fieldPassword.setEchoChar((char) 0); // Show password
+			this.btnLihatPassword.setText("SEMBUNYIKAN");
+		} else {
+			
+			this.fieldPassword.setEchoChar(defaultEchoChar); // Hide password
+			this.btnLihatPassword.setText("LIHAT");
+		}
+        }//GEN-LAST:event_btnLihatPasswordActionPerformed
+
 	public void updateData() {
 		this.karyawanTerpilih = null;
 		this.prodiTerpilih = null;
@@ -235,17 +492,19 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 		this.textFieldID.setText("");
 		this.textFieldNama.setText("");
 		this.textFieldTelp.setText("");
+		this.chbx_isAdminUser.setSelected(false);
+		this.panelFieldPassword.setVisible(false);
 		dapatkanData();
 	}
 
 	private boolean isFieldInputTerisiSemua() {
 		if (this.textFieldID.getText().isEmpty()) {
 			textFieldID.requestFocus();
-			Pesan.tampilkanPeringatan("ID Masih Kosong");
+			Pesan.tampilkanPeringatan("ID Masih Home");
 			return false;
 		} else if (this.textFieldNama.getText().isEmpty()) {
 			textFieldNama.requestFocus();
-			Pesan.tampilkanPeringatan("Nama masih Kosong");
+			Pesan.tampilkanPeringatan("Nama masih Home");
 			return false;
 		} else if (this.textFieldTelp.getText().isEmpty()) {
 			this.textFieldTelp.requestFocus();
@@ -270,6 +529,10 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 		} else if (this.comboBoxProdi.getSelectedItem() == null) {
 			this.comboBoxProdi.requestFocus();
 			Pesan.tampilkanPeringatan("Tentukan Prodi Karyawan");
+			return false;
+		} else if (this.panelFieldPassword.isVisible() && this.fieldPassword.getText().isEmpty()) {
+			this.fieldPassword.requestFocus();
+			Pesan.tampilkanPeringatan("Isi Password Admin");
 			return false;
 		}
 
@@ -313,6 +576,17 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 			this.prodiTerpilih = (Prodi) data[1];
 			this.jabatanTerpilih = (Jabatan) data[2];
 			this.shiftTerpilih = (Shift) data[3];
+			
+			this.fieldPassword.setText("");
+			if (this.db.isKaryawanAdmin(this.karyawanTerpilih.idKaryawan)) {
+				this.chbx_isAdminUser.setSelected(true);
+				this.panelFieldPassword.setVisible(true);
+				this.fieldPassword.setText(db.getPasswordKaryawanAdmin(this.karyawanTerpilih.idKaryawan));
+			} else {
+				this.chbx_isAdminUser.setSelected(false);
+				this.panelFieldPassword.setVisible(false);
+
+			}
 
 			this.tampilkanDataTerpilih();
 			this.isiDataDataComboBox();
@@ -335,10 +609,9 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 			if (this.shiftTerpilih != null) {
 				this.comboBoxShift.addItem(this.shiftTerpilih);
 				this.comboBoxShift.setSelectedItem(this.shiftTerpilih);
-			}else if (this.shiftTerpilih == null) {
+			} else if (this.shiftTerpilih == null) {
 				this.comboBoxShift.setSelectedItem(null);
 			}
-			
 
 		} catch (SQLException ex) {
 			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
@@ -359,13 +632,10 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 			if (this.jabatanTerpilih != null) {
 				this.comboBoxJabatan.addItem(this.jabatanTerpilih);
 				this.comboBoxJabatan.setSelectedItem(this.jabatanTerpilih);
-			}else if (this.jabatanTerpilih == null) {
+			} else if (this.jabatanTerpilih == null) {
 				this.comboBoxJabatan.setSelectedItem(null);
 			}
-			
-			
-		
-			
+
 		} catch (SQLException ex) {
 			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -386,10 +656,10 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 			if (this.prodiTerpilih != null) {
 				this.comboBoxProdi.addItem(this.prodiTerpilih);
 				this.comboBoxProdi.setSelectedItem(this.prodiTerpilih);
-			}else if (this.prodiTerpilih == null) {
+			} else if (this.prodiTerpilih == null) {
 				this.comboBoxProdi.setSelectedItem(null);
 			}
-			
+
 		} catch (SQLException ex) {
 			Logger.getLogger(JPanelMasterDataKaryawan.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -412,11 +682,26 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnHapus;
+        private javax.swing.JButton btnLihatPassword;
+        private javax.swing.JButton btnPencarian;
         private javax.swing.JButton btnSimpan;
+        private javax.swing.JCheckBox cbxFilter_Alamat;
+        private javax.swing.JCheckBox cbxFilter_Email;
+        private javax.swing.JCheckBox cbxFilter_Id;
+        private javax.swing.JCheckBox cbxFilter_Jabatan;
+        private javax.swing.JCheckBox cbxFilter_Nama;
+        private javax.swing.JCheckBox cbxFilter_Prodi;
+        private javax.swing.JCheckBox cbxFilter_Semua;
+        private javax.swing.JCheckBox cbxFilter_Shift;
+        private javax.swing.JCheckBox cbxFilter_Telp;
+        private javax.swing.JCheckBox chbx_isAdminUser;
         private javax.swing.JComboBox<Jabatan> comboBoxJabatan;
         private javax.swing.JComboBox<Prodi> comboBoxProdi;
         private javax.swing.JComboBox<Shift> comboBoxShift;
+        private javax.swing.JPasswordField fieldPassword;
+        private javax.swing.JButton jButton1;
         private javax.swing.JLabel jLabel1;
+        private javax.swing.JLabel jLabel10;
         private javax.swing.JLabel jLabel2;
         private javax.swing.JLabel jLabel3;
         private javax.swing.JLabel jLabel4;
@@ -424,15 +709,20 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
         private javax.swing.JLabel jLabel6;
         private javax.swing.JLabel jLabel7;
         private javax.swing.JLabel jLabel8;
+        private javax.swing.JLabel jLabel9;
         private javax.swing.JPanel jPanel1;
+        private javax.swing.JPanel jPanel2;
+        private javax.swing.JPanel jPanel7;
         private javax.swing.JPanel jPanel9;
         private javax.swing.JScrollPane jScrollPane1;
+        private javax.swing.JPanel panelFieldPassword;
         private javax.swing.JTabbedPane tabbedPane;
         private javax.swing.JTable tabelData;
         private javax.swing.JTextField textFieldAlamat;
         private javax.swing.JTextField textFieldEmail;
         private javax.swing.JTextField textFieldID;
         private javax.swing.JTextField textFieldNama;
+        private javax.swing.JTextField textFieldPencarian;
         private javax.swing.JTextField textFieldTelp;
         // End of variables declaration//GEN-END:variables
 }

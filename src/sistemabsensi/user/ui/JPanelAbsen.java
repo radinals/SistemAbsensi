@@ -7,6 +7,9 @@ package sistemabsensi.user.ui;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
@@ -17,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import sistemabsensi.user.data.DBAbsensi;
 import sistemabsensi.user.data.Karyawan;
 import sistemabsensi.user.data.RecordAbsen;
+import sistemabsensi.user.data.RecordAbsen.StatusAbsen;
 import sistemabsensi.user.data.RecordAbsen.TipeAbsen;
 
 /**
@@ -25,10 +29,17 @@ import sistemabsensi.user.data.RecordAbsen.TipeAbsen;
  */
 public class JPanelAbsen extends javax.swing.JPanel {
 
-	// private static final int TOLERANSI = 5; // menit
+	private static final int TOLERANSI_ABSEN = 5; // menit
+
+	private static class JadwalIstirahat {
+
+		public static final Time mulai = Time.valueOf("12:00:00");
+		public static final Time selesai = Time.valueOf("13:00:00");
+	}
+
 	private DBAbsensi dbAbsensi;
 	private Timer timerJam; // buat tampilan jam
-	
+
 	private TipeAbsen modeAbsen = null;
 	private Karyawan karyawan = null;
 
@@ -37,7 +48,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	 */
 	public JPanelAbsen() {
 		this.dbAbsensi = new DBAbsensi();
-		
+
 		initComponents();
 
 		// untuk membuat baris tabel lebih tinggi
@@ -53,11 +64,11 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			public void run() {
 				LocalTime waktu = LocalTime.now();
 				DateTimeFormatter format = DateTimeFormatter.ofPattern("hh:mm:ss a");
-				
+
 				labelWaktu.setText(waktu.format(format));
 			}
 		}, 0, 1000);
-		
+
 		this.clear();
 	}
 
@@ -153,7 +164,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	// Data Record didapatkan dari saat login. dapat diupdate (Jika Diperlukan dengan tombol refresh     //
 	//---------------------------------------------------------------------------------------------------//
 	private void tentukanModeAbsen() {
-		
+
 		try {
 			if (this.dbAbsensi.adaDataRecordAbsenHariIni(this.karyawan.getIdKaryawan(), TipeAbsen.ABSEN_PULANG)) {
 				this.jLabelNama.setText("SUDAH ABSEN PULANG");
@@ -170,11 +181,9 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 	}
 
-	/*
-	
 	//---------------------------------------------------------------------------------------------//
 	// Kembalikan salinan waktu yang telah ditambah/dikurang menitnya                              //
 	// digunakan untuk menghasilkan range/jangka waktu.                                            //
@@ -192,14 +201,13 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	//----------------------------------------------------------------------------------------------//
 	// Method untuk menghitung ketelatan                                                            //
 	//----------------------------------------------------------------------------------------------//
-	private Duration hitungPerbedaan(Time a, Time b) {
-		final LocalTime x = a.toLocalTime();
-		final LocalTime y = b.toLocalTime();
-		return Duration.between(x, y);
+	private Duration hitungPerbedaan(Time awal, Time akhir) {
+		return Duration.between(awal.toLocalTime(), akhir.toLocalTime());
+
 	}
 
-	public Duration hitungKetelatan(Time waktuAbsen, Time shift) {
-		final Time waktuAbsenMaksimum = tambahkanToleransiTelat(shift, TOLERANSI);
+	public Duration hitungKetelatan(Time waktuAbsen, Time shift, int toleransi_menit) {
+		final Time waktuAbsenMaksimum = tambahkanToleransiTelat(shift, toleransi_menit);
 
 		if (waktuAbsen.before(waktuAbsenMaksimum)) {
 			return null; // absen sebelum waktu maksimal
@@ -210,62 +218,137 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	//----------------------------------------------------------------------------------------------//
 	// Method untuk mengecek apakah telat                                                           //
 	//----------------------------------------------------------------------------------------------//
-	public boolean isAbsenTelat(Time waktuAbsen, Time waktuShift) {
-		final Time waktuAbsenMaksimum = tambahkanToleransiAbsenDini(waktuShift, TOLERANSI);
+	public boolean isAbsenTelat(Time waktuAbsen, Time waktuShift, int toleransi_menit) {
+		final Time waktuAbsenMaksimum = (toleransi_menit > 0) ? tambahkanToleransiAbsenDini(waktuShift, toleransi_menit) : waktuShift;
 		return waktuAbsen.after(waktuAbsenMaksimum);
 	}
 
-	public boolean isAbsenLebihAwal(Time waktuAbsen, Time waktuShift) {
-		final Time waktuAbsenMinimum = tambahkanToleransiTelat(waktuShift, TOLERANSI);
+	public boolean isAbsenLebihAwal(Time waktuAbsen, Time waktuShift, int toleransi_menit) {
+		final Time waktuAbsenMinimum = (toleransi_menit > 0) ? tambahkanToleransiTelat(waktuShift, toleransi_menit) : waktuShift;
 		return waktuAbsen.before(waktuAbsenMinimum);
 	}
-	
-	 */
+
+	public boolean isAbsenIstirahatTelat(Time waktuAbsen) {
+		return this.isAbsenTelat(waktuAbsen, JadwalIstirahat.mulai, 60); // toleransi 6 menti;
+	}
+
+	public boolean isAbsenKembaliIstirahatTelat(Time waktuAbsen) {
+		return this.isAbsenTelat(waktuAbsen, JadwalIstirahat.selesai, 3); // toleransi 3 menti;
+	}
+
+	public boolean isAbsenIstirahatLebihAwal(Time waktuAbsen) {
+		return isAbsenLebihAwal(waktuAbsen, JadwalIstirahat.mulai, 0);
+	}
+
+	private static Time TimestampToTime(Timestamp timestamp) {
+		return Time.valueOf(timestamp.toLocalDateTime().toLocalTime());
+	}
+
+	private boolean isDalamWaktuShift(Time waktuAbsen, Time start, Time end) {
+		LocalTime absen = waktuAbsen.toLocalTime();
+		return !absen.isBefore(start.toLocalTime()) && !absen.isAfter(end.toLocalTime());
+	}
+
 	//-----------------------------------------------------------------------------------//
 	// METHOD UNTUK MELAKUKAN ABSEN                                                      //
 	//-----------------------------------------------------------------------------------//
 	public void absenMasuk() { // catat waktu terkini
+		Timestamp waktuAbsen = Timestamp.valueOf(LocalDateTime.now());
+
+		String catatan = "";
+		StatusAbsen status;
+
+		if (isAbsenLebihAwal(TimestampToTime(waktuAbsen), this.karyawan.getShift().start, TOLERANSI_ABSEN)) {
+			catatan = "Terlalu Awal";
+			status = StatusAbsen.TERLALU_DINI;
+		} else if (isAbsenTelat(TimestampToTime(waktuAbsen), this.karyawan.getShift().start, TOLERANSI_ABSEN)) {
+			catatan = "Telat Absen";
+			status = StatusAbsen.TELAT;
+		} else {
+			status = StatusAbsen.TEPAT_WAKTU;
+		}
+
 		try {
-			this.dbAbsensi.tambahkanRecordAbsen(this.karyawan.getIdKaryawan(), RecordAbsen.TipeAbsen.ABSEN_MASUK, "");
+			this.dbAbsensi.tambahkanRecordAbsen(this.karyawan.getIdKaryawan(), RecordAbsen.TipeAbsen.ABSEN_MASUK, waktuAbsen, status, catatan);
 		} catch (SQLException ex) {
 			System.err.println("GAGAL MENYIMPAN ABSEN (Masuk Kerja)");
 			ex.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 	}
-	
+
 	public void absenIstirahat() {
-		
+		Timestamp waktuAbsen = Timestamp.valueOf(LocalDateTime.now());
+		String catatan = "";
+		StatusAbsen status;
+
+		if (this.isAbsenIstirahatLebihAwal(TimestampToTime(waktuAbsen))) {
+			catatan = "Terlalu Awal";
+			status = StatusAbsen.TERLALU_DINI;
+		} else if (this.isAbsenIstirahatTelat(TimestampToTime(waktuAbsen))) {
+			catatan = "Telat Absen";
+			status = StatusAbsen.TELAT;
+		} else {
+			status = StatusAbsen.TEPAT_WAKTU;
+		}
+
 		try {
-			this.dbAbsensi.tambahkanRecordAbsen(this.karyawan.getIdKaryawan(), RecordAbsen.TipeAbsen.ABSEN_ISTIRAHAT, "");
+			this.dbAbsensi.tambahkanRecordAbsen(this.karyawan.getIdKaryawan(), RecordAbsen.TipeAbsen.ABSEN_ISTIRAHAT, waktuAbsen, status, catatan);
 		} catch (SQLException ex) {
-			System.err.println("GAGAL MENYIMPAN ABSEN (Istirahat)");
+			System.err.println("GAGAL MENYIMPAN ABSEN (ISTIRAHAT)");
 			ex.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 	}
-	
+
 	public void absenKembaliIstirahat() {
+		Timestamp waktuAbsen = Timestamp.valueOf(LocalDateTime.now());
+		String catatan = "";
+		StatusAbsen status;
+
+		if (this.isAbsenIstirahatLebihAwal(TimestampToTime(waktuAbsen))) {
+			catatan = "Terlalu Awal";
+			status = StatusAbsen.TERLALU_DINI;
+		} else if (this.isAbsenKembaliIstirahatTelat(TimestampToTime(waktuAbsen))) {
+			catatan = "Telat Absen";
+			status = StatusAbsen.TELAT;
+		} else {
+			status = StatusAbsen.TEPAT_WAKTU;
+		}
+
 		try {
-			this.dbAbsensi.tambahkanRecordAbsen(this.karyawan.getIdKaryawan(), RecordAbsen.TipeAbsen.ABSEN_KEMBALI_ISTIRAHAT, "");
+			this.dbAbsensi.tambahkanRecordAbsen(this.karyawan.getIdKaryawan(), RecordAbsen.TipeAbsen.ABSEN_KEMBALI_ISTIRAHAT, waktuAbsen, status, catatan);
 		} catch (SQLException ex) {
-			System.err.println("GAGAL MENYIMPAN ABSEN (Kembali Istirahat)");
+			System.err.println("GAGAL MENYIMPAN ABSEN (KEMBALI ISTIRAHAT)");
 			ex.printStackTrace();
 			System.exit(-1);
 		}
+
 	}
-	
+
 	public void absenPulang() {
+		Timestamp waktuAbsen = Timestamp.valueOf(LocalDateTime.now());
+
+		String catatan = "";
+		StatusAbsen status;
+
+		if (this.isAbsenLebihAwal(TimestampToTime(waktuAbsen), this.karyawan.getShift().end, TOLERANSI_ABSEN)) {
+			catatan = "Terlalu Awal";
+			status = StatusAbsen.TERLALU_DINI;
+		} else {
+			status = StatusAbsen.TEPAT_WAKTU;
+		}
+
 		try {
-			this.dbAbsensi.tambahkanRecordAbsen(this.karyawan.getIdKaryawan(), RecordAbsen.TipeAbsen.ABSEN_PULANG, "");
+			this.dbAbsensi.tambahkanRecordAbsen(this.karyawan.getIdKaryawan(), RecordAbsen.TipeAbsen.ABSEN_PULANG, waktuAbsen, status, catatan);
 		} catch (SQLException ex) {
-			System.err.println("GAGAL MENYIMPAN ABSEN (Pulang Kerja)");
+			System.err.println("GAGAL MENYIMPAN ABSEN (Masuk Kerja)");
 			ex.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 	}
 
 	//--------------------------------------------------------------------------------------------------------//
@@ -273,23 +356,23 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	//--------------------------------------------------------------------------------------------------------//
 	private void updateTabelData() {
 		try {
-			
+
 			LinkedList<RecordAbsen> daftarRecord = this.dbAbsensi.getDaftarRecordAbsenKaryawanHariIni(this.karyawan.getIdKaryawan());
-			
+
 			if (daftarRecord.isEmpty()) {
 				return;
 			}
-			
+
 			DefaultTableModel model = new DefaultTableModel();
-			
+
 			model.addColumn("ABSEN");
 			model.addColumn("JAM ABSEN");
-			
+
 			Object[] barisIstirahat = {"Istirahat", "-"};
 			Object[] barisKembaliIstirahat = {"Kembali Istirahat", "-"};
 			Object[] barisPulang = {"Pulang Kerja", "-"};
 			Object[] barisMasuk = {"Masuk kerja", "-"};
-			
+
 			for (RecordAbsen record : daftarRecord) {
 				Time waktuAbsen = Time.valueOf(record.waktu_absen.toLocalDateTime().toLocalTime());
 				switch (record.tipe_absen) {
@@ -309,12 +392,12 @@ public class JPanelAbsen extends javax.swing.JPanel {
 						throw new AssertionError(record.tipe_absen.name());
 				}
 			}
-			
+
 			model.addRow(barisMasuk);
 			model.addRow(barisIstirahat);
 			model.addRow(barisKembaliIstirahat);
 			model.addRow(barisPulang);
-			
+
 			this.tabelData.setModel(model); // update tampilan data
 
 		} catch (SQLException | IllegalArgumentException ex) {
@@ -326,30 +409,30 @@ public class JPanelAbsen extends javax.swing.JPanel {
         private void jTextFieldIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDActionPerformed
 		// TODO add your handling code here:
         }//GEN-LAST:event_jTextFieldIDActionPerformed
-	
+
 	private void tampilkanDialog(String msg) {
 		JOptionPane.showMessageDialog(this, msg);
 	}
-	
+
 	private void clear() {
 		this.karyawan = null;
 		this.jLabelNama.setText("");
 		this.jTextFieldID.setText("");
 		this.tabelData.setModel(new DefaultTableModel());
 	}
-	
+
 
         private void jTextFieldIDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldIDKeyPressed
-		
+
 		if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			this.clear();
 			return;
 		}
-		
+
 		if (evt.getKeyCode() != KeyEvent.VK_ENTER) {
 			return;
 		}
-		
+
 		if (jTextFieldID.getText().isEmpty()) {
 			tampilkanDialog("Masukan ID!");
 			jTextFieldID.requestFocus();
@@ -358,20 +441,29 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			clear();
 			try {
 				Karyawan karyawan = dbAbsensi.getDataKaryawan(idKaryawan);
-				
+
 				if (karyawan == null) {
 					tampilkanDialog("Pastikan anda telah terdaftar sebagai karyawan!");
 					return;
 				}
-				
+
 				this.karyawan = karyawan;
-				
+
 				this.dapatkanDataTerkini();
-				
+
 				this.jLabelNama.setText(karyawan.getNamaKaryawan());
-				
+
+				// cek jika absen diluar waktu shift
+				Timestamp waktuAbsen = Timestamp.valueOf(LocalDateTime.now());
+				if (!isDalamWaktuShift(TimestampToTime(waktuAbsen), this.karyawan.getShift().start, this.karyawan.getShift().end)) {
+					tampilkanDialog("Dilarang absen diluar waktu shift!.");
+					this.dbAbsensi.tambahkanRecordAbsen(this.karyawan.getIdKaryawan(), RecordAbsen.TipeAbsen.INVALID, waktuAbsen, StatusAbsen.INVALID, "UPAYA ABSEN DILUAR SHIFT");
+					return;
+
+				}
+
 				this.tentukanModeAbsen();
-				
+
 				switch (modeAbsen) {
 					case ABSEN_MASUK:
 						absenMasuk();
@@ -385,17 +477,17 @@ public class JPanelAbsen extends javax.swing.JPanel {
 					case ABSEN_KEMBALI_ISTIRAHAT:
 						absenKembaliIstirahat();
 						break;
-					
+
 				}
-				
+
 				this.dapatkanDataTerkini();
 				this.updateTabelData();
-				
+
 			} catch (SQLException ex) {
 				tampilkanDialog("Pastikan Anda Memasukan ID yang Benar");
 				jTextFieldID.setText("");
 			}
-			
+
 		}
         }//GEN-LAST:event_jTextFieldIDKeyPressed
 

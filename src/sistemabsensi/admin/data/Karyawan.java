@@ -102,4 +102,8 @@ public class Karyawan {
 	}
 	
 	
+	@Override
+	public String toString() {
+		return this.idKaryawan + ":" + this.namaKaryawan;
+	}
 }

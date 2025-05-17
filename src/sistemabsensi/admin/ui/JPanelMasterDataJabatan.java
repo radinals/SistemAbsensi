@@ -64,8 +64,8 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 btnSimpan = new javax.swing.JButton();
                 btnHapus = new javax.swing.JButton();
 
+                setBorder(javax.swing.BorderFactory.createEtchedBorder());
                 setMaximumSize(new java.awt.Dimension(991, 599));
-                setLayout(null);
 
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
@@ -78,6 +78,8 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                                 "Title 1", "Title 2", "Title 3", "Title 4"
                         }
                 ));
+                tabelData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+                tabelData.setShowGrid(true);
                 tabelData.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
                                 tabelDataMouseClicked(evt);
@@ -85,10 +87,7 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 });
                 jScrollPane1.setViewportView(tabelData);
 
-                add(jScrollPane1);
-                jScrollPane1.setBounds(20, 130, 710, 190);
-
-                jPanel1.setLayout(new java.awt.GridLayout());
+                jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
                 jLabel1.setText("NAMA JABATAN");
                 jPanel1.add(jLabel1);
@@ -100,10 +99,7 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 });
                 jPanel1.add(textFieldNamaJabatan);
 
-                add(jPanel1);
-                jPanel1.setBounds(30, 20, 700, 40);
-
-                jPanel2.setLayout(new java.awt.GridLayout(1, 2));
+                jPanel2.setLayout(new java.awt.GridLayout(2, 1));
 
                 btnSimpan.setText("SIMPAN");
                 btnSimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -121,8 +117,35 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 });
                 jPanel2.add(btnHapus);
 
-                add(jPanel2);
-                jPanel2.setBounds(210, 80, 340, 40);
+                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+                this.setLayout(layout);
+                layout.setHorizontalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(630, 630, 630)
+                                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(10, 10, 10)
+                                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane1)
+                                .addContainerGap())
+                );
+                layout.setVerticalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                                .addContainerGap())
+                );
         }// </editor-fold>//GEN-END:initComponents
 
         private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed

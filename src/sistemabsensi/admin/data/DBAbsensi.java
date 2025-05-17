@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import sistemabsensi.admin.ui.Pesan;
 import sistemabsensi.database.connection.DBConnection;
@@ -449,6 +450,242 @@ public class DBAbsensi {
 		}
 	}
 
+	private String buatkanKlausaWherePencarian(String pencarian, List<KolomPencarian> kolomTarget) {
+		String sqlWhere = " WHERE ";
+
+		int i = 1;
+
+		for (KolomPencarian kolom : kolomTarget) {
+			switch (kolom) {
+				case ID:
+					sqlWhere += " a.id_karyawan like '" + pencarian + "'";
+					break;
+				case NAMA:
+					sqlWhere += " a.nama_karyawan like '" + pencarian + "'";
+					break;
+				case JABATAN:
+					sqlWhere += " c.nama_jabatan like '" + pencarian + "'";
+					break;
+				case PRODI:
+					sqlWhere += " b.nama_prodi like '" + pencarian + "'";
+					break;
+				case SHIFT:
+					sqlWhere += " e.deskripsi like '" + pencarian + "'";
+					break;
+				case EMAIL:
+					sqlWhere += " a.email like '" + pencarian + "'";
+					break;
+				case NO_TELP:
+					sqlWhere += " a.no_telp like '" + pencarian + "'";
+					break;
+				case ALAMAT:
+					sqlWhere += " a.alamat like '" + pencarian + "'";
+					break;
+				default:
+					throw new AssertionError(kolom.name());
+			}
+
+			if (kolomTarget.size() <= 1) {
+				continue;
+			}
+
+			if (i < kolomTarget.size()) {
+				sqlWhere += " AND ";
+			}
+			i++;
+		}
+
+		return sqlWhere;
+	}
+
+	public DefaultTableModel getModelTabel_PencarianKaryawan(String pencarian, List<KolomPencarian> kolomTarget) throws SQLException {
+		if (kolomTarget.isEmpty()) {
+			return null;
+		}
+
+		String sql
+			= "SELECT "
+			+ "a.id_karyawan, a.nama_karyawan, a.id_prodi, b.nama_prodi, "
+			+ "a.id_jabatan, c.nama_jabatan, "
+			+ "a.id_shift, e.shift_start, e.shift_end, e.deskripsi,"
+			+ "a.email, a.no_telp, a.alamat "
+			+ "FROM tkaryawan a "
+			+ "LEFT JOIN tprodi b ON a.id_prodi = b.id_prodi "
+			+ "LEFT JOIN tjabatan c ON a.id_jabatan = c.id_jabatan "
+			+ "LEFT JOIN tshift e ON a.id_shift = e.id_shift";
+
+		sql += buatkanKlausaWherePencarian(pencarian, kolomTarget);
+
+		DefaultTableModel model = new DefaultTableModel();
+
+		model.addColumn("ID");
+		model.addColumn("NAMA");
+		model.addColumn("PRODI");
+		model.addColumn("SHIFT");
+		model.addColumn("JABATAN");
+		model.addColumn("ALAMAT");
+		model.addColumn("NO TELP");
+		model.addColumn("EMAIL");
+
+		try (PreparedStatement query = this.getConnection().prepareStatement(sql)) {
+			ResultSet result = query.executeQuery();
+
+			while (result.next()) {
+				Prodi prodi = null;
+				int idProdi = result.getInt("id_prodi");
+				if (!result.wasNull() && result.getString("nama_prodi") != null) {
+					prodi = new Prodi(idProdi, result.getString("nama_prodi"));
+				}
+
+				Jabatan jabatan = null;
+				int idJabatan = result.getInt("id_jabatan");
+				if (!result.wasNull() && result.getString("nama_jabatan") != null) {
+					jabatan = new Jabatan(idJabatan, result.getString("nama_jabatan"));
+				}
+
+				Shift shift = null;
+				int idShift = result.getInt("id_shift");
+				if (!result.wasNull() && result.getTime("shift_start") != null) {
+					shift = new Shift();
+					shift.idShift = idShift;
+					shift.shift_start = result.getTime("shift_start");
+					shift.shift_end = result.getTime("shift_end");
+					shift.deskripsi = result.getString("deskripsi");
+
+				}
+
+				Object[] row = {
+					result.getString("id_karyawan"),
+					result.getString("nama_karyawan"),
+					prodi,
+					shift,
+					jabatan,
+					result.getString("alamat"),
+					result.getString("no_telp"),
+					result.getString("email")
+				};
+
+				model.addRow(row);
+			}
+
+			return model;
+
+		} catch (SQLException e) {
+			System.err.println("QUERY: " + sql);
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	
+	
+	public StatusLogin loginAdminValid(String id, String password) {
+		final String sql = "SELECT a.id_karyawan, b.nama_karyawan, a.password FROM tadmin a, tkaryawan b where a.id_karyawan = b.id_karyawan AND a.id_karyawan = ?;";
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			query.setString(1, id);
+
+			ResultSet result = query.executeQuery();
+			if (result.next()) {
+				String passwordAdmin = result.getString("password");
+				
+				if (passwordAdmin.equals(password))
+					return StatusLogin.LOGIN_VALID;
+				else
+					return StatusLogin.PASSWORD_SALAH;
+			} else {
+				return StatusLogin.ID_TIDAK_TERDAFTAR;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
+		return null;
+	}
+	
+	public boolean isKaryawanAdmin(String idKaryawan) {
+		final String sql = "SELECT 1 FROM tadmin where id_karyawan = ?;";
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			query.setString(1, idKaryawan);
+
+			ResultSet result = query.executeQuery();
+			return result.next();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		return false;
+	}
+	
+	public String getPasswordKaryawanAdmin(String idKaryawan) {
+		final String sql = "SELECT password FROM tadmin where id_karyawan = ?;";
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+			query.setString(1, idKaryawan);
+
+			ResultSet result = query.executeQuery();
+			if(result.next()) {
+				return result.getString("password");
+			}
+			
+			return null;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		return null;
+	}
+	
+	public void tambahKaryawanAdmin(String idKaryawan, String password) {
+		final String sql = "INSERT INTO tadmin values(?,?);";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+
+			query.setString(1, idKaryawan);
+			query.setString(2, password);
+
+			int affected = query.executeUpdate();
+
+			if (affected <= 0) {
+				throw new SQLException("Gagal menambahkan data karyawan baru");
+			}
+
+			System.out.println("MENAMBAHKAN ADMIN BARU: " + affected);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+	
+	public void hapusKaryawanAdmin(String idKaryawan) {
+		final String sql = "DELETE FROM tadmin WHERE id_karyawan = ?;";
+
+		try {
+			PreparedStatement query = this.getConnection().prepareStatement(sql);
+
+			query.setString(1, idKaryawan);
+
+			int affected = query.executeUpdate();
+
+			if (affected <= 0) {
+				throw new SQLException("Gagal Menghapus data karyawan baru");
+			}
+
+			System.out.println("MENGHAPUS ADMIN: " + affected);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+
 	public DefaultTableModel getModelTabel_Jabatan() throws SQLException {
 		final String sql = "SELECT * FROM tjabatan;";
 		DefaultTableModel model = new DefaultTableModel();
@@ -497,6 +734,61 @@ public class DBAbsensi {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+	
+	public LinkedList<Date> getDaftarTanggalRecordAbsen() throws SQLException {
+	LinkedList<Date> tanggalList = new LinkedList<>();
+	String sql = "SELECT DISTINCT DATE(waktu_absen) AS tanggal FROM trecordabsen ORDER BY tanggal DESC";
+
+	try (PreparedStatement stmt = this.getConnection().prepareStatement(sql);
+		 ResultSet rs = stmt.executeQuery()) {
+		while (rs.next()) {
+			tanggalList.add(rs.getDate("tanggal"));
+		}
+	}
+	return tanggalList;
+}
+
+	public DefaultTableModel getModelTabel_RecordAbsen() throws SQLException {
+		String sql
+			= "SELECT "
+			+ "b.id_karyawan, b.nama_karyawan, c.id_shift, c.deskripsi, c.shift_start, c.shift_end,"
+			+ "a.id_recordabsen, a.waktu_absen, a.status_absen, a.catatan_absen,a.tipe_absen "
+			+ "FROM trecordabsen a "
+			+ "LEFT JOIN tkaryawan b ON a.id_karyawan = b.id_karyawan "
+			+ "LEFT JOIN tshift c ON b.id_shift = c.id_shift";
+
+		DefaultTableModel model = new DefaultTableModel();
+
+		model.addColumn("ID RECORD");
+		model.addColumn("ID KARYAWAN");
+		model.addColumn("NAMA KARYAWAN");
+		model.addColumn("WAKTU ABSEN");
+		model.addColumn("TIPE ABSEN");
+		model.addColumn("CATATAN ABSEN");
+
+		try (PreparedStatement stmt = this.database.getConnection().prepareStatement(sql)) {
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					RecordAbsen record = new RecordAbsen();
+
+					Object[] baris = {
+						rs.getInt("id_recordabsen"),
+						rs.getString("id_karyawan"),
+						rs.getString("nama_karyawan"),
+						rs.getString("status_absen"),
+						rs.getTimestamp("waktu_absen"),
+						rs.getString("tipe_absen"),
+						rs.getString("catatan_absen")
+					};
+
+					model.addRow(baris);
+				}
+
+			}
+		}
+
+		return model;
 	}
 
 	//----------------------------------------------------------------------
@@ -673,13 +965,158 @@ public class DBAbsensi {
 			throw e;
 		}
 	}
-
-	public void updateDataRecordAbsen(final RecordAbsen record) {
-
+	
+	public void simpanDataRecordAbsen(RecordAbsen record) throws SQLException {
+		if (record.id_recordabsen != null) {
+			if (Pesan.tampilkanKonfirmasi("Konfirmasi Update Data", "Apakah anda yakin ingin mengupdate data?")) {
+				updateDataRecordAbsen(record);
+			}
+		} else {
+			if (Pesan.tampilkanKonfirmasi("Konfirmasi Insert Data", "Apakah anda yakin ingin menambah data baru?")) {
+				insertDataRecordAbsen(record);
+			}
+		}
 	}
 
-	public void updateDataShift(final Shift shift) {
+	public void insertDataRecordAbsen(RecordAbsen record) throws SQLException {
+		String sql = "INSERT INTO trecordabsen (id_recordabsen, waktu_absen, id_karyawan, status_absen, catatan_absen, tipe_absen) "
+			+ "VALUES (default, ?, ?, ?, ?, ?)";
+		try (PreparedStatement stmt = this.database.getConnection().prepareStatement(sql)) {
+			stmt.setTimestamp(1, record.waktu_absen);
+			stmt.setString(2, record.id_karyawan);
+			stmt.setString(3, record.status_absen.name());
+			stmt.setString(4, record.catatan_absen);
+			stmt.setString(5, record.tipe_absen.name());
+			stmt.executeUpdate();
+		}
+	}
 
+	// --------------------- READ ---------------------
+	public RecordAbsen getRecordAbsenById(int id) throws SQLException {
+		String sql = "SELECT * FROM trecordabsen WHERE id_recordabsen = ?";
+		try (PreparedStatement stmt = this.database.getConnection().prepareStatement(sql)) {
+			stmt.setInt(1, id);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					return new RecordAbsen(
+						rs.getInt("id_recordabsen"),
+						rs.getTimestamp("waktu_absen"),
+						rs.getString("id_karyawan"),
+						RecordAbsen.StatusAbsen.valueOf(rs.getString("status_absen")),
+						rs.getString("catatan_absen"),
+						RecordAbsen.TipeAbsen.valueOf(rs.getString("tipe_absen"))
+					);
+				}
+			}
+		}
+		return null;
+	}
+
+	// --------------------- UPDATE ---------------------
+	public void updateDataRecordAbsen(final RecordAbsen record) throws SQLException {
+		String sql = "UPDATE trecordabsen SET waktu_absen = ?, id_karyawan = ?, status_absen = ?, catatan_absen = ?, tipe_absen = ? "
+			+ "WHERE id_recordabsen = ?";
+		try (PreparedStatement stmt = this.database.getConnection().prepareStatement(sql)) {
+			stmt.setTimestamp(1, record.waktu_absen);
+			stmt.setString(2, record.id_karyawan);
+			stmt.setString(3, record.status_absen.name());
+			stmt.setString(4, record.catatan_absen);
+			stmt.setString(5, record.tipe_absen.name());
+			stmt.setInt(6, record.id_recordabsen);
+			stmt.executeUpdate();
+		}
+	}
+
+	// --------------------- DELETE ---------------------
+	public void deleteDataRecordAbsen(int idRecord) throws SQLException, SQLException, SQLException, SQLException {
+		String sql = "DELETE FROM trecordabsen WHERE id_recordabsen = ?";
+		try (PreparedStatement stmt = this.database.getConnection().prepareStatement(sql)) {
+			stmt.setInt(1, idRecord);
+			stmt.executeUpdate();
+		}
+	}
+	
+	public void simpanDataShift(Shift shift) throws SQLException {
+		if (shift.idShift != null) {
+			if (Pesan.tampilkanKonfirmasi("Konfirmasi Update Data", "Apakah anda yakin ingin mengupdate data?")) {
+				updateDataShift(shift);
+			}
+		} else {
+			if (Pesan.tampilkanKonfirmasi("Konfirmasi Insert Data", "Apakah anda yakin ingin menambah data baru?")) {
+				insertDataShift(shift);
+			}
+		}
+	}
+	
+	public DefaultTableModel getModelDataTabel_Shift() throws SQLException {
+		String sql = "SELECT * FROM tshift";
+		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn("ID");
+		model.addColumn("SHIFT MULAI");
+		model.addColumn("SHIFT SELESAI");
+		model.addColumn("DESKRIPSI");
+		try (PreparedStatement stmt = this.database.getConnection().prepareStatement(sql)) {
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					Object[] baris =  {
+						rs.getInt("id_shift"),
+						rs.getTime("shift_start"),
+						rs.getTime("shift_end"),
+						rs.getString("deskripsi")
+					};
+					
+					model.addRow(baris);
+				}
+			}
+		}
+		return model;
+	}
+	
+	public Shift getDataShift(int id) throws SQLException {
+		String sql = "SELECT * FROM tshift WHERE id_shift = ?";
+		try (PreparedStatement stmt = this.database.getConnection().prepareStatement(sql)) {
+			stmt.setInt(1, id);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					return new Shift(
+						rs.getInt("id_shift"),
+						rs.getTime("shift_start"),
+						rs.getTime("shift_end"),
+						rs.getString("deskripsi")
+					);
+				}
+			}
+		}
+		return null;
+	}
+
+	public void updateDataShift(final Shift shift) throws SQLException {
+		String sql = "UPDATE tshift SET shift_start = ?, shift_end = ?, deskripsi = ? where id_shift = ?";
+		try (PreparedStatement stmt = this.database.getConnection().prepareStatement(sql)) {
+			stmt.setTime(1, shift.shift_start);
+			stmt.setTime(2, shift.shift_end);
+			stmt.setString(3, shift.deskripsi);
+			stmt.setInt(4, shift.idShift);
+			stmt.executeUpdate();
+		}
+	}
+	
+	public void insertDataShift(final Shift shift) throws SQLException {
+		String sql = "INSERT INTO tshift(shift_start, shift_end, deskripsi) values (?,?,?";
+		try (PreparedStatement stmt = this.database.getConnection().prepareStatement(sql)) {
+			stmt.setTime(1, shift.shift_start);
+			stmt.setTime(2, shift.shift_end);
+			stmt.setString(3, shift.deskripsi);
+			stmt.executeUpdate();
+		}
+	}
+	
+	public void deleteDataShift(int idShift) throws SQLException {
+		String sql = "DELETE FROM tshift WHERE id_shift = ?";
+		try (PreparedStatement stmt = this.database.getConnection().prepareStatement(sql)) {
+			stmt.setInt(1, idShift);
+			stmt.executeUpdate();
+		}
 	}
 
 	//----------------------------------------------------------------------
@@ -740,18 +1177,6 @@ public class DBAbsensi {
 			e.printStackTrace();
 			throw e;
 		}
-	}
-
-	public void deleteDataRecordAbsen(int idRecord) {
-
-	}
-
-	public void deleteDataCatatanRecord(int idDetailRecord) {
-
-	}
-
-	public void deleteDataShift(int idShift) {
-
 	}
 
 }

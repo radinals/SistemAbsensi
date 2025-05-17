@@ -4,7 +4,21 @@
  */
 package sistemabsensi.admin.ui;
 
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import sistemabsensi.admin.data.DBAbsensi;
+import sistemabsensi.admin.data.Karyawan;
+import sistemabsensi.admin.data.RecordAbsen;
+import sistemabsensi.admin.data.RecordAbsen.StatusAbsen;
+import sistemabsensi.admin.data.RecordAbsen.TipeAbsen;
 
 /**
  *
@@ -14,12 +28,130 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 
 	private DBAbsensi db;
 
+	private String karyawanTerpilih;
+	private RecordAbsen recordTerpilih;
+
 	/**
 	 * Creates new form JPanelMasterDataRecordAbsen
 	 */
 	public JPanelMasterDataRecordAbsen(DBAbsensi db) {
 		this.db = db;
+		this.karyawanTerpilih = null;
+		this.recordTerpilih = null;
 		initComponents();
+	}
+
+	public void updateData() {
+		try {
+			this.tabelData.setModel(this.db.getModelTabel_RecordAbsen());
+			this.isiComboBox();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+
+	private void isiComboBoxTipeAbsen() {
+		this.comboBoxTipeAbsen.removeAllItems();
+		for (TipeAbsen status : TipeAbsen.values()) {
+			if (this.recordTerpilih != null && status == this.recordTerpilih.tipe_absen) {
+				continue;
+			}
+			this.comboBoxTipeAbsen.addItem(status);
+		}
+
+		if (this.recordTerpilih != null) {
+			this.comboBoxTipeAbsen.addItem(this.recordTerpilih.tipe_absen);
+			this.comboBoxTipeAbsen.setSelectedItem(this.recordTerpilih.tipe_absen);
+		} else {
+			this.comboBoxTipeAbsen.setSelectedItem(null);
+		}
+	}
+
+	private void isiComboBoxStatusAbsen() {
+		this.comboBoxStatusAbsen.removeAllItems();
+		for (StatusAbsen status : StatusAbsen.values()) {
+			if (this.recordTerpilih != null && status == this.recordTerpilih.status_absen) {
+				continue;
+			}
+			this.comboBoxStatusAbsen.addItem(status);
+		}
+
+		if (this.recordTerpilih != null) {
+			this.comboBoxStatusAbsen.addItem(this.recordTerpilih.status_absen);
+			this.comboBoxStatusAbsen.setSelectedItem(this.recordTerpilih.status_absen);
+		} else {
+			this.comboBoxStatusAbsen.setSelectedItem(null);
+		}
+	}
+
+	private void isiComboBoxKaryawan() {
+		this.comboBoxKaryawan.removeAllItems();
+		try {
+			LinkedList<Karyawan> dataKaryawan = this.db.getDaftarDataKaryawan();
+			Karyawan karyawanTerpilih_tmp = null;
+			for (Karyawan karyawan : dataKaryawan) {
+				if (karyawanTerpilih != null && karyawan.idKaryawan.equals(this.karyawanTerpilih)) {
+					karyawanTerpilih_tmp = karyawan;
+					continue;
+				}
+				this.comboBoxKaryawan.addItem(karyawan);
+			}
+
+			if (this.karyawanTerpilih != null && karyawanTerpilih_tmp != null) {
+				this.comboBoxKaryawan.addItem(karyawanTerpilih_tmp);
+				this.comboBoxKaryawan.setSelectedItem(karyawanTerpilih_tmp);
+			} else {
+				this.comboBoxKaryawan.setSelectedItem(null);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+
+	public static Date toDate(LocalTime localTime) {
+		// Combine LocalTime with current date
+		return Date.from(
+			localTime.atDate(LocalDate.now()) // Combine time with today’s date
+				.atZone(ZoneId.systemDefault()) // Add system default timezone
+				.toInstant() // Convert to Instant
+		);
+	}
+
+	public static Date toDate(LocalDate localDate) {
+		return Date.from(
+			localDate.atStartOfDay() // Set time to 00:00
+				.atZone(ZoneId.systemDefault()) // Apply system time zone
+				.toInstant() // Convert to Instant
+		);
+	}
+
+	private void getDataTerpilih(int idRecord) {
+		try {
+			this.recordTerpilih = db.getRecordAbsenById(idRecord);
+
+			this.karyawanTerpilih = recordTerpilih.id_karyawan;
+
+			Date tanggal = toDate(recordTerpilih.waktu_absen.toLocalDateTime().toLocalDate());
+			Date jam = toDate(recordTerpilih.waktu_absen.toLocalDateTime().toLocalTime());
+			this.spinnerJam.setValue(tanggal);
+			this.spinnerTanggal.setValue(jam);
+			this.textAreaCatatanAbsen.setText(this.recordTerpilih.catatan_absen);
+			this.textFieldIdRecord.setText(recordTerpilih.id_recordabsen.toString());
+
+			this.isiComboBox();
+
+		} catch (SQLException ex) {
+			Logger.getLogger(JPanelMasterDataRecordAbsen.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	private void isiComboBox() {
+		this.isiComboBoxKaryawan();
+		this.isiComboBoxStatusAbsen();
+		this.isiComboBoxTipeAbsen();
 	}
 
 	/**
@@ -33,102 +165,92 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 
                 jPanel6 = new javax.swing.JPanel();
                 jPanel1 = new javax.swing.JPanel();
-                jLabel1 = new javax.swing.JLabel();
-                jComboBox1 = new javax.swing.JComboBox<>();
                 jLabel2 = new javax.swing.JLabel();
-                jComboBox2 = new javax.swing.JComboBox<>();
-                jLabel3 = new javax.swing.JLabel();
-                jPanel2 = new javax.swing.JPanel();
-                jTextField1 = new javax.swing.JTextField();
-                jLabel5 = new javax.swing.JLabel();
-                jPanel5 = new javax.swing.JPanel();
-                jTextField3 = new javax.swing.JTextField();
+                textFieldIdRecord = new javax.swing.JTextField();
+                jLabel1 = new javax.swing.JLabel();
+                comboBoxKaryawan = new javax.swing.JComboBox<>();
                 jLabel4 = new javax.swing.JLabel();
-                jPanel3 = new javax.swing.JPanel();
-                jTextField4 = new javax.swing.JTextField();
-                jLabel6 = new javax.swing.JLabel();
-                jPanel4 = new javax.swing.JPanel();
-                jTextField2 = new javax.swing.JTextField();
+                comboBoxTipeAbsen = new javax.swing.JComboBox<>();
+                jLabel5 = new javax.swing.JLabel();
+                comboBoxStatusAbsen = new javax.swing.JComboBox<>();
                 btnHapus = new javax.swing.JButton();
-                jButton3 = new javax.swing.JButton();
+                btnSimpan = new javax.swing.JButton();
                 jScrollPane1 = new javax.swing.JScrollPane();
-                jTable1 = new javax.swing.JTable();
+                tabelData = new javax.swing.JTable();
                 jLabel7 = new javax.swing.JLabel();
                 jScrollPane2 = new javax.swing.JScrollPane();
-                jTextArea1 = new javax.swing.JTextArea();
+                textAreaCatatanAbsen = new javax.swing.JTextArea();
                 jPanel7 = new javax.swing.JPanel();
-                jTextField5 = new javax.swing.JTextField();
-                jRadioButton2 = new javax.swing.JRadioButton();
-                jRadioButton3 = new javax.swing.JRadioButton();
-                jRadioButton4 = new javax.swing.JRadioButton();
-                jRadioButton5 = new javax.swing.JRadioButton();
-                jRadioButton6 = new javax.swing.JRadioButton();
-                jRadioButton7 = new javax.swing.JRadioButton();
-                jButton1 = new javax.swing.JButton();
+                jPanel3 = new javax.swing.JPanel();
+                jLabel6 = new javax.swing.JLabel();
+                spinnerTanggal = new javax.swing.JSpinner();
+                jLabel8 = new javax.swing.JLabel();
+                spinnerJam = new javax.swing.JSpinner();
+                jLabel3 = new javax.swing.JLabel();
+                jLabel9 = new javax.swing.JLabel();
 
                 setMaximumSize(new java.awt.Dimension(991, 599));
-                setLayout(new java.awt.GridLayout());
+                setLayout(new java.awt.GridLayout(1, 0));
 
                 jPanel6.setLayout(null);
 
-                jPanel1.setLayout(new java.awt.GridLayout(7, 2));
+                jPanel1.setLayout(new java.awt.GridLayout(4, 2));
+
+                jLabel2.setText("ID RECORD");
+                jPanel1.add(jLabel2);
+
+                textFieldIdRecord.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                textFieldIdRecordActionPerformed(evt);
+                        }
+                });
+                jPanel1.add(textFieldIdRecord);
 
                 jLabel1.setText("KARYAWAN");
                 jPanel1.add(jLabel1);
 
-                jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-                jPanel1.add(jComboBox1);
+                comboBoxKaryawan.setModel(new javax.swing.DefaultComboBoxModel<>());
+                jPanel1.add(comboBoxKaryawan);
 
-                jLabel2.setText("TANGGAL");
-                jPanel1.add(jLabel2);
-
-                jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-                jPanel1.add(jComboBox2);
-
-                jLabel3.setText("ABSEN MASUK");
-                jPanel1.add(jLabel3);
-
-                jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
-                jPanel2.add(jTextField1);
-
-                jPanel1.add(jPanel2);
-
-                jLabel5.setText("ABSEN KEMBALI ISTIRAHAT");
-                jPanel1.add(jLabel5);
-
-                jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.LINE_AXIS));
-                jPanel5.add(jTextField3);
-
-                jPanel1.add(jPanel5);
-
-                jLabel4.setText("ABSEN ISTIRAHAT");
+                jLabel4.setText("TIPE ABSEN");
                 jPanel1.add(jLabel4);
 
-                jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
-                jPanel3.add(jTextField4);
+                comboBoxTipeAbsen.setModel(new javax.swing.DefaultComboBoxModel<>());
+                jPanel1.add(comboBoxTipeAbsen);
 
-                jPanel1.add(jPanel3);
+                jLabel5.setText("STATUS ABSEN");
+                jPanel1.add(jLabel5);
 
-                jLabel6.setText("ABSEN PULANG");
-                jPanel1.add(jLabel6);
-
-                jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
-                jPanel4.add(jTextField2);
-
-                jPanel1.add(jPanel4);
+                comboBoxStatusAbsen.setModel(new javax.swing.DefaultComboBoxModel<>());
+                comboBoxStatusAbsen.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                comboBoxStatusAbsenActionPerformed(evt);
+                        }
+                });
+                jPanel1.add(comboBoxStatusAbsen);
 
                 jPanel6.add(jPanel1);
-                jPanel1.setBounds(20, 20, 740, 250);
+                jPanel1.setBounds(20, 60, 740, 120);
 
                 btnHapus.setText("HAPUS");
+                btnHapus.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnHapusActionPerformed(evt);
+                        }
+                });
                 jPanel6.add(btnHapus);
-                btnHapus.setBounds(380, 600, 78, 29);
+                btnHapus.setBounds(400, 450, 78, 29);
 
-                jButton3.setText("SIMPAN");
-                jPanel6.add(jButton3);
-                jButton3.setBounds(290, 600, 85, 29);
+                btnSimpan.setText("SIMPAN");
+                btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnSimpanActionPerformed(evt);
+                        }
+                });
+                jPanel6.add(btnSimpan);
+                btnSimpan.setBounds(310, 450, 85, 29);
 
-                jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null},
                                 {null, null, null, null},
@@ -139,98 +261,174 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                                 "Title 1", "Title 2", "Title 3", "Title 4"
                         }
                 ));
-                jScrollPane1.setViewportView(jTable1);
+                tabelData.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                tabelDataMouseClicked(evt);
+                        }
+                });
+                jScrollPane1.setViewportView(tabelData);
 
                 jPanel6.add(jScrollPane1);
-                jScrollPane1.setBounds(780, 30, 560, 470);
+                jScrollPane1.setBounds(780, 20, 560, 670);
 
                 jLabel7.setText("CATATAN ABSEN");
                 jPanel6.add(jLabel7);
-                jLabel7.setBounds(20, 290, 370, 35);
+                jLabel7.setBounds(20, 270, 370, 35);
 
-                jTextArea1.setColumns(20);
-                jTextArea1.setRows(5);
-                jScrollPane2.setViewportView(jTextArea1);
+                textAreaCatatanAbsen.setColumns(20);
+                textAreaCatatanAbsen.setRows(5);
+                jScrollPane2.setViewportView(textAreaCatatanAbsen);
 
                 jPanel6.add(jScrollPane2);
-                jScrollPane2.setBounds(390, 290, 370, 220);
-
-                jTextField5.setText("jTextField5");
-
-                jRadioButton2.setText("jRadioButton2");
-
-                jRadioButton3.setText("jRadioButton3");
-
-                jRadioButton4.setText("jRadioButton4");
-
-                jRadioButton5.setText("jRadioButton5");
-
-                jRadioButton6.setText("jRadioButton6");
-
-                jRadioButton7.setText("jRadioButton7");
-
-                jButton1.setText("jButton1");
+                jScrollPane2.setBounds(390, 270, 370, 160);
 
                 javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
                 jPanel7.setLayout(jPanel7Layout);
                 jPanel7Layout.setHorizontalGroup(
                         jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGap(120, 120, 120)
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel7Layout.createSequentialGroup()
-                                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton1))
-                                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addGroup(jPanel7Layout.createSequentialGroup()
-                                                        .addComponent(jRadioButton4)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jRadioButton7))
-                                                .addGroup(jPanel7Layout.createSequentialGroup()
-                                                        .addComponent(jRadioButton3)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jRadioButton6))
-                                                .addGroup(jPanel7Layout.createSequentialGroup()
-                                                        .addComponent(jRadioButton2)
-                                                        .addGap(37, 37, 37)
-                                                        .addComponent(jRadioButton5))))
-                                .addContainerGap(95, Short.MAX_VALUE))
+                        .addGap(0, 560, Short.MAX_VALUE)
                 );
                 jPanel7Layout.setVerticalGroup(
                         jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton1))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jRadioButton2)
-                                        .addComponent(jRadioButton5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jRadioButton3)
-                                        .addComponent(jRadioButton6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jRadioButton4)
-                                        .addComponent(jRadioButton7))
-                                .addContainerGap(45, Short.MAX_VALUE))
+                        .addGap(0, 190, Short.MAX_VALUE)
                 );
 
                 jPanel6.add(jPanel7);
                 jPanel7.setBounds(780, 510, 560, 190);
 
+                jPanel3.setLayout(new java.awt.GridLayout(2, 2));
+
+                jLabel6.setText("TANGGAL");
+                jPanel3.add(jLabel6);
+
+                spinnerTanggal.setModel(new javax.swing.SpinnerDateModel());
+                spinnerTanggal.setDoubleBuffered(true);
+                spinnerTanggal.setEditor(new javax.swing.JSpinner.DateEditor(spinnerTanggal, "yyyy-MM-dd"));
+                jPanel3.add(spinnerTanggal);
+
+                jLabel8.setText("JAM");
+                jPanel3.add(jLabel8);
+
+                spinnerJam.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.SECOND));
+                spinnerJam.setToolTipText("");
+                spinnerJam.setEditor(new javax.swing.JSpinner.DateEditor(spinnerJam, "HH:mm:ss"));
+                jPanel3.add(spinnerJam);
+
+                jPanel6.add(jPanel3);
+                jPanel3.setBounds(396, 188, 360, 70);
+
+                jLabel3.setText("WAKTU ABSEN");
+                jPanel6.add(jLabel3);
+                jLabel3.setBounds(20, 180, 370, 36);
+
+                jLabel9.setFont(jLabel9.getFont().deriveFont((jLabel9.getFont().getStyle() | java.awt.Font.ITALIC) | java.awt.Font.BOLD, jLabel9.getFont().getSize()+4));
+                jLabel9.setText("MAINTENENCE RECORD ABSEN");
+                jPanel6.add(jLabel9);
+                jLabel9.setBounds(20, 20, 270, 30);
+
                 add(jPanel6);
         }// </editor-fold>//GEN-END:initComponents
 
+        private void comboBoxStatusAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxStatusAbsenActionPerformed
+		// TODO add your handling code here:
+        }//GEN-LAST:event_comboBoxStatusAbsenActionPerformed
+
+        private void tabelDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelDataMouseClicked
+		int barisTerpilih = this.tabelData.getSelectedRow();
+		Integer idRecord = (Integer) this.tabelData.getModel().getValueAt(barisTerpilih, 0);
+		this.getDataTerpilih(idRecord);
+
+        }//GEN-LAST:event_tabelDataMouseClicked
+
+	private String formatNilaiSpinner() {
+		Date tanggal = (Date) this.spinnerTanggal.getValue();
+		Date jam = (Date) this.spinnerJam.getValue();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.format(jam);
+	}
+
+        private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+
+		if (this.comboBoxKaryawan.getSelectedItem() == null) {
+			this.comboBoxKaryawan.requestFocus();
+			Pesan.tampilkanPeringatan("Tentukan ID Karyawan!");
+			return;
+		}
+
+		if (this.comboBoxTipeAbsen.getSelectedItem() == null) {
+			this.comboBoxTipeAbsen.requestFocus();
+			Pesan.tampilkanPeringatan("Tentukan Tipe Absen");
+			return;
+		}
+
+		if (this.comboBoxStatusAbsen.getSelectedItem() == null) {
+			this.comboBoxStatusAbsen.requestFocus();
+			Pesan.tampilkanPeringatan("Tentukan Status Absen");
+		}
+
+		String idKaryawan = ((Karyawan) this.comboBoxKaryawan.getSelectedItem()).idKaryawan;
+		StatusAbsen status = (StatusAbsen) this.comboBoxStatusAbsen.getSelectedItem();
+		TipeAbsen tipe = (TipeAbsen) this.comboBoxTipeAbsen.getSelectedItem();
+
+		RecordAbsen record = new RecordAbsen();
+		try {
+			record.id_recordabsen = Integer.valueOf(this.textFieldIdRecord.getText());
+		} catch (Exception e) {
+			record.id_recordabsen = null;
+		}
+
+		record.id_karyawan = idKaryawan;
+		record.status_absen = status;
+		record.tipe_absen = tipe;
+		record.waktu_absen = Timestamp.valueOf(this.formatNilaiSpinner());
+		record.catatan_absen = this.textAreaCatatanAbsen.getText();
+
+		try {
+			this.db.simpanDataRecordAbsen(record);
+			this.updateData();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+        }//GEN-LAST:event_btnSimpanActionPerformed
+
+        private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+		if (this.textFieldIdRecord.getText().isEmpty()) {
+			this.textFieldIdRecord.requestFocus();
+			Pesan.tampilkanPeringatan("ID Tidak boleh Home!");
+			return;
+		}
+
+		int idRecord = -1;
+
+		try {
+			idRecord = Integer.parseInt(this.textFieldIdRecord.getText());
+		} catch (Exception e) {
+			this.textFieldIdRecord.requestFocus();
+			Pesan.tampilkanPeringatan("ID harus berbentuk angka numeric!");
+			return;
+		}
+
+		try {
+			db.deleteDataRecordAbsen(idRecord);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
+
+        }//GEN-LAST:event_btnHapusActionPerformed
+
+        private void textFieldIdRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldIdRecordActionPerformed
+		// TODO add your handling code here:
+        }//GEN-LAST:event_textFieldIdRecordActionPerformed
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnHapus;
-        private javax.swing.JButton jButton1;
-        private javax.swing.JButton jButton3;
-        private javax.swing.JComboBox<String> jComboBox1;
-        private javax.swing.JComboBox<String> jComboBox2;
+        private javax.swing.JButton btnSimpan;
+        private javax.swing.JComboBox<Karyawan> comboBoxKaryawan;
+        private javax.swing.JComboBox<StatusAbsen> comboBoxStatusAbsen;
+        private javax.swing.JComboBox<TipeAbsen> comboBoxTipeAbsen;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JLabel jLabel2;
         private javax.swing.JLabel jLabel3;
@@ -238,27 +436,18 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
         private javax.swing.JLabel jLabel5;
         private javax.swing.JLabel jLabel6;
         private javax.swing.JLabel jLabel7;
+        private javax.swing.JLabel jLabel8;
+        private javax.swing.JLabel jLabel9;
         private javax.swing.JPanel jPanel1;
-        private javax.swing.JPanel jPanel2;
         private javax.swing.JPanel jPanel3;
-        private javax.swing.JPanel jPanel4;
-        private javax.swing.JPanel jPanel5;
         private javax.swing.JPanel jPanel6;
         private javax.swing.JPanel jPanel7;
-        private javax.swing.JRadioButton jRadioButton2;
-        private javax.swing.JRadioButton jRadioButton3;
-        private javax.swing.JRadioButton jRadioButton4;
-        private javax.swing.JRadioButton jRadioButton5;
-        private javax.swing.JRadioButton jRadioButton6;
-        private javax.swing.JRadioButton jRadioButton7;
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JScrollPane jScrollPane2;
-        private javax.swing.JTable jTable1;
-        private javax.swing.JTextArea jTextArea1;
-        private javax.swing.JTextField jTextField1;
-        private javax.swing.JTextField jTextField2;
-        private javax.swing.JTextField jTextField3;
-        private javax.swing.JTextField jTextField4;
-        private javax.swing.JTextField jTextField5;
+        private javax.swing.JSpinner spinnerJam;
+        private javax.swing.JSpinner spinnerTanggal;
+        private javax.swing.JTable tabelData;
+        private javax.swing.JTextArea textAreaCatatanAbsen;
+        private javax.swing.JTextField textFieldIdRecord;
         // End of variables declaration//GEN-END:variables
 }

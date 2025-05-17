@@ -5,7 +5,10 @@
 package sistemabsensi.admin.ui;
 
 import java.awt.CardLayout;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import sistemabsensi.admin.data.DBAbsensi;
+import sistemabsensi.user.ui.JPanelAbsen;
 
 /**
  *
@@ -18,23 +21,32 @@ public class JFrameAdmin extends javax.swing.JFrame {
 	JPanelMasterDataKaryawan MasterDataKaryawan;
 	JPanelMasterDataRecordAbsen MasterDataRecordAbsen;
 	JPanelMasterDataShift MasterDataShift;
+	JPanelLoginAdmin panelLogin;
+	JPanelWelcome panelWelcome;
+	
+	// todo Session
+	public boolean admin_terlogin = false;
 
 	/**
 	 * Creates new form JFrameAdmin
 	 */
 	public JFrameAdmin() {
-		initComponents();
+		
 		DBAbsensi db = new DBAbsensi();
+		initComponents();
+
 		this.MasterDataKaryawan = new JPanelMasterDataKaryawan(db);
 		this.MasterDataRecordAbsen = new JPanelMasterDataRecordAbsen(db);
 		this.MasterDataShift = new JPanelMasterDataShift(db);
-	
+		this.panelLogin = new JPanelLoginAdmin(db, this);
+		this.panelWelcome = new JPanelWelcome(this);
 
+		this.jPanelUtama.add("Home", this.panelWelcome);
 		this.jPanelUtama.add("MasterDataKaryawan", this.MasterDataKaryawan);
 		this.jPanelUtama.add("MasterDataRecordAbsen", this.MasterDataRecordAbsen);
 		this.jPanelUtama.add("MasterDataShift", this.MasterDataShift);
-		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
-
+		this.jPanelUtama.add("Login", this.panelLogin);
+		
 		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
 	}
 
@@ -52,9 +64,14 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 jMenu2 = new javax.swing.JMenu();
                 jMenu3 = new javax.swing.JMenu();
                 jMenuItem2 = new javax.swing.JMenuItem();
+                jPanel1 = new javax.swing.JPanel();
                 jPanelUtama = new javax.swing.JPanel();
                 jMenuBar1 = new javax.swing.JMenuBar();
                 jMenu1 = new javax.swing.JMenu();
+                bukaLoginAdmin = new javax.swing.JMenuItem();
+                bukaTampilanAbsen = new javax.swing.JMenuItem();
+                menuBtnLogout = new javax.swing.JMenuItem();
+                bukaHome = new javax.swing.JMenuItem();
                 jMenu4 = new javax.swing.JMenu();
                 jMenuMasterData_Karyawan = new javax.swing.JMenuItem();
                 jMenu5 = new javax.swing.JMenu();
@@ -83,6 +100,39 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 getContentPane().add(jPanelUtama);
 
                 jMenu1.setText("File");
+
+                bukaLoginAdmin.setText("Login Admin");
+                bukaLoginAdmin.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                bukaLoginAdminActionPerformed(evt);
+                        }
+                });
+                jMenu1.add(bukaLoginAdmin);
+
+                bukaTampilanAbsen.setText("Absensi");
+                bukaTampilanAbsen.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                bukaTampilanAbsenActionPerformed(evt);
+                        }
+                });
+                jMenu1.add(bukaTampilanAbsen);
+
+                menuBtnLogout.setText("Logout");
+                menuBtnLogout.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                menuBtnLogoutActionPerformed(evt);
+                        }
+                });
+                jMenu1.add(menuBtnLogout);
+
+                bukaHome.setText("Home");
+                bukaHome.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                bukaHomeActionPerformed(evt);
+                        }
+                });
+                jMenu1.add(bukaHome);
+
                 jMenuBar1.add(jMenu1);
 
                 jMenu4.setText("Maintenence Karyawan");
@@ -129,23 +179,74 @@ public class JFrameAdmin extends javax.swing.JFrame {
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
-
+	
         private void jMenuMasterData_KaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_KaryawanActionPerformed
+		if (!this.admin_terlogin) {
+			Pesan.tampilkanPeringatan("Login Terlebih Dahulu Jika ingin mengakses data!.");
+			this.layoutPanel.show(this.jPanelUtama, "Login");
+			return;
+		}
 		this.layoutPanel.show(this.jPanelUtama, "MasterDataKaryawan");
 		this.MasterDataKaryawan.updateData();
         }//GEN-LAST:event_jMenuMasterData_KaryawanActionPerformed
 
         private void jMenuMasterData_RecordAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_RecordAbsenActionPerformed
+		if (!this.admin_terlogin) {
+			Pesan.tampilkanPeringatan("Login Terlebih Dahulu Jika ingin mengakses data!.");
+			this.layoutPanel.show(this.jPanelUtama, "Login");
+			return;
+		}
 		this.layoutPanel.show(this.jPanelUtama, "MasterDataRecordAbsen");
+		this.MasterDataRecordAbsen.updateData();
         }//GEN-LAST:event_jMenuMasterData_RecordAbsenActionPerformed
 
         private void jMenuMasterData_ShiftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_ShiftActionPerformed
+		if (!this.admin_terlogin) {
+			Pesan.tampilkanPeringatan("Login Terlebih Dahulu Jika ingin mengakses data!.");
+			this.layoutPanel.show(this.jPanelUtama, "Login");
+			return;
+		}
 		this.layoutPanel.show(this.jPanelUtama, "MasterDataShift");
+		this.MasterDataShift.updateData();
         }//GEN-LAST:event_jMenuMasterData_ShiftActionPerformed
 
         private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
                 // TODO add your handling code here:
         }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+	public void bukaLoginAdmin() {
+		this.layoutPanel.show(this.jPanelUtama, "Login");
+	}
+	
+        private void bukaLoginAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bukaLoginAdminActionPerformed
+                this.bukaLoginAdmin();
+        }//GEN-LAST:event_bukaLoginAdminActionPerformed
+
+        private void menuBtnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBtnLogoutActionPerformed
+                if(this.admin_terlogin) {
+			Pesan.tampilkanPeringatan("Anda Terlogout");
+			this.layoutPanel.show(this.jPanelUtama, "Home");
+			this.admin_terlogin = false;
+		}
+		
+        }//GEN-LAST:event_menuBtnLogoutActionPerformed
+
+	public void bukaTampilanAbsen() {
+		JFrame frame = new JFrame();
+		frame.setSize(800,600);
+		JPanel panel = new JPanelAbsen();
+		panel.setVisible(true);
+		frame.add(panel);
+		frame.setVisible(true);
+	}
+	
+        private void bukaTampilanAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bukaTampilanAbsenActionPerformed
+		this.bukaTampilanAbsen();
+        }//GEN-LAST:event_bukaTampilanAbsenActionPerformed
+
+        private void bukaHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bukaHomeActionPerformed
+                this.layoutPanel.show(this.jPanelUtama, "Home");
+        }//GEN-LAST:event_bukaHomeActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -183,6 +284,9 @@ public class JFrameAdmin extends javax.swing.JFrame {
 	}
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
+        private javax.swing.JMenuItem bukaHome;
+        private javax.swing.JMenuItem bukaLoginAdmin;
+        private javax.swing.JMenuItem bukaTampilanAbsen;
         private javax.swing.JMenu jMenu1;
         private javax.swing.JMenu jMenu2;
         private javax.swing.JMenu jMenu3;
@@ -196,6 +300,8 @@ public class JFrameAdmin extends javax.swing.JFrame {
         private javax.swing.JMenuItem jMenuMasterData_Karyawan;
         private javax.swing.JMenuItem jMenuMasterData_RecordAbsen;
         private javax.swing.JMenuItem jMenuMasterData_Shift;
+        private javax.swing.JPanel jPanel1;
         private javax.swing.JPanel jPanelUtama;
+        private javax.swing.JMenuItem menuBtnLogout;
         // End of variables declaration//GEN-END:variables
 }

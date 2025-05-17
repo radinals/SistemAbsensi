@@ -10,9 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import sistemabsensi.database.connection.DBConnection;
+import sistemabsensi.user.data.RecordAbsen.StatusAbsen;
 import sistemabsensi.user.data.RecordAbsen.TipeAbsen;
 
 /**
@@ -137,21 +139,25 @@ public class DBAbsensi {
 		return false;
 	}
 	
-	public void tambahkanRecordAbsen(String id_karyawan, TipeAbsen tipe_absen, String catatan) throws SQLException {
-		final String sql = "INSERT INTO trecordabsen values (default,?,?,?,?);";
+	public void tambahkanRecordAbsen(String id_karyawan, TipeAbsen tipe_absen, Timestamp waktuAbsen, StatusAbsen status_absen, String catatan) throws SQLException {
+		final String sql = "INSERT INTO trecordabsen(waktu_absen, id_karyawan,status_absen,catatan_absen,tipe_absen) values (?,?,?,?,?);";
 
 		try {
-			LinkedList<RecordAbsen> daftarTanggal = new LinkedList<>();
 			PreparedStatement query = this.getConnection().prepareStatement(sql);
-			
-			Date tanggalSekarang = Date.valueOf(LocalDate.now());
 
-			RecordAbsen record = RecordAbsen.buatRecordAbsen(tipe_absen, id_karyawan, catatan);
+			RecordAbsen record = new RecordAbsen();
+				
+			record.catatan_absen = catatan;
+			record.id_karyawan = id_karyawan;
+			record.status_absen = status_absen;
+			record.waktu_absen = waktuAbsen;
+			record.tipe_absen = tipe_absen;
 			
 			query.setTimestamp(1, record.waktu_absen);
 			query.setString(2, record.id_karyawan);
-			query.setString(3, record.catatan_absen);
-			query.setString(4, record.tipe_absen.toString());
+			query.setString(3, record.status_absen.toString());
+			query.setString(4, record.catatan_absen);
+			query.setString(5, record.tipe_absen.toString());
 
 			int affected = query.executeUpdate();
 			
@@ -194,7 +200,7 @@ public class DBAbsensi {
 		final String sql = "SELECT * FROM trecordabsen WHERE id_karyawan = ? AND DATE(waktu_absen) = ?;";
 
 		try {
-			LinkedList<RecordAbsen> daftarTanggal = new LinkedList<>();
+			LinkedList<RecordAbsen> daftarRecord = new LinkedList<>();
 			PreparedStatement query = this.getConnection().prepareStatement(sql);
 			
 			Date tanggalSekarang = Date.valueOf(LocalDate.now());
@@ -210,6 +216,21 @@ public class DBAbsensi {
 				record.id_karyawan = result.getString("id_karyawan");
 				record.waktu_absen = result.getTimestamp("waktu_absen");
 				
+				switch(result.getString("status_absen")) {
+					case "TELAT":
+						record.status_absen = StatusAbsen.TELAT;
+						break;
+					case "TEPAT_WAKTU":
+						record.status_absen = StatusAbsen.TEPAT_WAKTU;
+						break;
+					case "TERLALU_DINI":
+						record.status_absen = StatusAbsen.TERLALU_DINI;
+						break;
+					case "INVALID":
+						record.status_absen = StatusAbsen.INVALID;
+						break;
+				}
+				
 				switch(result.getString("tipe_absen")) {
 					case "ABSEN_MASUK":
 						record.tipe_absen = TipeAbsen.ABSEN_MASUK;
@@ -223,14 +244,17 @@ public class DBAbsensi {
 					case "ABSEN_KEMBALI_ISTIRAHAT":
 						record.tipe_absen = TipeAbsen.ABSEN_KEMBALI_ISTIRAHAT;
 						break;
+					case "INVALID":
+						record.tipe_absen = TipeAbsen.INVALID;
+						break;
 					
 				}
 				
 				record.catatan_absen = result.getString("catatan_absen");
-				daftarTanggal.add(record);
+				daftarRecord.add(record);
 			}
 
-			return daftarTanggal;
+			return daftarRecord;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -66,10 +66,10 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
                 jLabel1 = new javax.swing.JLabel();
                 textFieldNamaProdi = new javax.swing.JTextField();
 
+                setBorder(javax.swing.BorderFactory.createEtchedBorder());
                 setMaximumSize(new java.awt.Dimension(991, 599));
-                setLayout(null);
 
-                jPanel3.setLayout(new java.awt.GridLayout());
+                jPanel3.setLayout(new java.awt.GridLayout(2, 1));
 
                 btnSimpan.setText("SIMPAN");
                 btnSimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -87,9 +87,6 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
                 });
                 jPanel3.add(btnHapus);
 
-                add(jPanel3);
-                jPanel3.setBounds(230, 90, 260, 40);
-
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null},
@@ -101,15 +98,14 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
                                 "Title 1", "Title 2", "Title 3", "Title 4"
                         }
                 ));
+                tabelData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+                tabelData.setShowGrid(true);
                 tabelData.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
                                 tabelDataMouseClicked(evt);
                         }
                 });
                 jScrollPane1.setViewportView(tabelData);
-
-                add(jScrollPane1);
-                jScrollPane1.setBounds(16, 140, 700, 180);
 
                 jPanel2.setLayout(new java.awt.GridLayout(1, 1));
 
@@ -127,8 +123,35 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
 
                 jPanel2.add(jPanel1);
 
-                add(jPanel2);
-                jPanel2.setBounds(20, 30, 690, 40);
+                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+                this.setLayout(layout);
+                layout.setHorizontalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(10, 10, 10)
+                                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(630, 630, 630)
+                                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane1)
+                                .addContainerGap())
+                );
+                layout.setVerticalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                                .addContainerGap())
+                );
         }// </editor-fold>//GEN-END:initComponents
 
         private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
