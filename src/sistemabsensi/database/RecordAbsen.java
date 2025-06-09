@@ -2,30 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemabsensi.admin.data;
+package sistemabsensi.database;
 
 import java.sql.Timestamp;
+import sistemabsensi.database.StatusAbsen;
+import sistemabsensi.database.TipeAbsen;
 
 /**
  *
  * @author rss
  */
 public class RecordAbsen {
-	public enum TipeAbsen {
-		ABSEN_MASUK,
-		ABSEN_PULANG,
-		ABSEN_ISTIRAHAT,
-		ABSEN_KEMBALI_ISTIRAHAT,
-		INVALID
-	};
-	
-	public enum StatusAbsen {
-		TELAT,
-		TEPAT_WAKTU,
-		TERLALU_DINI,
-		INVALID
-	}
-	
 	public Integer id_recordabsen;
 	public Timestamp waktu_absen;
 	public String id_karyawan;
@@ -45,5 +32,4 @@ public class RecordAbsen {
 		this.waktu_absen = waktu_absen;
 		this.tipe_absen = tipe_absen;
 	}
-
 }

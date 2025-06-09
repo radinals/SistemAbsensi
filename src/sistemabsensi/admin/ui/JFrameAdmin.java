@@ -7,7 +7,7 @@ package sistemabsensi.admin.ui;
 import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import sistemabsensi.admin.data.DBAbsensi;
+import sistemabsensi.admin.database.DatabaseAdmin;
 import sistemabsensi.user.ui.JPanelAbsen;
 
 /**
@@ -23,8 +23,8 @@ public class JFrameAdmin extends javax.swing.JFrame {
 	JPanelMasterDataShift MasterDataShift;
 	JPanelLoginAdmin panelLogin;
 	JPanelWelcome panelWelcome;
+	JPanelCetakLaporan panelLaporan;
 	
-	// todo Session
 	public boolean admin_terlogin = false;
 
 	/**
@@ -32,7 +32,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
 	 */
 	public JFrameAdmin() {
 		
-		DBAbsensi db = new DBAbsensi();
+		DatabaseAdmin db = new DatabaseAdmin();
 		initComponents();
 
 		this.MasterDataKaryawan = new JPanelMasterDataKaryawan(db);
@@ -40,12 +40,14 @@ public class JFrameAdmin extends javax.swing.JFrame {
 		this.MasterDataShift = new JPanelMasterDataShift(db);
 		this.panelLogin = new JPanelLoginAdmin(db, this);
 		this.panelWelcome = new JPanelWelcome(this);
+		this.panelLaporan = new JPanelCetakLaporan(db);
 
 		this.jPanelUtama.add("Home", this.panelWelcome);
 		this.jPanelUtama.add("MasterDataKaryawan", this.MasterDataKaryawan);
 		this.jPanelUtama.add("MasterDataRecordAbsen", this.MasterDataRecordAbsen);
 		this.jPanelUtama.add("MasterDataShift", this.MasterDataShift);
 		this.jPanelUtama.add("Login", this.panelLogin);
+		this.jPanelUtama.add("Laporan", this.panelLaporan);
 		
 		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
 	}
@@ -72,6 +74,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 bukaTampilanAbsen = new javax.swing.JMenuItem();
                 menuBtnLogout = new javax.swing.JMenuItem();
                 bukaHome = new javax.swing.JMenuItem();
+                exitAplikasi = new javax.swing.JMenuItem();
                 jMenu4 = new javax.swing.JMenu();
                 jMenuMasterData_Karyawan = new javax.swing.JMenuItem();
                 jMenu5 = new javax.swing.JMenu();
@@ -99,6 +102,10 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 jPanelUtama.setLayout(new java.awt.CardLayout());
                 getContentPane().add(jPanelUtama);
 
+                jMenuBar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+                jMenuBar1.setFont(jMenuBar1.getFont().deriveFont(jMenuBar1.getFont().getStyle() | java.awt.Font.BOLD));
+
+                jMenu1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
                 jMenu1.setText("File");
 
                 bukaLoginAdmin.setText("Login Admin");
@@ -133,8 +140,17 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 });
                 jMenu1.add(bukaHome);
 
+                exitAplikasi.setText("Exit");
+                exitAplikasi.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                exitAplikasiActionPerformed(evt);
+                        }
+                });
+                jMenu1.add(exitAplikasi);
+
                 jMenuBar1.add(jMenu1);
 
+                jMenu4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
                 jMenu4.setText("Maintenence Karyawan");
 
                 jMenuMasterData_Karyawan.setText("Karyawan");
@@ -147,6 +163,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
 
                 jMenuBar1.add(jMenu4);
 
+                jMenu5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
                 jMenu5.setText("Maintenence Absensi");
 
                 jMenuMasterData_RecordAbsen.setText("Record Absen");
@@ -165,7 +182,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 });
                 jMenu5.add(jMenuMasterData_Shift);
 
-                jMenuItem3.setText("Laporan Absen");
+                jMenuItem3.setText("Cetak Laporan");
                 jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jMenuItem3ActionPerformed(evt);
@@ -182,7 +199,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
 	
         private void jMenuMasterData_KaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_KaryawanActionPerformed
 		if (!this.admin_terlogin) {
-			Pesan.tampilkanPeringatan("Login Terlebih Dahulu Jika ingin mengakses data!.");
+			DialogPesan.tampilPesan("Login Terlebih Dahulu Jika ingin mengakses data!.");
 			this.layoutPanel.show(this.jPanelUtama, "Login");
 			return;
 		}
@@ -192,7 +209,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
 
         private void jMenuMasterData_RecordAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_RecordAbsenActionPerformed
 		if (!this.admin_terlogin) {
-			Pesan.tampilkanPeringatan("Login Terlebih Dahulu Jika ingin mengakses data!.");
+			DialogPesan.tampilPesan("Login Terlebih Dahulu Jika ingin mengakses data!.");
 			this.layoutPanel.show(this.jPanelUtama, "Login");
 			return;
 		}
@@ -202,7 +219,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
 
         private void jMenuMasterData_ShiftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_ShiftActionPerformed
 		if (!this.admin_terlogin) {
-			Pesan.tampilkanPeringatan("Login Terlebih Dahulu Jika ingin mengakses data!.");
+			DialogPesan.tampilPesan("Login Terlebih Dahulu Jika ingin mengakses data!.");
 			this.layoutPanel.show(this.jPanelUtama, "Login");
 			return;
 		}
@@ -211,7 +228,13 @@ public class JFrameAdmin extends javax.swing.JFrame {
         }//GEN-LAST:event_jMenuMasterData_ShiftActionPerformed
 
         private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-                // TODO add your handling code here:
+                if (!this.admin_terlogin) {
+			DialogPesan.tampilPesan("Login Terlebih Dahulu Jika ingin mengakses data!.");
+			this.layoutPanel.show(this.jPanelUtama, "Login");
+			return;
+		}
+		this.layoutPanel.show(this.jPanelUtama, "Laporan");
+		this.panelLaporan.updateData();// TODO add your handling code here:
         }//GEN-LAST:event_jMenuItem3ActionPerformed
 
 	public void bukaLoginAdmin() {
@@ -224,7 +247,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
 
         private void menuBtnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBtnLogoutActionPerformed
                 if(this.admin_terlogin) {
-			Pesan.tampilkanPeringatan("Anda Terlogout");
+			DialogPesan.tampilPesan("Anda Terlogout");
 			this.layoutPanel.show(this.jPanelUtama, "Home");
 			this.admin_terlogin = false;
 		}
@@ -248,6 +271,19 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 this.layoutPanel.show(this.jPanelUtama, "Home");
         }//GEN-LAST:event_bukaHomeActionPerformed
 
+        private void exitAplikasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitAplikasiActionPerformed
+                System.exit(0);
+        }//GEN-LAST:event_exitAplikasiActionPerformed
+
+	public void bukaMaintenenceKaryawan() {
+		if (!this.admin_terlogin) {
+			DialogPesan.tampilPesan("Login Terlebih Dahulu Jika ingin mengakses data!.");
+			this.layoutPanel.show(this.jPanelUtama, "Login");
+			return;
+		}
+		this.layoutPanel.show(this.jPanelUtama, "MasterDataKaryawan");
+		this.MasterDataKaryawan.updateData();
+	}
 	/**
 	 * @param args the command line arguments
 	 */
@@ -287,6 +323,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
         private javax.swing.JMenuItem bukaHome;
         private javax.swing.JMenuItem bukaLoginAdmin;
         private javax.swing.JMenuItem bukaTampilanAbsen;
+        private javax.swing.JMenuItem exitAplikasi;
         private javax.swing.JMenu jMenu1;
         private javax.swing.JMenu jMenu2;
         private javax.swing.JMenu jMenu3;

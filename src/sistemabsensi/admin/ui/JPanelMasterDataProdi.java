@@ -4,11 +4,8 @@
  */
 package sistemabsensi.admin.ui;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import sistemabsensi.admin.data.DBAbsensi;
-import sistemabsensi.admin.data.Prodi;
+import sistemabsensi.admin.database.DatabaseAdmin;
+import sistemabsensi.admin.database.Prodi;
 
 /**
  *
@@ -16,16 +13,16 @@ import sistemabsensi.admin.data.Prodi;
  */
 public class JPanelMasterDataProdi extends javax.swing.JPanel {
 
-	private DBAbsensi db;
+	private DatabaseAdmin db;
 
 	private Prodi prodiTerpilih;
-	
+
 	private final JPanelMasterDataKaryawan panelKaryawan;
 
 	/**
 	 * Creates new form JPanelMasterDataShift
 	 */
-	public JPanelMasterDataProdi(DBAbsensi db, JPanelMasterDataKaryawan panelKaryawan) {
+	public JPanelMasterDataProdi(DatabaseAdmin db, JPanelMasterDataKaryawan panelKaryawan) {
 		this.db = db;
 		this.panelKaryawan = panelKaryawan;
 		initComponents();
@@ -40,11 +37,7 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
 	}
 
 	private void dapatkanData() {
-		try {
-			this.tabelData.setModel(db.getModelTabel_Prodi());
-		} catch (SQLException ex) {
-			Logger.getLogger(JPanelMasterDataJabatan.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		this.tabelData.setModel(db.getModelTabel_Prodi());
 	}
 
 	/**
@@ -56,37 +49,21 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
-                jPanel3 = new javax.swing.JPanel();
-                btnSimpan = new javax.swing.JButton();
-                btnHapus = new javax.swing.JButton();
+                jLabel1 = new javax.swing.JLabel();
                 jScrollPane1 = new javax.swing.JScrollPane();
                 tabelData = new javax.swing.JTable();
-                jPanel2 = new javax.swing.JPanel();
-                jPanel1 = new javax.swing.JPanel();
-                jLabel1 = new javax.swing.JLabel();
+                btnHapus = new javax.swing.JButton();
+                btnSimpan = new javax.swing.JButton();
                 textFieldNamaProdi = new javax.swing.JTextField();
+                jLabel2 = new javax.swing.JLabel();
 
                 setBorder(javax.swing.BorderFactory.createEtchedBorder());
                 setMaximumSize(new java.awt.Dimension(991, 599));
 
-                jPanel3.setLayout(new java.awt.GridLayout(2, 1));
+                jLabel1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                jLabel1.setText("NAMA PRODI");
 
-                btnSimpan.setText("SIMPAN");
-                btnSimpan.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnSimpanActionPerformed(evt);
-                        }
-                });
-                jPanel3.add(btnSimpan);
-
-                btnHapus.setText("HAPUS");
-                btnHapus.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnHapusActionPerformed(evt);
-                        }
-                });
-                jPanel3.add(btnHapus);
-
+                tabelData.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null},
@@ -107,49 +84,70 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
                 });
                 jScrollPane1.setViewportView(tabelData);
 
-                jPanel2.setLayout(new java.awt.GridLayout(1, 1));
-
-                jPanel1.setLayout(new java.awt.GridLayout(1, 2));
-
-                jLabel1.setText("NAMA PRODI");
-                jPanel1.add(jLabel1);
-
-                textFieldNamaProdi.addActionListener(new java.awt.event.ActionListener() {
+                btnHapus.setBackground(new java.awt.Color(255, 51, 51));
+                btnHapus.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                btnHapus.setForeground(new java.awt.Color(0, 0, 0));
+                btnHapus.setText("HAPUS");
+                btnHapus.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                textFieldNamaProdiActionPerformed(evt);
+                                btnHapusActionPerformed(evt);
                         }
                 });
-                jPanel1.add(textFieldNamaProdi);
 
-                jPanel2.add(jPanel1);
+                btnSimpan.setBackground(new java.awt.Color(153, 255, 153));
+                btnSimpan.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                btnSimpan.setForeground(new java.awt.Color(0, 0, 0));
+                btnSimpan.setText("SIMPAN");
+                btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnSimpanActionPerformed(evt);
+                        }
+                });
+
+                textFieldNamaProdi.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+
+                jLabel2.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+                jLabel2.setText("Master Data Prodi");
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
                 layout.setHorizontalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(10, 10, 10)
-                                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addContainerGap())
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(630, 630, 630)
-                                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jScrollPane1)
-                                .addContainerGap())
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel2)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(textFieldNamaProdi, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(0, 0, Short.MAX_VALUE))))
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(textFieldNamaProdi, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnHapus)
+                                        .addComponent(btnSimpan))
                                 .addContainerGap())
                 );
         }// </editor-fold>//GEN-END:initComponents
@@ -157,7 +155,7 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
         private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
 		if (this.textFieldNamaProdi.getText().isEmpty()) {
 			this.textFieldNamaProdi.requestFocus();
-			Pesan.tampilkanPeringatan("Pastikan Field Nama Prodi Terisi!.");
+			DialogPesan.tampilPesan("Pastikan Field Nama Prodi Terisi!.");
 			return;
 		}
 
@@ -165,27 +163,19 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
 
 		Prodi prodi = null;
 		if ((this.prodiTerpilih != null && namaProdi.equals(this.prodiTerpilih.namaProdi)) || (this.prodiTerpilih == null && this.db.isDataProdiAda(namaProdi))) {
-			Pesan.tampilkanPeringatan("Tidak ada nilai yang baru atau diubah!.");
+			DialogPesan.tampilPesan("Tidak ada nilai yang baru atau diubah!.");
 			return;
 		} else if (this.prodiTerpilih != null && !namaProdi.equals(this.prodiTerpilih.namaProdi)) {
 			prodi = new Prodi(this.prodiTerpilih.id, namaProdi);
 		} else {
 			prodi = new Prodi(null, namaProdi);
 		}
-		try {
 
-			this.db.simpanDataProdi(prodi);
-		} catch (SQLException ex) {
-			Logger.getLogger(JPanelMasterDataProdi.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		this.db.simpanDataProdi(prodi);
 
 		this.updateData();
 
         }//GEN-LAST:event_btnSimpanActionPerformed
-
-        private void textFieldNamaProdiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldNamaProdiActionPerformed
-		// TODO add your handling code here:
-        }//GEN-LAST:event_textFieldNamaProdiActionPerformed
 
         private void tabelDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelDataMouseClicked
 		int barisTerpilih = this.tabelData.getSelectedRow();
@@ -200,7 +190,7 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
         private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
 		if (this.textFieldNamaProdi.getText().isEmpty()) {
 			this.textFieldNamaProdi.requestFocus();
-			Pesan.tampilkanPeringatan("Pastikan Field Nama Prodi Terisi!.");
+			DialogPesan.tampilPesan("Pastikan Field Nama Prodi Terisi!.");
 			return;
 		}
 
@@ -212,24 +202,16 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
 		} else if (this.prodiTerpilih != null && !namaProdi.equals(this.prodiTerpilih.namaProdi)) {
 			prodi = new Prodi(this.prodiTerpilih.id, namaProdi);
 		} else if (this.db.isDataProdiAda(namaProdi)) {
-			try {
-				prodi = this.db.getDataProdi(namaProdi);
-			} catch (SQLException ex) {
-				Logger.getLogger(JPanelMasterDataProdi.class.getName()).log(Level.SEVERE, null, ex);
-			}
+			prodi = this.db.getDataProdi(namaProdi);
 		} else {
 			prodi = new Prodi(null, namaProdi);
 		}
 
-		if (!Pesan.tampilkanKonfirmasi("Konfirmasi Penghapusan", "Apakah anda yakin ingin menghapus data prodi: " + namaProdi + "?. ")) {
+		if (!DialogPesan.tampilKonfirmasi("Konfirmasi Penghapusan", "Apakah anda yakin ingin menghapus data prodi: " + namaProdi + "?. ")) {
 			return;
 		}
 
-		try {
-			this.db.deleteDataProdi(prodi.id);
-		} catch (SQLException ex) {
-			Logger.getLogger(JPanelMasterDataProdi.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		this.db.deleteDataProdi(prodi.id);
 
 		this.updateData();
 
@@ -239,9 +221,7 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
         private javax.swing.JButton btnHapus;
         private javax.swing.JButton btnSimpan;
         private javax.swing.JLabel jLabel1;
-        private javax.swing.JPanel jPanel1;
-        private javax.swing.JPanel jPanel2;
-        private javax.swing.JPanel jPanel3;
+        private javax.swing.JLabel jLabel2;
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JTable tabelData;
         private javax.swing.JTextField textFieldNamaProdi;

@@ -2,35 +2,35 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemabsensi.admin.data;
+package sistemabsensi.admin.database;
 
 /**
  *
  * @author rss
  */
-public class Prodi {
+public class Jabatan {
 
-	public Integer id;
-	public String namaProdi;
+	public Integer idJabatan;
+	public String namaJabatan;
 
-	public Prodi() {
+	public Jabatan() {
 		this(null, null);
 	}
 
-	public Prodi(Integer id, String namaProdi) {
-		this.id = id;
-		this.namaProdi = namaProdi;
+	public Jabatan(Integer idJabatan, String namaJabatan) {
+		this.idJabatan = idJabatan;
+		this.namaJabatan = namaJabatan;
 	}
 
 	@Override
 	public String toString() {
-		return namaProdi;
+		return namaJabatan;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Prodi) {
-			return this.id == ((Prodi) obj).id;
+		if (obj instanceof Jabatan) {
+			return this.idJabatan == ((Jabatan) obj).idJabatan;
 		} else {
 			return super.equals(obj);
 		}

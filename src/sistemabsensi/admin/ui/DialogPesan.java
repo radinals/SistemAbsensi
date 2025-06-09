@@ -10,9 +10,9 @@ import javax.swing.JOptionPane;
  *
  * @author rss
  */
-public class Pesan {
+public class DialogPesan {
 
-	public static boolean tampilkanKonfirmasi(String judul, String pesan) {
+	public static boolean tampilKonfirmasi(String judul, String pesan) {
 		int result = JOptionPane.showConfirmDialog(
 			null,
 			pesan,
@@ -23,7 +23,7 @@ public class Pesan {
 		return result == JOptionPane.YES_OPTION;
 	}
 
-	public static void tampilkanPeringatan(String pesan) {
+	public static void tampilPesan(String pesan) {
 		JOptionPane.showMessageDialog(null, pesan);
 	}
 }

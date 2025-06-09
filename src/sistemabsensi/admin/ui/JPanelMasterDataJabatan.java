@@ -4,11 +4,8 @@
  */
 package sistemabsensi.admin.ui;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import sistemabsensi.admin.data.DBAbsensi;
-import sistemabsensi.admin.data.Jabatan;
+import sistemabsensi.admin.database.DatabaseAdmin;
+import sistemabsensi.admin.database.Jabatan;
 
 /**
  *
@@ -16,7 +13,7 @@ import sistemabsensi.admin.data.Jabatan;
  */
 public class JPanelMasterDataJabatan extends javax.swing.JPanel {
 
-	private DBAbsensi db;
+	private DatabaseAdmin db;
 
 	private Jabatan jabatanTerpilih;
 	private final JPanelMasterDataKaryawan panelKaryawan;
@@ -24,7 +21,7 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
 	/**
 	 * Creates new form JPanelMasterDataShift
 	 */
-	public JPanelMasterDataJabatan(DBAbsensi db, JPanelMasterDataKaryawan panelKaryawan) {
+	public JPanelMasterDataJabatan(DatabaseAdmin db, JPanelMasterDataKaryawan panelKaryawan) {
 		this.db = db;
 		this.panelKaryawan = panelKaryawan;
 		initComponents();
@@ -39,11 +36,8 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
 	}
 
 	private void dapatkanData() {
-		try {
-			this.tabelData.setModel(db.getModelTabel_Jabatan());
-		} catch (SQLException ex) {
-			Logger.getLogger(JPanelMasterDataJabatan.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		this.tabelData.setModel(db.getModelTabel_Jabatan());
+
 	}
 
 	/**
@@ -57,16 +51,16 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
 
                 jScrollPane1 = new javax.swing.JScrollPane();
                 tabelData = new javax.swing.JTable();
-                jPanel1 = new javax.swing.JPanel();
                 jLabel1 = new javax.swing.JLabel();
                 textFieldNamaJabatan = new javax.swing.JTextField();
-                jPanel2 = new javax.swing.JPanel();
-                btnSimpan = new javax.swing.JButton();
                 btnHapus = new javax.swing.JButton();
+                btnSimpan = new javax.swing.JButton();
+                jLabel2 = new javax.swing.JLabel();
 
                 setBorder(javax.swing.BorderFactory.createEtchedBorder());
                 setMaximumSize(new java.awt.Dimension(991, 599));
 
+                tabelData.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null},
@@ -87,91 +81,104 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 });
                 jScrollPane1.setViewportView(tabelData);
 
-                jPanel1.setLayout(new java.awt.GridLayout(1, 0));
-
+                jLabel1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jLabel1.setText("NAMA JABATAN");
-                jPanel1.add(jLabel1);
 
+                textFieldNamaJabatan.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 textFieldNamaJabatan.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 textFieldNamaJabatanActionPerformed(evt);
                         }
                 });
-                jPanel1.add(textFieldNamaJabatan);
 
-                jPanel2.setLayout(new java.awt.GridLayout(2, 1));
-
-                btnSimpan.setText("SIMPAN");
-                btnSimpan.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnSimpanActionPerformed(evt);
-                        }
-                });
-                jPanel2.add(btnSimpan);
-
+                btnHapus.setBackground(new java.awt.Color(255, 51, 51));
+                btnHapus.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                btnHapus.setForeground(new java.awt.Color(0, 0, 0));
                 btnHapus.setText("HAPUS");
                 btnHapus.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 btnHapusActionPerformed(evt);
                         }
                 });
-                jPanel2.add(btnHapus);
+
+                btnSimpan.setBackground(new java.awt.Color(153, 255, 153));
+                btnSimpan.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                btnSimpan.setForeground(new java.awt.Color(0, 0, 0));
+                btnSimpan.setText("SIMPAN");
+                btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnSimpanActionPerformed(evt);
+                        }
+                });
+
+                jLabel2.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+                jLabel2.setText("Master Data Jabatan");
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
                 layout.setHorizontalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(630, 630, 630)
-                                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(10, 10, 10)
-                                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jScrollPane1)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(textFieldNamaJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(jLabel2))
+                                                .addGap(0, 0, Short.MAX_VALUE)))
                                 .addContainerGap())
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(textFieldNamaJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
-                                .addContainerGap())
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnSimpan)
+                                        .addComponent(btnHapus)))
                 );
         }// </editor-fold>//GEN-END:initComponents
 
         private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
 		if (this.textFieldNamaJabatan.getText().isEmpty()) {
 			this.textFieldNamaJabatan.requestFocus();
-			Pesan.tampilkanPeringatan("Pastikan Field Nama Jabatan Terisi!.");
+			DialogPesan.tampilPesan("Pastikan Field Nama Jabatan Terisi!.");
 			return;
 		}
 
-		String namaJabatan = this.textFieldNamaJabatan.getText();
+		final String namaJabatan = this.textFieldNamaJabatan.getText();
 
-		Jabatan jabatan = null;
-		if ((this.jabatanTerpilih != null && namaJabatan.equals(this.jabatanTerpilih.namaJabatan)) || (this.jabatanTerpilih == null && this.db.isDataJabatanAda(namaJabatan))) {
-			Pesan.tampilkanPeringatan("Tidak ada nilai yang baru atau diubah!.");
+		// cek jika ada perubahan data di form input.
+		if ((this.jabatanTerpilih != null && namaJabatan.equals(this.jabatanTerpilih.namaJabatan))
+			|| (this.jabatanTerpilih == null && this.db.isDataJabatanAda(namaJabatan))) {
+			DialogPesan.tampilPesan("Data Sudah Ada!.");
 			return;
-		} else if (this.jabatanTerpilih != null && !namaJabatan.equals(this.jabatanTerpilih.namaJabatan)) {
-			jabatan = new Jabatan(this.jabatanTerpilih.idJabatan, namaJabatan);
-		} else {
-			jabatan = new Jabatan(null, namaJabatan);
 		}
-		try {
 
-			this.db.simpanDataJabatan(jabatan);
-		} catch (SQLException ex) {
-			Logger.getLogger(JPanelMasterDataJabatan.class.getName()).log(Level.SEVERE, null, ex);
+		Jabatan jabatan = new Jabatan(null, namaJabatan);
+
+		// gunakan id data jabatan yang user pilih jika ada
+		// menandakan operasi (UPDATE)
+		if (this.jabatanTerpilih != null && !namaJabatan.equals(this.jabatanTerpilih.namaJabatan)) {
+			jabatan.idJabatan = jabatanTerpilih.idJabatan;
 		}
+
+		this.db.simpanDataJabatan(jabatan);
 
 		this.updateData();
 
@@ -192,38 +199,41 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
         }//GEN-LAST:event_tabelDataMouseClicked
 
         private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+
+		// Pastikan field input terisi.
 		if (this.textFieldNamaJabatan.getText().isEmpty()) {
 			this.textFieldNamaJabatan.requestFocus();
-			Pesan.tampilkanPeringatan("Pastikan Field Nama Jabatan Terisi!.");
+			DialogPesan.tampilPesan("Pastikan Field Nama Jabatan Terisi!.");
 			return;
 		}
 
-		String namaJabatan = this.textFieldNamaJabatan.getText();
+		final String namaJabatan = this.textFieldNamaJabatan.getText();
 
-		Jabatan jabatan = null;
-		if (this.jabatanTerpilih != null && namaJabatan.equals(this.jabatanTerpilih.namaJabatan)) {
-			jabatan = this.jabatanTerpilih;
-		} else if (this.jabatanTerpilih != null && !namaJabatan.equals(this.jabatanTerpilih.namaJabatan)) {
-			jabatan = new Jabatan(this.jabatanTerpilih.idJabatan, namaJabatan);
+		Integer idJabatan = null;
+
+		if (this.jabatanTerpilih != null && this.jabatanTerpilih.namaJabatan.equals(namaJabatan)) {
+			idJabatan = this.jabatanTerpilih.idJabatan;
 		} else if (this.db.isDataJabatanAda(namaJabatan)) {
-			try {
-				jabatan = this.db.getDataJabatan(namaJabatan);
-			} catch (SQLException ex) {
-				Logger.getLogger(JPanelMasterDataJabatan.class.getName()).log(Level.SEVERE, null, ex);
+			final Jabatan jabatan = this.db.getDataJabatan(namaJabatan);
+			if (jabatan == null) {
+				System.err.println("Gagal Mendapatkan data Jabatan");
+				System.exit(-1);
 			}
+			idJabatan = jabatan.idJabatan;
 		} else {
-			jabatan = new Jabatan(null, namaJabatan);
-		}
-
-		if (!Pesan.tampilkanKonfirmasi("Konfirmasi Penghapusan", "Apakah anda yakin ingin menghapus data jabatan: " + namaJabatan + "?. ")) {
+			DialogPesan.tampilPesan("Tidak ada Data Jabatan Yang Sesuai untuk Dihapus, pastikan data jabatan sudah ada di database!");
 			return;
 		}
 
-		try {
-			this.db.deleteDataJabatan(jabatan.idJabatan);
-		} catch (SQLException ex) {
-			Logger.getLogger(JPanelMasterDataJabatan.class.getName()).log(Level.SEVERE, null, ex);
+		if (idJabatan == null) {
+			System.err.println("Gagal Mendapatkan id data Jabatan");
+			System.exit(-1);
 		}
+
+		if (!DialogPesan.tampilKonfirmasi("Konfirmasi Penghapusan", "Apakah anda yakin ingin menghapus data jabatan: " + namaJabatan + "?. ")) {
+			return; // cancel
+		}
+		this.db.deleteDataJabatan(idJabatan);
 
 		this.updateData();
         }//GEN-LAST:event_btnHapusActionPerformed
@@ -232,8 +242,7 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
         private javax.swing.JButton btnHapus;
         private javax.swing.JButton btnSimpan;
         private javax.swing.JLabel jLabel1;
-        private javax.swing.JPanel jPanel1;
-        private javax.swing.JPanel jPanel2;
+        private javax.swing.JLabel jLabel2;
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JTable tabelData;
         private javax.swing.JTextField textFieldNamaJabatan;

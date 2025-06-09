@@ -4,7 +4,6 @@
  */
 package sistemabsensi.admin.ui;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -12,13 +11,11 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import sistemabsensi.admin.data.DBAbsensi;
-import sistemabsensi.admin.data.Karyawan;
-import sistemabsensi.admin.data.RecordAbsen;
-import sistemabsensi.admin.data.RecordAbsen.StatusAbsen;
-import sistemabsensi.admin.data.RecordAbsen.TipeAbsen;
+import sistemabsensi.admin.database.DatabaseAdmin;
+import sistemabsensi.admin.database.Karyawan;
+import sistemabsensi.database.RecordAbsen;
+import sistemabsensi.database.StatusAbsen;
+import sistemabsensi.database.TipeAbsen;
 
 /**
  *
@@ -26,7 +23,7 @@ import sistemabsensi.admin.data.RecordAbsen.TipeAbsen;
  */
 public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 
-	private DBAbsensi db;
+	private DatabaseAdmin db;
 
 	private String karyawanTerpilih;
 	private RecordAbsen recordTerpilih;
@@ -34,7 +31,7 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 	/**
 	 * Creates new form JPanelMasterDataRecordAbsen
 	 */
-	public JPanelMasterDataRecordAbsen(DBAbsensi db) {
+	public JPanelMasterDataRecordAbsen(DatabaseAdmin db) {
 		this.db = db;
 		this.karyawanTerpilih = null;
 		this.recordTerpilih = null;
@@ -87,28 +84,24 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 
 	private void isiComboBoxKaryawan() {
 		this.comboBoxKaryawan.removeAllItems();
-		try {
-			LinkedList<Karyawan> dataKaryawan = this.db.getDaftarDataKaryawan();
-			Karyawan karyawanTerpilih_tmp = null;
-			for (Karyawan karyawan : dataKaryawan) {
-				if (karyawanTerpilih != null && karyawan.idKaryawan.equals(this.karyawanTerpilih)) {
-					karyawanTerpilih_tmp = karyawan;
-					continue;
-				}
-				this.comboBoxKaryawan.addItem(karyawan);
-			}
 
-			if (this.karyawanTerpilih != null && karyawanTerpilih_tmp != null) {
-				this.comboBoxKaryawan.addItem(karyawanTerpilih_tmp);
-				this.comboBoxKaryawan.setSelectedItem(karyawanTerpilih_tmp);
-			} else {
-				this.comboBoxKaryawan.setSelectedItem(null);
+		LinkedList<Karyawan> dataKaryawan = this.db.getDaftarDataKaryawan();
+		Karyawan karyawanTerpilih_tmp = null;
+		for (Karyawan karyawan : dataKaryawan) {
+			if (karyawanTerpilih != null && karyawan.idKaryawan.equals(this.karyawanTerpilih)) {
+				karyawanTerpilih_tmp = karyawan;
+				continue;
 			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
+			this.comboBoxKaryawan.addItem(karyawan);
 		}
+
+		if (this.karyawanTerpilih != null && karyawanTerpilih_tmp != null) {
+			this.comboBoxKaryawan.addItem(karyawanTerpilih_tmp);
+			this.comboBoxKaryawan.setSelectedItem(karyawanTerpilih_tmp);
+		} else {
+			this.comboBoxKaryawan.setSelectedItem(null);
+		}
+
 	}
 
 	public static Date toDate(LocalTime localTime) {
@@ -129,23 +122,19 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 	}
 
 	private void getDataTerpilih(int idRecord) {
-		try {
-			this.recordTerpilih = db.getRecordAbsenById(idRecord);
 
-			this.karyawanTerpilih = recordTerpilih.id_karyawan;
+		this.recordTerpilih = db.getRecordAbsenById(idRecord);
 
-			Date tanggal = toDate(recordTerpilih.waktu_absen.toLocalDateTime().toLocalDate());
-			Date jam = toDate(recordTerpilih.waktu_absen.toLocalDateTime().toLocalTime());
-			this.spinnerJam.setValue(tanggal);
-			this.spinnerTanggal.setValue(jam);
-			this.textAreaCatatanAbsen.setText(this.recordTerpilih.catatan_absen);
-			this.textFieldIdRecord.setText(recordTerpilih.id_recordabsen.toString());
+		this.karyawanTerpilih = recordTerpilih.id_karyawan;
 
-			this.isiComboBox();
+		Date tanggal = toDate(recordTerpilih.waktu_absen.toLocalDateTime().toLocalDate());
+		Date jam = toDate(recordTerpilih.waktu_absen.toLocalDateTime().toLocalTime());
+		this.spinnerJam.setValue(jam);
+		this.spinnerTanggal.setValue(tanggal);
+		this.textAreaCatatanAbsen.setText(this.recordTerpilih.catatan_absen);
 
-		} catch (SQLException ex) {
-			Logger.getLogger(JPanelMasterDataRecordAbsen.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		this.isiComboBox();
+
 	}
 
 	private void isiComboBox() {
@@ -165,8 +154,6 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 
                 jPanel6 = new javax.swing.JPanel();
                 jPanel1 = new javax.swing.JPanel();
-                jLabel2 = new javax.swing.JLabel();
-                textFieldIdRecord = new javax.swing.JTextField();
                 jLabel1 = new javax.swing.JLabel();
                 comboBoxKaryawan = new javax.swing.JComboBox<>();
                 jLabel4 = new javax.swing.JLabel();
@@ -174,64 +161,88 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                 jLabel5 = new javax.swing.JLabel();
                 comboBoxStatusAbsen = new javax.swing.JComboBox<>();
                 btnHapus = new javax.swing.JButton();
-                btnSimpan = new javax.swing.JButton();
+                btnEdit = new javax.swing.JButton();
                 jScrollPane1 = new javax.swing.JScrollPane();
                 tabelData = new javax.swing.JTable();
                 jLabel7 = new javax.swing.JLabel();
                 jScrollPane2 = new javax.swing.JScrollPane();
                 textAreaCatatanAbsen = new javax.swing.JTextArea();
                 jPanel7 = new javax.swing.JPanel();
-                jPanel3 = new javax.swing.JPanel();
-                jLabel6 = new javax.swing.JLabel();
-                spinnerTanggal = new javax.swing.JSpinner();
-                jLabel8 = new javax.swing.JLabel();
-                spinnerJam = new javax.swing.JSpinner();
                 jLabel3 = new javax.swing.JLabel();
                 jLabel9 = new javax.swing.JLabel();
+                jLabel8 = new javax.swing.JLabel();
+                jLabel6 = new javax.swing.JLabel();
+                spinnerJam = new javax.swing.JSpinner();
+                spinnerTanggal = new javax.swing.JSpinner();
 
                 setMaximumSize(new java.awt.Dimension(991, 599));
                 setLayout(new java.awt.GridLayout(1, 0));
 
                 jPanel6.setLayout(null);
 
-                jPanel1.setLayout(new java.awt.GridLayout(4, 2));
-
-                jLabel2.setText("ID RECORD");
-                jPanel1.add(jLabel2);
-
-                textFieldIdRecord.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                textFieldIdRecordActionPerformed(evt);
-                        }
-                });
-                jPanel1.add(textFieldIdRecord);
-
+                jLabel1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jLabel1.setText("KARYAWAN");
-                jPanel1.add(jLabel1);
 
+                comboBoxKaryawan.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 comboBoxKaryawan.setModel(new javax.swing.DefaultComboBoxModel<>());
-                jPanel1.add(comboBoxKaryawan);
 
+                jLabel4.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jLabel4.setText("TIPE ABSEN");
-                jPanel1.add(jLabel4);
 
+                comboBoxTipeAbsen.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 comboBoxTipeAbsen.setModel(new javax.swing.DefaultComboBoxModel<>());
-                jPanel1.add(comboBoxTipeAbsen);
 
+                jLabel5.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jLabel5.setText("STATUS ABSEN");
-                jPanel1.add(jLabel5);
 
+                comboBoxStatusAbsen.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 comboBoxStatusAbsen.setModel(new javax.swing.DefaultComboBoxModel<>());
                 comboBoxStatusAbsen.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 comboBoxStatusAbsenActionPerformed(evt);
                         }
                 });
-                jPanel1.add(comboBoxStatusAbsen);
+
+                javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+                jPanel1.setLayout(jPanel1Layout);
+                jPanel1Layout.setHorizontalGroup(
+                        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(comboBoxTipeAbsen, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(comboBoxStatusAbsen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(comboBoxKaryawan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap())
+                );
+                jPanel1Layout.setVerticalGroup(
+                        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(comboBoxKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(comboBoxTipeAbsen, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(comboBoxStatusAbsen, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(24, 24, 24))
+                );
 
                 jPanel6.add(jPanel1);
-                jPanel1.setBounds(20, 60, 740, 120);
+                jPanel1.setBounds(20, 60, 510, 100);
 
+                btnHapus.setBackground(new java.awt.Color(255, 51, 51));
+                btnHapus.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                btnHapus.setForeground(new java.awt.Color(0, 0, 0));
                 btnHapus.setText("HAPUS");
                 btnHapus.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -239,16 +250,19 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                         }
                 });
                 jPanel6.add(btnHapus);
-                btnHapus.setBounds(400, 450, 78, 29);
+                btnHapus.setBounds(420, 480, 90, 30);
 
-                btnSimpan.setText("SIMPAN");
-                btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+                btnEdit.setBackground(new java.awt.Color(255, 255, 102));
+                btnEdit.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                btnEdit.setForeground(new java.awt.Color(0, 0, 0));
+                btnEdit.setText("EDIT");
+                btnEdit.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnSimpanActionPerformed(evt);
+                                btnEditActionPerformed(evt);
                         }
                 });
-                jPanel6.add(btnSimpan);
-                btnSimpan.setBounds(310, 450, 85, 29);
+                jPanel6.add(btnEdit);
+                btnEdit.setBounds(10, 470, 76, 30);
 
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
@@ -269,18 +283,20 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                 jScrollPane1.setViewportView(tabelData);
 
                 jPanel6.add(jScrollPane1);
-                jScrollPane1.setBounds(780, 20, 560, 670);
+                jScrollPane1.setBounds(540, 20, 800, 670);
 
+                jLabel7.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jLabel7.setText("CATATAN ABSEN");
                 jPanel6.add(jLabel7);
-                jLabel7.setBounds(20, 270, 370, 35);
+                jLabel7.setBounds(10, 300, 120, 35);
 
                 textAreaCatatanAbsen.setColumns(20);
+                textAreaCatatanAbsen.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 textAreaCatatanAbsen.setRows(5);
                 jScrollPane2.setViewportView(textAreaCatatanAbsen);
 
                 jPanel6.add(jScrollPane2);
-                jScrollPane2.setBounds(390, 270, 370, 160);
+                jScrollPane2.setBounds(130, 300, 380, 160);
 
                 javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
                 jPanel7.setLayout(jPanel7Layout);
@@ -296,35 +312,39 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                 jPanel6.add(jPanel7);
                 jPanel7.setBounds(780, 510, 560, 190);
 
-                jPanel3.setLayout(new java.awt.GridLayout(2, 2));
+                jLabel3.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                jLabel3.setText("WAKTU ABSEN");
+                jPanel6.add(jLabel3);
+                jLabel3.setBounds(20, 160, 120, 36);
 
-                jLabel6.setText("TANGGAL");
-                jPanel3.add(jLabel6);
+                jLabel9.setFont(jLabel9.getFont().deriveFont((jLabel9.getFont().getStyle() | java.awt.Font.ITALIC) | java.awt.Font.BOLD, jLabel9.getFont().getSize()+5));
+                jLabel9.setText("MAINTENENCE RECORD ABSEN");
+                jPanel6.add(jLabel9);
+                jLabel9.setBounds(20, 20, 290, 30);
 
-                spinnerTanggal.setModel(new javax.swing.SpinnerDateModel());
-                spinnerTanggal.setDoubleBuffered(true);
-                spinnerTanggal.setEditor(new javax.swing.JSpinner.DateEditor(spinnerTanggal, "yyyy-MM-dd"));
-                jPanel3.add(spinnerTanggal);
-
+                jLabel8.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jLabel8.setText("JAM");
-                jPanel3.add(jLabel8);
+                jPanel6.add(jLabel8);
+                jLabel8.setBounds(60, 230, 80, 35);
 
+                jLabel6.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                jLabel6.setText("TANGGAL");
+                jPanel6.add(jLabel6);
+                jLabel6.setBounds(60, 190, 80, 35);
+
+                spinnerJam.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 spinnerJam.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.SECOND));
                 spinnerJam.setToolTipText("");
                 spinnerJam.setEditor(new javax.swing.JSpinner.DateEditor(spinnerJam, "HH:mm:ss"));
-                jPanel3.add(spinnerJam);
+                jPanel6.add(spinnerJam);
+                spinnerJam.setBounds(150, 230, 190, 35);
 
-                jPanel6.add(jPanel3);
-                jPanel3.setBounds(396, 188, 360, 70);
-
-                jLabel3.setText("WAKTU ABSEN");
-                jPanel6.add(jLabel3);
-                jLabel3.setBounds(20, 180, 370, 36);
-
-                jLabel9.setFont(jLabel9.getFont().deriveFont((jLabel9.getFont().getStyle() | java.awt.Font.ITALIC) | java.awt.Font.BOLD, jLabel9.getFont().getSize()+4));
-                jLabel9.setText("MAINTENENCE RECORD ABSEN");
-                jPanel6.add(jLabel9);
-                jLabel9.setBounds(20, 20, 270, 30);
+                spinnerTanggal.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                spinnerTanggal.setModel(new javax.swing.SpinnerDateModel());
+                spinnerTanggal.setDoubleBuffered(true);
+                spinnerTanggal.setEditor(new javax.swing.JSpinner.DateEditor(spinnerTanggal, "yyyy-MM-dd"));
+                jPanel6.add(spinnerTanggal);
+                spinnerTanggal.setBounds(150, 190, 190, 35);
 
                 add(jPanel6);
         }// </editor-fold>//GEN-END:initComponents
@@ -335,7 +355,9 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 
         private void tabelDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelDataMouseClicked
 		int barisTerpilih = this.tabelData.getSelectedRow();
-		Integer idRecord = (Integer) this.tabelData.getModel().getValueAt(barisTerpilih, 0);
+		
+		Integer idRecord = (Integer) this.tabelData.getModel().getValueAt(barisTerpilih,0);
+		
 		this.getDataTerpilih(idRecord);
 
         }//GEN-LAST:event_tabelDataMouseClicked
@@ -347,23 +369,23 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 		return sdf.format(jam);
 	}
 
-        private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
 
 		if (this.comboBoxKaryawan.getSelectedItem() == null) {
 			this.comboBoxKaryawan.requestFocus();
-			Pesan.tampilkanPeringatan("Tentukan ID Karyawan!");
+			DialogPesan.tampilPesan("Tentukan ID Karyawan!");
 			return;
 		}
 
 		if (this.comboBoxTipeAbsen.getSelectedItem() == null) {
 			this.comboBoxTipeAbsen.requestFocus();
-			Pesan.tampilkanPeringatan("Tentukan Tipe Absen");
+			DialogPesan.tampilPesan("Tentukan Tipe Absen");
 			return;
 		}
 
 		if (this.comboBoxStatusAbsen.getSelectedItem() == null) {
 			this.comboBoxStatusAbsen.requestFocus();
-			Pesan.tampilkanPeringatan("Tentukan Status Absen");
+			DialogPesan.tampilPesan("Tentukan Status Absen");
 		}
 
 		String idKaryawan = ((Karyawan) this.comboBoxKaryawan.getSelectedItem()).idKaryawan;
@@ -371,10 +393,11 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 		TipeAbsen tipe = (TipeAbsen) this.comboBoxTipeAbsen.getSelectedItem();
 
 		RecordAbsen record = new RecordAbsen();
-		try {
-			record.id_recordabsen = Integer.valueOf(this.textFieldIdRecord.getText());
-		} catch (Exception e) {
-			record.id_recordabsen = null;
+		if (this.recordTerpilih != null) {
+			record.id_recordabsen = this.recordTerpilih.id_recordabsen;
+		} else {
+			DialogPesan.tampilPesan("Pilihlah satu data record dari tabel!.");
+			return;
 		}
 
 		record.id_karyawan = idKaryawan;
@@ -383,54 +406,32 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 		record.waktu_absen = Timestamp.valueOf(this.formatNilaiSpinner());
 		record.catatan_absen = this.textAreaCatatanAbsen.getText();
 
-		try {
-			this.db.simpanDataRecordAbsen(record);
-			this.updateData();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-        }//GEN-LAST:event_btnSimpanActionPerformed
+		this.db.simpanDataRecordAbsen(record);
+		this.updateData();
+
+        }//GEN-LAST:event_btnEditActionPerformed
 
         private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-		if (this.textFieldIdRecord.getText().isEmpty()) {
-			this.textFieldIdRecord.requestFocus();
-			Pesan.tampilkanPeringatan("ID Tidak boleh Home!");
+
+		Integer idRecord = null;
+
+		if (this.recordTerpilih != null) {
+			idRecord = this.recordTerpilih.id_recordabsen;
+		} else {
+			DialogPesan.tampilPesan("Pilihlah satu data record dari tabel!.");
 			return;
 		}
 
-		int idRecord = -1;
-
-		try {
-			idRecord = Integer.parseInt(this.textFieldIdRecord.getText());
-		} catch (Exception e) {
-			this.textFieldIdRecord.requestFocus();
-			Pesan.tampilkanPeringatan("ID harus berbentuk angka numeric!");
-			return;
-		}
-
-		try {
-			db.deleteDataRecordAbsen(idRecord);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-
-
+		db.deleteDataRecordAbsen(idRecord);
         }//GEN-LAST:event_btnHapusActionPerformed
 
-        private void textFieldIdRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldIdRecordActionPerformed
-		// TODO add your handling code here:
-        }//GEN-LAST:event_textFieldIdRecordActionPerformed
-
         // Variables declaration - do not modify//GEN-BEGIN:variables
+        private javax.swing.JButton btnEdit;
         private javax.swing.JButton btnHapus;
-        private javax.swing.JButton btnSimpan;
         private javax.swing.JComboBox<Karyawan> comboBoxKaryawan;
         private javax.swing.JComboBox<StatusAbsen> comboBoxStatusAbsen;
         private javax.swing.JComboBox<TipeAbsen> comboBoxTipeAbsen;
         private javax.swing.JLabel jLabel1;
-        private javax.swing.JLabel jLabel2;
         private javax.swing.JLabel jLabel3;
         private javax.swing.JLabel jLabel4;
         private javax.swing.JLabel jLabel5;
@@ -439,7 +440,6 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
         private javax.swing.JLabel jLabel8;
         private javax.swing.JLabel jLabel9;
         private javax.swing.JPanel jPanel1;
-        private javax.swing.JPanel jPanel3;
         private javax.swing.JPanel jPanel6;
         private javax.swing.JPanel jPanel7;
         private javax.swing.JScrollPane jScrollPane1;
@@ -448,6 +448,5 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
         private javax.swing.JSpinner spinnerTanggal;
         private javax.swing.JTable tabelData;
         private javax.swing.JTextArea textAreaCatatanAbsen;
-        private javax.swing.JTextField textFieldIdRecord;
         // End of variables declaration//GEN-END:variables
 }

@@ -2,145 +2,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemabsensi.user.data;
+package sistemabsensi.user.database;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.LinkedList;
-import sistemabsensi.database.connection.DBConnection;
-import sistemabsensi.user.data.RecordAbsen.StatusAbsen;
-import sistemabsensi.user.data.RecordAbsen.TipeAbsen;
+import sistemabsensi.database.DatabaseAbsensi;
+import sistemabsensi.database.RecordAbsen;
+import sistemabsensi.database.Shift;
+import sistemabsensi.database.StatusAbsen;
+import sistemabsensi.database.TipeAbsen;
 
 /**
  *
  * @author rss
  */
-public class DBAbsensi {
-
-	private DBConnection database;
-	private Statement statement;
-
-	public DBAbsensi() {
-		this.database = new DBConnection("jdbc:mysql://localhost/dbabsensi", "root", "");
-
-		try {
-			this.statement = this.database.createStatement();
-		} catch (Exception ex) {
-			System.err.println("Gagal membuat statement");
-			System.exit(-1);
-		}
-	}
-
-	public Connection getConnection() {
-		return this.database.getConnection();
-	}
-
-	private void exitError(String msg, Exception e) {
-		System.err.println(msg + ": " + e);
-		System.exit(-1);
-	}
-
-	//---------------------------------------------------------------------------------------------------------//
-	// Method-Method untuk mengecek jika sebuah data sudah ada atau tidak                                      //
-	//---------------------------------------------------------------------------------------------------------//
-	public boolean isDataDetailAbsenAda(int idDetailAbsen) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM tdetailabsen WHERE id_detailabsen = %d", idDetailAbsen));
-			return result.next();
-		} catch (SQLException e) {
-			exitError("Gagal Melakukan Query", e);
-		}
-
-		return false;
-	}
-
-	public boolean isDataJabatanAda(int idJabatan) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM tjabatan WHERE id_jabatan = %d", idJabatan));
-			return result.next();
-		} catch (SQLException e) {
-			exitError("Gagal Melakukan Query", e);
-		}
-
-		return false;
-	}
-
-	public boolean isDataKaryawanAda(String idKaryawan) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM tkaryawan WHERE id_karyawan = '%s'", idKaryawan));
-			return result.next();
-		} catch (SQLException e) {
-			exitError("Gagal Melakukan Query", e);
-		}
-		return false;
-	}
-
-	public boolean isDataRecordAbsenKaryawanAda(int idKaryawan, Date tanggalSekarang) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM trecordabsen WHERE id_karyawan = %d and tanggalrecord = %s", idKaryawan, tanggalSekarang));
-			return result.next();
-		} catch (SQLException e) {
-			exitError("Gagal Melakukan Query", e);
-		}
-		return false;
-	}
-
-	public boolean isDataProdiAda(int idProdi) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM tprodi WHERE id_prodi = %d", idProdi));
-			return result.next();
-		} catch (SQLException e) {
-			exitError("Gagal Melakukan Query", e);
-		}
-		return false;
-	}
-
-	public boolean isDataRecordAbsenAda(int idRecordAbsen) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM trecordabsen WHERE id_recordabsen = %d", idRecordAbsen));
-			return result.next();
-		} catch (SQLException e) {
-			exitError("Gagal Melakukan Query", e);
-		}
-		return false;
-	}
-
-	public boolean isDataRoleAda(int idRole) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM trole WHERE id_role = %d", idRole));
-			return result.next();
-		} catch (SQLException e) {
-			exitError("Gagal Melakukan Query", e);
-		}
-		return false;
-	}
-
-	public boolean isDataShiftAda(int idShift) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM tshift WHERE id_shift = %d", idShift));
-			return result.next();
-		} catch (SQLException e) {
-			exitError("Gagal Melakukan Query", e);
-		}
-		return false;
-	}
+public class DatabaseUser extends DatabaseAbsensi {
 	
-	public void tambahkanRecordAbsen(String id_karyawan, TipeAbsen tipe_absen, Timestamp waktuAbsen, StatusAbsen status_absen, String catatan) throws SQLException {
-		final String sql = "INSERT INTO trecordabsen(waktu_absen, id_karyawan,status_absen,catatan_absen,tipe_absen) values (?,?,?,?,?);";
+	public void tambahkanRecordAbsen(String id_karyawan, TipeAbsen tipe_absen, Timestamp waktuAbsen, StatusAbsen status_absen, String catatan) {
+		final String sql = "INSERT INTO trecordabsen(waktu_absen, id_karyawan,status_absen,catatan_absen,tipe_absen)"
+			+ " values (?,?,?,?,?);";
 
 		try {
 			PreparedStatement query = this.getConnection().prepareStatement(sql);
@@ -165,19 +50,19 @@ public class DBAbsensi {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw e;
+			System.exit(-1);
 		}
 	}
 	
 	
-	public boolean adaDataRecordAbsenHariIni(String idKaryawan, TipeAbsen tipe) throws SQLException {
-		final String sql = "SELECT * FROM trecordabsen WHERE id_karyawan = ? AND DATE(waktu_absen) = ? AND tipe_absen = ?;";
+	public boolean adaDataRecordAbsenHariIni(String idKaryawan, TipeAbsen tipe) {
+		final String sql = "SELECT 1 FROM trecordabsen"
+			+ " WHERE id_karyawan = ? AND DATE(waktu_absen) = ? AND tipe_absen = ?;";
 
 		try {
-			LinkedList<RecordAbsen> daftarTanggal = new LinkedList<>();
 			PreparedStatement query = this.getConnection().prepareStatement(sql);
 			
-			Date tanggalSekarang = Date.valueOf(LocalDate.now());
+			Date tanggalSekarang = Date.valueOf(LocalDate.now()); // dapatkan tanggal terkini
 
 			query.setString(1, idKaryawan);
 			query.setDate(2, tanggalSekarang);
@@ -189,14 +74,16 @@ public class DBAbsensi {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw e;
+			System.exit(-1);
 		}
+		
+		return false;
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------//
 	// Kembalikan Sebuah Linked List / Daftar semua data record yang dimiliki seorang karyawan                            //
 	//--------------------------------------------------------------------------------------------------------------------//
-	public LinkedList<RecordAbsen> getDaftarRecordAbsenKaryawanHariIni(String idKaryawan) throws SQLException {
+	public LinkedList<RecordAbsen> getDaftarRecordAbsenKaryawanHariIni(String idKaryawan)  {
 		final String sql = "SELECT * FROM trecordabsen WHERE id_karyawan = ? AND DATE(waktu_absen) = ?;";
 
 		try {
@@ -258,15 +145,17 @@ public class DBAbsensi {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw e;
+			System.exit(-1);
 		}
+		
+		return null;
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------//
 	// Query SELECT join-relasi ke tabel-tabel data karyawan (prodi, shift, jabatan) dan juga membuat/mendapatkan        //
 	// record absen untuk karyawan tersebut.                                                                             //
 	//-------------------------------------------------------------------------------------------------------------------//
-	public Karyawan getDataKaryawan(String idKaryawan) throws SQLException {
+	public Karyawan getDataKaryawan(String idKaryawan) {
 		final String sql
 			= "SELECT "
 			+ "a.id_karyawan, a.nama_karyawan,"
@@ -291,7 +180,6 @@ public class DBAbsensi {
 
 				karyawan.setIdKaryawan(result.getString("id_karyawan"));
 				karyawan.setNamaKaryawan(result.getString("nama_karyawan"));
-
 				karyawan.setShift(new Shift(
 					result.getInt("id_shift"),
 					result.getTime("shift_start"),
@@ -302,11 +190,11 @@ public class DBAbsensi {
 				return karyawan;
 			}
 
-			return null;
-
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw e;
+			System.exit(-1);
 		}
+		
+		return null;
 	}
 }

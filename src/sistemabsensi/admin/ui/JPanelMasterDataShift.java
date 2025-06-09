@@ -4,17 +4,14 @@
  */
 package sistemabsensi.admin.ui;
 
-import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import sistemabsensi.admin.data.DBAbsensi;
-import sistemabsensi.admin.data.Shift;
+import sistemabsensi.admin.database.DatabaseAdmin;
+import sistemabsensi.database.Shift;
 
 /**
  *
@@ -22,13 +19,13 @@ import sistemabsensi.admin.data.Shift;
  */
 public class JPanelMasterDataShift extends javax.swing.JPanel {
 
-	private DBAbsensi db;
+	private DatabaseAdmin db;
 	private Shift shiftTerpilih;
 
 	/**
 	 * Creates new form JPanelMasterDataShift
 	 */
-	public JPanelMasterDataShift(DBAbsensi db) {
+	public JPanelMasterDataShift(DatabaseAdmin db) {
 		this.db = db;
 		this.shiftTerpilih = null;
 		initComponents();
@@ -39,12 +36,9 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
 	}
 
 	private void isiTabelData() {
-		try {
-			this.tabelData.setModel(db.getModelDataTabel_Shift());
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+
+		this.tabelData.setModel(db.getModelDataTabel_Shift());
+
 	}
 
 	/**
@@ -58,17 +52,16 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
 
                 jScrollPane1 = new javax.swing.JScrollPane();
                 tabelData = new javax.swing.JTable();
-                textFieldID = new javax.swing.JTextField();
-                jLabel1 = new javax.swing.JLabel();
                 jLabel2 = new javax.swing.JLabel();
                 textFieldDeskripsi = new javax.swing.JTextField();
                 jLabel3 = new javax.swing.JLabel();
                 jLabel4 = new javax.swing.JLabel();
                 btnHapus = new javax.swing.JButton();
-                btnSimpan = new javax.swing.JButton();
+                btnTambah = new javax.swing.JButton();
                 spinnerMulai = new javax.swing.JSpinner();
                 spinnerSelesai = new javax.swing.JSpinner();
                 jLabel5 = new javax.swing.JLabel();
+                btnEdit = new javax.swing.JButton();
 
                 setMaximumSize(new java.awt.Dimension(991, 599));
 
@@ -90,14 +83,20 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
                 });
                 jScrollPane1.setViewportView(tabelData);
 
-                jLabel1.setText("ID");
+                jLabel2.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                jLabel2.setText("Nama Shift");
 
-                jLabel2.setText("DESKRIPSI");
+                textFieldDeskripsi.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
 
-                jLabel3.setText("MULAI");
+                jLabel3.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                jLabel3.setText("SHIFT MULAI");
 
-                jLabel4.setText("SELESAI");
+                jLabel4.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                jLabel4.setText("SHIFT SELESAI");
 
+                btnHapus.setBackground(new java.awt.Color(255, 51, 51));
+                btnHapus.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                btnHapus.setForeground(new java.awt.Color(0, 0, 0));
                 btnHapus.setText("HAPUS");
                 btnHapus.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,21 +104,36 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
                         }
                 });
 
-                btnSimpan.setText("SIMPAN");
-                btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+                btnTambah.setBackground(new java.awt.Color(102, 255, 102));
+                btnTambah.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                btnTambah.setForeground(new java.awt.Color(0, 0, 0));
+                btnTambah.setText("TAMBAH");
+                btnTambah.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnSimpanActionPerformed(evt);
+                                btnTambahActionPerformed(evt);
                         }
                 });
 
+                spinnerMulai.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 spinnerMulai.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
-                spinnerMulai.setEditor(new javax.swing.JSpinner.DateEditor(spinnerMulai, ""));
+                spinnerMulai.setEditor(new javax.swing.JSpinner.DateEditor(spinnerMulai, "HH:mm"));
 
+                spinnerSelesai.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 spinnerSelesai.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
-                spinnerSelesai.setEditor(new javax.swing.JSpinner.DateEditor(spinnerSelesai, ""));
+                spinnerSelesai.setEditor(new javax.swing.JSpinner.DateEditor(spinnerSelesai, "HH:mm"));
 
                 jLabel5.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
                 jLabel5.setText("MAINTENENCE SHIFT");
+
+                btnEdit.setBackground(new java.awt.Color(255, 255, 102));
+                btnEdit.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                btnEdit.setForeground(new java.awt.Color(0, 0, 0));
+                btnEdit.setText("EDIT");
+                btnEdit.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnEditActionPerformed(evt);
+                        }
+                });
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
@@ -127,36 +141,33 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(47, 47, 47)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel1)
-                                        .addComponent(jLabel2)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jLabel4))
-                                .addGap(46, 46, 46)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(textFieldDeskripsi)
-                                                        .addComponent(textFieldID)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(spinnerSelesai, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(0, 152, Short.MAX_VALUE)))
-                                                .addGap(109, 109, 109))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(spinnerMulai, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addGap(36, 36, 36)
-                                                                .addComponent(btnSimpan)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btnHapus)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 785, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(44, 44, 44))
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(35, 35, 35)
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(45, 45, 45)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 15, Short.MAX_VALUE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(btnEdit)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(btnTambah))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(jLabel4))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(spinnerSelesai, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(spinnerMulai, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(textFieldDeskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,28 +177,25 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(5, 5, 5)
-                                                .addComponent(jLabel1)
-                                                .addGap(16, 16, 16)
+                                                .addGap(42, 42, 42)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(spinnerMulai, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel3)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                 .addComponent(jLabel2)
-                                                .addGap(16, 16, 16)
-                                                .addComponent(jLabel3))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(textFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(6, 6, 6)
-                                                .addComponent(textFieldDeskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(spinnerMulai, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(spinnerSelesai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel4))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(btnSimpan)
-                                                        .addComponent(btnHapus)))
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(125, Short.MAX_VALUE))
+                                                .addComponent(textFieldDeskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(spinnerSelesai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel4))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnHapus)
+                                        .addComponent(btnTambah)
+                                        .addComponent(btnEdit))
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(26, Short.MAX_VALUE))
                 );
         }// </editor-fold>//GEN-END:initComponents
 
@@ -209,18 +217,14 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
 	}
 
 	private void getDataTerpilih(int idShift) {
-		try {
-			this.shiftTerpilih = db.getDataShift(idShift);
-			Date start = toDate(this.shiftTerpilih.shift_start.toLocalTime());
-			Date end = toDate(this.shiftTerpilih.shift_end.toLocalTime());
-			this.spinnerMulai.setValue(start);
-			this.spinnerSelesai.setValue(end);
-			this.textFieldDeskripsi.setText(this.shiftTerpilih.deskripsi);
-			this.textFieldID.setText(this.shiftTerpilih.idShift.toString());
 
-		} catch (SQLException ex) {
-			Logger.getLogger(JPanelMasterDataRecordAbsen.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		this.shiftTerpilih = db.getDataShift(idShift);
+		Date start = toDate(this.shiftTerpilih.shift_start.toLocalTime());
+		Date end = toDate(this.shiftTerpilih.shift_end.toLocalTime());
+		this.spinnerMulai.setValue(start);
+		this.spinnerSelesai.setValue(end);
+		this.textFieldDeskripsi.setText(this.shiftTerpilih.deskripsi);
+
 	}
 
 	private static String formatWaktuDate(Date waktu) {
@@ -228,34 +232,29 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
 		return sdf.format(waktu);
 	}
 
-        private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+	//NOTES:
+	// UNCLEAR LOGIC
+	// EDIT HAS ID,
+	// ADD IF NO ID, (NEED TO VERIFY)
+	// FIXME: NEED TO REVIEW USE CASE!
+
+        private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
 		if (this.textFieldDeskripsi.getText().isEmpty()) {
 			this.textFieldDeskripsi.requestFocus();
-			Pesan.tampilkanPeringatan("Deskripsi tidak boleh Home!");
+			DialogPesan.tampilPesan("Deskripsi tidak boleh Kosong!");
 			return;
 		}
 
 		Shift shift = new Shift();
-
-		try {
-			shift.idShift = Integer.parseInt(this.textFieldID.getText());
-		} catch (Exception e) {
-			shift.idShift = null;
-		}
-
+		shift.idShift = null;
 		shift.shift_end = Time.valueOf(formatWaktuDate((Date) this.spinnerSelesai.getValue()));
 		shift.shift_start = Time.valueOf(formatWaktuDate((Date) this.spinnerMulai.getValue()));
 		shift.deskripsi = this.textFieldDeskripsi.getText();
 
-		try {
-			this.db.simpanDataShift(shift);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		
+		this.db.simpanDataShift(shift);
+
 		this.updateData();
-        }//GEN-LAST:event_btnSimpanActionPerformed
+        }//GEN-LAST:event_btnTambahActionPerformed
 
         private void tabelDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelDataMouseClicked
 		int barisTerpilih = this.tabelData.getSelectedRow();
@@ -263,35 +262,60 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
 		this.getDataTerpilih(id);
         }//GEN-LAST:event_tabelDataMouseClicked
 
+	private boolean isDataTerpilihDiubah() {
+		Time shift_end = Time.valueOf(formatWaktuDate((Date) this.spinnerSelesai.getValue()));
+		Time shift_start = Time.valueOf(formatWaktuDate((Date) this.spinnerMulai.getValue()));
+		String deskripsi = this.textFieldDeskripsi.getText();
+
+		return !(this.shiftTerpilih != null && this.shiftTerpilih.deskripsi.equals(deskripsi) && this.shiftTerpilih.shift_end.equals(shift_end) && this.shiftTerpilih.shift_start.equals(shift_start));
+	}
+
         private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-		if (this.textFieldID.getText().isEmpty()) {
-			this.textFieldID.requestFocus();
-			Pesan.tampilkanPeringatan("ID Tidak boleh Home!");
-		}
-		int idShift = -1;
-		try {
-			idShift = Integer.parseInt(this.textFieldID.getText());
-		} catch (Exception e) {
-			this.textFieldID.requestFocus();
-			Pesan.tampilkanPeringatan("ID harus berbentuk angka numeric!");
+
+		Integer idShift = null;
+		if (this.shiftTerpilih != null && !this.isDataTerpilihDiubah()) {
+			idShift = this.shiftTerpilih.idShift;
+		} else {
+			DialogPesan.tampilPesan("Silahkan Pilih terlebih dahulu dari tabel, data yang ingin dihapus!");
 			return;
 		}
-		
-		
-		try {
-			this.db.deleteDataShift(idShift);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
+
+		if (!DialogPesan.tampilKonfirmasi("Konfirmasi Penghapusan", "Apakah anda yakin ingin menghapus data shift: " + this.shiftTerpilih.deskripsi + "?. ")) {
+			return;
 		}
-		
+
+		this.db.deleteDataShift(idShift);
+
 		this.updateData();
         }//GEN-LAST:event_btnHapusActionPerformed
 
+        private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+		if (this.textFieldDeskripsi.getText().isEmpty()) {
+			this.textFieldDeskripsi.requestFocus();
+			DialogPesan.tampilPesan("Deskripsi tidak boleh Kosong!");
+			return;
+		}
+
+		Shift shift = new Shift();
+		if (this.shiftTerpilih != null) {
+			shift.idShift = this.shiftTerpilih.idShift;
+		} else {
+			DialogPesan.tampilPesan("Silahkan Pilih terlebih dahulu dari tabel, data yang ingin diedit!");
+			return;
+		}
+		shift.shift_end = Time.valueOf(formatWaktuDate((Date) this.spinnerSelesai.getValue()));
+		shift.shift_start = Time.valueOf(formatWaktuDate((Date) this.spinnerMulai.getValue()));
+		shift.deskripsi = this.textFieldDeskripsi.getText();
+
+		this.db.simpanDataShift(shift);
+
+		this.updateData();
+        }//GEN-LAST:event_btnEditActionPerformed
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
+        private javax.swing.JButton btnEdit;
         private javax.swing.JButton btnHapus;
-        private javax.swing.JButton btnSimpan;
-        private javax.swing.JLabel jLabel1;
+        private javax.swing.JButton btnTambah;
         private javax.swing.JLabel jLabel2;
         private javax.swing.JLabel jLabel3;
         private javax.swing.JLabel jLabel4;
@@ -301,6 +325,5 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
         private javax.swing.JSpinner spinnerSelesai;
         private javax.swing.JTable tabelData;
         private javax.swing.JTextField textFieldDeskripsi;
-        private javax.swing.JTextField textFieldID;
         // End of variables declaration//GEN-END:variables
 }

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemabsensi.admin.data;
+package sistemabsensi.database;
 
 import java.sql.Time;
 
@@ -26,6 +26,14 @@ public class Shift {
 		this.shift_end = shift_end;
 		this.shift_start = shift_start;
 		this.deskripsi = deskripsi;
+	}
+	
+	public Time getShiftStart() {
+		return this.shift_start;
+	}
+	
+	public Time getShiftEnd() {
+		return this.shift_end;
 	}
 
 	@Override

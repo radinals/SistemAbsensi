@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemabsensi.user.data;
+package sistemabsensi.user.database;
+
+import sistemabsensi.database.Shift;
 
 /**
  *
@@ -10,9 +12,9 @@ package sistemabsensi.user.data;
  */
 
 
-//------------------------------------------------------------------------------------------------------//
-// Class Karyawan menyimpan seluruh set data yang dimiliki atau berhubungan langsung seorang karyawan.  //
-//------------------------------------------------------------------------------------------------------//
+//----------------------------------------------------------------//
+// Class Karyawan menyimpan data yang harus dimiliki saat absen   //
+//----------------------------------------------------------------//
 
 public class Karyawan {
 
