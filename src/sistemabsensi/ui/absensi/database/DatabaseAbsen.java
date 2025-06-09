@@ -21,7 +21,7 @@ import sistemabsensi.database.TipeAbsen;
  *
  * @author rss
  */
-public class DatabaseUser extends DatabaseAbsensi {
+public class DatabaseAbsen extends DatabaseAbsensi {
 	
 	public void tambahkanRecordAbsen(String id_karyawan, TipeAbsen tipe_absen, Timestamp waktuAbsen, StatusAbsen status_absen, String catatan) {
 		final String sql = "INSERT INTO trecordabsen(waktu_absen, id_karyawan,status_absen,catatan_absen,tipe_absen)"

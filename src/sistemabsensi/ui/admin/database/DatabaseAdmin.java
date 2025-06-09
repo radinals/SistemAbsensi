@@ -4,7 +4,6 @@
  */
 package sistemabsensi.ui.admin.database;
 
-import sistemabsensi.database.Shift;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,11 +11,12 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import sistemabsensi.ui.admin.ui.DialogPesan;
 import sistemabsensi.database.DatabaseAbsensi;
 import sistemabsensi.database.RecordAbsen;
+import sistemabsensi.database.Shift;
 import sistemabsensi.database.StatusAbsen;
 import sistemabsensi.database.TipeAbsen;
+import sistemabsensi.ui.admin.ui.DialogPesan;
 
 /**
  *
@@ -637,7 +637,7 @@ public class DatabaseAdmin extends DatabaseAbsensi{
 		return null;
 	}
 
-	public LinkedList<Date> getDaftarTanggalRecordAbsen() throws SQLException {
+	public LinkedList<Date> getDaftarTanggalRecordAbsen() {
 		LinkedList<Date> tanggalList = new LinkedList<>();
 		String sql = "SELECT DISTINCT DATE(waktu_absen) AS tanggal FROM trecordabsen ORDER BY tanggal DESC";
 
@@ -650,6 +650,7 @@ public class DatabaseAdmin extends DatabaseAbsensi{
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.exit(0);
 		}
 		return tanggalList;
 	}
@@ -662,7 +663,7 @@ public class DatabaseAdmin extends DatabaseAbsensi{
 			+ "FROM trecordabsen a "
 			+ "LEFT JOIN tkaryawan b ON a.id_karyawan = b.id_karyawan "
 			+ "LEFT JOIN tshift c ON b.id_shift = c.id_shift";
-
+		
 		DefaultTableModel model = new DefaultTableModel();
 
 		model.addColumn("ID RECORD");

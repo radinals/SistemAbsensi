@@ -34,19 +34,6 @@ public class DatabaseAbsensi {
 	public Connection getConnection() {
 		return this.database.getConnection();
 	}
-	
-	public boolean isDataDetailAbsenAda(int idDetailAbsen) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM tdetailabsen WHERE id_detailabsen = %d", idDetailAbsen));
-			return result.next();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-
-		return false;
-	}
 
 	public boolean isDataJabatanAda(int idJabatan) {
 		try {
@@ -98,18 +85,6 @@ public class DatabaseAbsensi {
 		return false;
 	}
 
-	public boolean isDataProdiAda(int idProdi) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM tprodi WHERE id_prodi = %d", idProdi));
-			return result.next();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		return false;
-	}
-
 	public boolean isDataProdiAda(String namaProdi) {
 		try {
 			ResultSet result = statement.executeQuery(String.format(
@@ -122,28 +97,5 @@ public class DatabaseAbsensi {
 		return false;
 	}
 
-	public boolean isDataRecordAbsenAda(int idRecordAbsen) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM trecordabsen WHERE id_recordabsen = %d", idRecordAbsen));
-			return result.next();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		return false;
-	}
-
-	public boolean isDataShiftAda(int idShift) {
-		try {
-			ResultSet result = statement.executeQuery(String.format(
-				"SELECT 1 FROM tshift WHERE id_shift = %d", idShift));
-			return result.next();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		return false;
-	}
 
 }

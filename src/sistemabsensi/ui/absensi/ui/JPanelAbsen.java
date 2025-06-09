@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import sistemabsensi.database.RecordAbsen;
 import sistemabsensi.database.StatusAbsen;
 import sistemabsensi.database.TipeAbsen;
-import sistemabsensi.ui.absensi.database.DatabaseUser;
+import sistemabsensi.ui.absensi.database.DatabaseAbsen;
 import sistemabsensi.ui.absensi.database.Karyawan;
 
 /**
@@ -36,7 +36,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		public static final Time selesai = Time.valueOf("13:00:00");
 	}
 
-	private DatabaseUser dbUser;
+	private DatabaseAbsen dbUser;
 	private Timer timerJam; // buat tampilan jam
 
 	private TipeAbsen modeAbsen = null;
@@ -46,7 +46,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	 * Creates new form JPanelAbsen
 	 */
 	public JPanelAbsen() {
-		this.dbUser = new DatabaseUser();
+		this.dbUser = new DatabaseAbsen();
 
 		initComponents();
 
