@@ -107,7 +107,7 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 	private static Date toDate(LocalTime localTime) {
 		return Date.from(
 			localTime.atDate(LocalDate.now())
-				.atZone(ZoneId.systemDefault()) // Add system default timezone
+				.atZone(ZoneId.systemDefault())
 				.toInstant()
 		);
 	}
