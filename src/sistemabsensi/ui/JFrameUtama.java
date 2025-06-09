@@ -2,19 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package sistemabsensi.admin.ui;
+package sistemabsensi.ui;
 
 import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import sistemabsensi.admin.database.DatabaseAdmin;
-import sistemabsensi.user.ui.JPanelAbsen;
+import sistemabsensi.ui.admin.database.DatabaseAdmin;
+import sistemabsensi.ui.admin.ui.DialogPesan;
+import sistemabsensi.ui.admin.ui.JPanelCetakLaporan;
+import sistemabsensi.ui.admin.ui.JPanelLoginAdmin;
+import sistemabsensi.ui.admin.ui.JPanelMasterDataKaryawan;
+import sistemabsensi.ui.admin.ui.JPanelMasterDataRecordAbsen;
+import sistemabsensi.ui.admin.ui.JPanelMasterDataShift;
+import sistemabsensi.ui.admin.ui.JPanelWelcome;
+import sistemabsensi.ui.absensi.ui.JPanelAbsen;
 
 /**
  *
  * @author rss
  */
-public class JFrameAdmin extends javax.swing.JFrame {
+public class JFrameUtama extends javax.swing.JFrame {
 
 	private CardLayout layoutPanel;
 
@@ -30,7 +37,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
 	/**
 	 * Creates new form JFrameAdmin
 	 */
-	public JFrameAdmin() {
+	public JFrameUtama() {
 		
 		DatabaseAdmin db = new DatabaseAdmin();
 		initComponents();
@@ -93,9 +100,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 jMenuItem2.setText("jMenuItem2");
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                setMaximumSize(new java.awt.Dimension(1366, 768));
                 setMinimumSize(new java.awt.Dimension(1366, 768));
-                setPreferredSize(new java.awt.Dimension(1024, 768));
                 setResizable(false);
                 getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
@@ -287,37 +292,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
 	/**
 	 * @param args the command line arguments
 	 */
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-		/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(JFrameAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(JFrameAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(JFrameAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(JFrameAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new JFrameAdmin().setVisible(true);
-			}
-		});
-	}
+	
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JMenuItem bukaHome;

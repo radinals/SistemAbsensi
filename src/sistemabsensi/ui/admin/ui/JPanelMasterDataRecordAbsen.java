@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.admin.ui;
+package sistemabsensi.ui.admin.ui;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -11,8 +11,8 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.LinkedList;
-import sistemabsensi.admin.database.DatabaseAdmin;
-import sistemabsensi.admin.database.Karyawan;
+import sistemabsensi.ui.admin.database.DatabaseAdmin;
+import sistemabsensi.ui.admin.database.Karyawan;
 import sistemabsensi.database.RecordAbsen;
 import sistemabsensi.database.StatusAbsen;
 import sistemabsensi.database.TipeAbsen;

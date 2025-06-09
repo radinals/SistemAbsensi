@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.admin.ui;
+package sistemabsensi.ui.admin.ui;
+
+import sistemabsensi.ui.JFrameUtama;
 
 /**
  *
@@ -10,12 +12,12 @@ package sistemabsensi.admin.ui;
  */
 public class JPanelWelcome extends javax.swing.JPanel {
 
-	JFrameAdmin frameAdmin;
+	private JFrameUtama frameAdmin;
 	
 	/**
 	 * Creates new form JPanelWelcome
 	 */
-	public JPanelWelcome(JFrameAdmin frameAdmin) {
+	public JPanelWelcome(JFrameUtama frameAdmin) {
 		this.frameAdmin = frameAdmin;
 		initComponents();
 	}

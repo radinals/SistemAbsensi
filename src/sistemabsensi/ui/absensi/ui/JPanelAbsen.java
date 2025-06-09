@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.user.ui;
+package sistemabsensi.ui.absensi.ui;
 
 import java.awt.event.KeyEvent;
 import java.sql.Time;
@@ -19,8 +19,8 @@ import javax.swing.table.DefaultTableModel;
 import sistemabsensi.database.RecordAbsen;
 import sistemabsensi.database.StatusAbsen;
 import sistemabsensi.database.TipeAbsen;
-import sistemabsensi.user.database.DatabaseUser;
-import sistemabsensi.user.database.Karyawan;
+import sistemabsensi.ui.absensi.database.DatabaseUser;
+import sistemabsensi.ui.absensi.database.Karyawan;
 
 /**
  *

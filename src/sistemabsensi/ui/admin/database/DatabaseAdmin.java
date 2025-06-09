@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemabsensi.admin.database;
+package sistemabsensi.ui.admin.database;
 
 import sistemabsensi.database.Shift;
 import java.sql.Date;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import sistemabsensi.admin.ui.DialogPesan;
+import sistemabsensi.ui.admin.ui.DialogPesan;
 import sistemabsensi.database.DatabaseAbsensi;
 import sistemabsensi.database.RecordAbsen;
 import sistemabsensi.database.StatusAbsen;

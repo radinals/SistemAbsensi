@@ -2,26 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.admin.ui;
+package sistemabsensi.ui.admin.ui;
 
-import sistemabsensi.admin.database.DatabaseAdmin;
-import sistemabsensi.admin.database.Jabatan;
+import sistemabsensi.ui.admin.database.DatabaseAdmin;
+import sistemabsensi.ui.admin.database.Prodi;
 
 /**
  *
  * @author rss
  */
-public class JPanelMasterDataJabatan extends javax.swing.JPanel {
+public class JPanelMasterDataProdi extends javax.swing.JPanel {
 
 	private DatabaseAdmin db;
 
-	private Jabatan jabatanTerpilih;
+	private Prodi prodiTerpilih;
+
 	private final JPanelMasterDataKaryawan panelKaryawan;
 
 	/**
 	 * Creates new form JPanelMasterDataShift
 	 */
-	public JPanelMasterDataJabatan(DatabaseAdmin db, JPanelMasterDataKaryawan panelKaryawan) {
+	public JPanelMasterDataProdi(DatabaseAdmin db, JPanelMasterDataKaryawan panelKaryawan) {
 		this.db = db;
 		this.panelKaryawan = panelKaryawan;
 		initComponents();
@@ -30,14 +31,13 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
 
 	public void updateData() {
 		this.panelKaryawan.updateData();
-		this.jabatanTerpilih = null;
-		this.textFieldNamaJabatan.setText("");
+		this.prodiTerpilih = null;
+		this.textFieldNamaProdi.setText("");
 		this.dapatkanData();
 	}
 
 	private void dapatkanData() {
-		this.tabelData.setModel(db.getModelTabel_Jabatan());
-
+		this.tabelData.setModel(db.getModelTabel_Prodi());
 	}
 
 	/**
@@ -49,16 +49,19 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
+                jLabel1 = new javax.swing.JLabel();
                 jScrollPane1 = new javax.swing.JScrollPane();
                 tabelData = new javax.swing.JTable();
-                jLabel1 = new javax.swing.JLabel();
-                textFieldNamaJabatan = new javax.swing.JTextField();
                 btnHapus = new javax.swing.JButton();
                 btnSimpan = new javax.swing.JButton();
+                textFieldNamaProdi = new javax.swing.JTextField();
                 jLabel2 = new javax.swing.JLabel();
 
                 setBorder(javax.swing.BorderFactory.createEtchedBorder());
                 setMaximumSize(new java.awt.Dimension(991, 599));
+
+                jLabel1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                jLabel1.setText("NAMA PRODI");
 
                 tabelData.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
@@ -81,16 +84,6 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                 });
                 jScrollPane1.setViewportView(tabelData);
 
-                jLabel1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-                jLabel1.setText("NAMA JABATAN");
-
-                textFieldNamaJabatan.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-                textFieldNamaJabatan.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                textFieldNamaJabatanActionPerformed(evt);
-                        }
-                });
-
                 btnHapus.setBackground(new java.awt.Color(255, 51, 51));
                 btnHapus.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 btnHapus.setForeground(new java.awt.Color(0, 0, 0));
@@ -111,8 +104,10 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                         }
                 });
 
+                textFieldNamaProdi.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+
                 jLabel2.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-                jLabel2.setText("Master Data Jabatan");
+                jLabel2.setText("Master Data Prodi");
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
@@ -121,121 +116,105 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addContainerGap())
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel2)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(textFieldNamaJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addComponent(jLabel2))
-                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                .addContainerGap())
+                                                                .addComponent(textFieldNamaProdi, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(0, 0, Short.MAX_VALUE))))
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap()
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(textFieldNamaJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(textFieldNamaProdi, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(btnSimpan)
-                                        .addComponent(btnHapus)))
+                                        .addComponent(btnHapus)
+                                        .addComponent(btnSimpan))
+                                .addContainerGap())
                 );
         }// </editor-fold>//GEN-END:initComponents
 
         private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-		if (this.textFieldNamaJabatan.getText().isEmpty()) {
-			this.textFieldNamaJabatan.requestFocus();
-			DialogPesan.tampilPesan("Pastikan Field Nama Jabatan Terisi!.");
+		if (this.textFieldNamaProdi.getText().isEmpty()) {
+			this.textFieldNamaProdi.requestFocus();
+			DialogPesan.tampilPesan("Pastikan Field Nama Prodi Terisi!.");
 			return;
 		}
 
-		final String namaJabatan = this.textFieldNamaJabatan.getText();
+		String namaProdi = this.textFieldNamaProdi.getText();
 
-		// cek jika ada perubahan data di form input.
-		if ((this.jabatanTerpilih != null && namaJabatan.equals(this.jabatanTerpilih.namaJabatan))
-			|| (this.jabatanTerpilih == null && this.db.isDataJabatanAda(namaJabatan))) {
-			DialogPesan.tampilPesan("Data Sudah Ada!.");
+		Prodi prodi = null;
+		if ((this.prodiTerpilih != null && namaProdi.equals(this.prodiTerpilih.namaProdi)) || (this.prodiTerpilih == null && this.db.isDataProdiAda(namaProdi))) {
+			DialogPesan.tampilPesan("Tidak ada nilai yang baru atau diubah!.");
 			return;
+		} else if (this.prodiTerpilih != null && !namaProdi.equals(this.prodiTerpilih.namaProdi)) {
+			prodi = new Prodi(this.prodiTerpilih.id, namaProdi);
+		} else {
+			prodi = new Prodi(null, namaProdi);
 		}
 
-		Jabatan jabatan = new Jabatan(null, namaJabatan);
-
-		// gunakan id data jabatan yang user pilih jika ada
-		// menandakan operasi (UPDATE)
-		if (this.jabatanTerpilih != null && !namaJabatan.equals(this.jabatanTerpilih.namaJabatan)) {
-			jabatan.idJabatan = jabatanTerpilih.idJabatan;
-		}
-
-		this.db.simpanDataJabatan(jabatan);
+		this.db.simpanDataProdi(prodi);
 
 		this.updateData();
 
         }//GEN-LAST:event_btnSimpanActionPerformed
 
-        private void textFieldNamaJabatanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldNamaJabatanActionPerformed
-		// TODO add your handling code here:
-        }//GEN-LAST:event_textFieldNamaJabatanActionPerformed
-
         private void tabelDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelDataMouseClicked
 		int barisTerpilih = this.tabelData.getSelectedRow();
-		String namaJabatan = (String) this.tabelData.getModel().getValueAt(barisTerpilih, 1);
-		int idJabatan = Integer.valueOf((String) this.tabelData.getModel().getValueAt(barisTerpilih, 0));
+		String namaProdi = (String) this.tabelData.getModel().getValueAt(barisTerpilih, 1);
+		int idProdi = Integer.valueOf((String) this.tabelData.getModel().getValueAt(barisTerpilih, 0));
 
-		this.jabatanTerpilih = new Jabatan(idJabatan, namaJabatan);
+		this.prodiTerpilih = new Prodi(idProdi, namaProdi);
 
-		this.textFieldNamaJabatan.setText(namaJabatan);
+		this.textFieldNamaProdi.setText(namaProdi);
         }//GEN-LAST:event_tabelDataMouseClicked
 
         private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-
-		// Pastikan field input terisi.
-		if (this.textFieldNamaJabatan.getText().isEmpty()) {
-			this.textFieldNamaJabatan.requestFocus();
-			DialogPesan.tampilPesan("Pastikan Field Nama Jabatan Terisi!.");
+		if (this.textFieldNamaProdi.getText().isEmpty()) {
+			this.textFieldNamaProdi.requestFocus();
+			DialogPesan.tampilPesan("Pastikan Field Nama Prodi Terisi!.");
 			return;
 		}
 
-		final String namaJabatan = this.textFieldNamaJabatan.getText();
+		String namaProdi = this.textFieldNamaProdi.getText();
 
-		Integer idJabatan = null;
-
-		if (this.jabatanTerpilih != null && this.jabatanTerpilih.namaJabatan.equals(namaJabatan)) {
-			idJabatan = this.jabatanTerpilih.idJabatan;
-		} else if (this.db.isDataJabatanAda(namaJabatan)) {
-			final Jabatan jabatan = this.db.getDataJabatan(namaJabatan);
-			if (jabatan == null) {
-				System.err.println("Gagal Mendapatkan data Jabatan");
-				System.exit(-1);
-			}
-			idJabatan = jabatan.idJabatan;
+		Prodi prodi = null;
+		if (this.prodiTerpilih != null && namaProdi.equals(this.prodiTerpilih.namaProdi)) {
+			prodi = this.prodiTerpilih;
+		} else if (this.prodiTerpilih != null && !namaProdi.equals(this.prodiTerpilih.namaProdi)) {
+			prodi = new Prodi(this.prodiTerpilih.id, namaProdi);
+		} else if (this.db.isDataProdiAda(namaProdi)) {
+			prodi = this.db.getDataProdi(namaProdi);
 		} else {
-			DialogPesan.tampilPesan("Tidak ada Data Jabatan Yang Sesuai untuk Dihapus, pastikan data jabatan sudah ada di database!");
+			prodi = new Prodi(null, namaProdi);
+		}
+
+		if (!DialogPesan.tampilKonfirmasi("Konfirmasi Penghapusan", "Apakah anda yakin ingin menghapus data prodi: " + namaProdi + "?. ")) {
 			return;
 		}
 
-		if (idJabatan == null) {
-			System.err.println("Gagal Mendapatkan id data Jabatan");
-			System.exit(-1);
-		}
-
-		if (!DialogPesan.tampilKonfirmasi("Konfirmasi Penghapusan", "Apakah anda yakin ingin menghapus data jabatan: " + namaJabatan + "?. ")) {
-			return; // cancel
-		}
-		this.db.deleteDataJabatan(idJabatan);
+		this.db.deleteDataProdi(prodi.id);
 
 		this.updateData();
+
         }//GEN-LAST:event_btnHapusActionPerformed
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -245,6 +224,6 @@ public class JPanelMasterDataJabatan extends javax.swing.JPanel {
         private javax.swing.JLabel jLabel2;
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JTable tabelData;
-        private javax.swing.JTextField textFieldNamaJabatan;
+        private javax.swing.JTextField textFieldNamaProdi;
         // End of variables declaration//GEN-END:variables
 }

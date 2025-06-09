@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.admin.ui;
+package sistemabsensi.ui.admin.ui;
 
 import java.awt.event.ActionEvent;
-import sistemabsensi.admin.database.DatabaseAdmin;
-import sistemabsensi.admin.database.StatusLogin;
+import sistemabsensi.ui.JFrameUtama;
+import sistemabsensi.ui.admin.database.DatabaseAdmin;
+import sistemabsensi.ui.admin.database.StatusLogin;
 
 /**
  *
@@ -15,12 +16,12 @@ import sistemabsensi.admin.database.StatusLogin;
 public class JPanelLoginAdmin extends javax.swing.JPanel {
 
 	private DatabaseAdmin db;
-	private JFrameAdmin frameAdmin;
+	private JFrameUtama frameAdmin;
 
 	/**
 	 * Creates new form JPanelLogin
 	 */
-	public JPanelLoginAdmin(DatabaseAdmin db, JFrameAdmin frameAdmin) {
+	public JPanelLoginAdmin(DatabaseAdmin db, JFrameUtama frameAdmin) {
 		this.db = db;
 		this.frameAdmin = frameAdmin;
 		initComponents();

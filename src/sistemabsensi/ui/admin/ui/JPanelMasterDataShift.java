@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.admin.ui;
+package sistemabsensi.ui.admin.ui;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -10,8 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
-import sistemabsensi.admin.database.DatabaseAdmin;
 import sistemabsensi.database.Shift;
+import sistemabsensi.ui.admin.database.DatabaseAdmin;
 
 /**
  *

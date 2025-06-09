@@ -2,15 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.admin.ui;
+package sistemabsensi.ui.admin.ui;
 
 import java.util.LinkedList;
-import sistemabsensi.admin.database.DatabaseAdmin;
-import sistemabsensi.admin.database.Jabatan;
-import sistemabsensi.admin.database.Karyawan;
-import sistemabsensi.admin.database.KolomPencarian;
-import sistemabsensi.admin.database.Prodi;
 import sistemabsensi.database.Shift;
+import sistemabsensi.ui.admin.database.DatabaseAdmin;
+import sistemabsensi.ui.admin.database.Jabatan;
+import sistemabsensi.ui.admin.database.Karyawan;
+import sistemabsensi.ui.admin.database.KolomPencarian;
+import sistemabsensi.ui.admin.database.Prodi;
 
 /**
  *
