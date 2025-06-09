@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.ui.admin.ui;
+package sistemabsensi.ui.admin;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -11,11 +11,11 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.LinkedList;
-import sistemabsensi.database.admin.DatabaseAdmin;
-import sistemabsensi.database.admin.Karyawan;
+import sistemabsensi.database.Karyawan;
 import sistemabsensi.database.RecordAbsen;
 import sistemabsensi.database.StatusAbsen;
 import sistemabsensi.database.TipeAbsen;
+import sistemabsensi.database.admin.DatabaseAdmin;
 
 /**
  *
@@ -104,20 +104,19 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 
 	}
 
-	public static Date toDate(LocalTime localTime) {
-		// Combine LocalTime with current date
+	private static Date toDate(LocalTime localTime) {
 		return Date.from(
-			localTime.atDate(LocalDate.now()) // Combine time with today’s date
+			localTime.atDate(LocalDate.now())
 				.atZone(ZoneId.systemDefault()) // Add system default timezone
-				.toInstant() // Convert to Instant
+				.toInstant()
 		);
 	}
 
-	public static Date toDate(LocalDate localDate) {
+	private static Date toDate(LocalDate localDate) {
 		return Date.from(
-			localDate.atStartOfDay() // Set time to 00:00
-				.atZone(ZoneId.systemDefault()) // Apply system time zone
-				.toInstant() // Convert to Instant
+			localDate.atStartOfDay()
+				.atZone(ZoneId.systemDefault())
+				.toInstant()
 		);
 	}
 
@@ -355,9 +354,9 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
 
         private void tabelDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelDataMouseClicked
 		int barisTerpilih = this.tabelData.getSelectedRow();
-		
-		Integer idRecord = (Integer) this.tabelData.getModel().getValueAt(barisTerpilih,0);
-		
+
+		Integer idRecord = (Integer) this.tabelData.getModel().getValueAt(barisTerpilih, 0);
+
 		this.getDataTerpilih(idRecord);
 
         }//GEN-LAST:event_tabelDataMouseClicked

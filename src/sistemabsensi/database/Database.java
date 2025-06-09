@@ -16,7 +16,7 @@ import sistemabsensi.database.connection.DBConnection;
  * @author rss
  */
 public class Database {
-	
+
 	private DBConnection database;
 	private Statement statement;
 
@@ -96,6 +96,5 @@ public class Database {
 		}
 		return false;
 	}
-
 
 }

@@ -8,14 +8,14 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import sistemabsensi.database.admin.DatabaseAdmin;
-import sistemabsensi.ui.admin.ui.DialogPesan;
-import sistemabsensi.ui.admin.ui.JPanelCetakLaporan;
-import sistemabsensi.ui.admin.ui.JPanelLoginAdmin;
-import sistemabsensi.ui.admin.ui.JPanelMasterDataKaryawan;
-import sistemabsensi.ui.admin.ui.JPanelMasterDataRecordAbsen;
-import sistemabsensi.ui.admin.ui.JPanelMasterDataShift;
-import sistemabsensi.ui.admin.ui.JPanelWelcome;
 import sistemabsensi.ui.absensi.JPanelAbsen;
+import sistemabsensi.ui.admin.DialogPesan;
+import sistemabsensi.ui.admin.JPanelCetakLaporan;
+import sistemabsensi.ui.admin.JPanelLoginAdmin;
+import sistemabsensi.ui.admin.JPanelMasterDataKaryawan;
+import sistemabsensi.ui.admin.JPanelMasterDataRecordAbsen;
+import sistemabsensi.ui.admin.JPanelMasterDataShift;
+import sistemabsensi.ui.admin.JPanelWelcome;
 
 /**
  *
@@ -24,21 +24,20 @@ import sistemabsensi.ui.absensi.JPanelAbsen;
 public class JFrameUtama extends javax.swing.JFrame {
 
 	private CardLayout layoutPanel;
+	private JPanelMasterDataKaryawan MasterDataKaryawan;
+	private JPanelMasterDataRecordAbsen MasterDataRecordAbsen;
+	private JPanelMasterDataShift MasterDataShift;
+	private JPanelLoginAdmin panelLogin;
+	private JPanelWelcome panelWelcome;
+	private JPanelCetakLaporan panelLaporan;
 
-	JPanelMasterDataKaryawan MasterDataKaryawan;
-	JPanelMasterDataRecordAbsen MasterDataRecordAbsen;
-	JPanelMasterDataShift MasterDataShift;
-	JPanelLoginAdmin panelLogin;
-	JPanelWelcome panelWelcome;
-	JPanelCetakLaporan panelLaporan;
-	
 	public boolean admin_terlogin = false;
 
 	/**
 	 * Creates new form JFrameAdmin
 	 */
 	public JFrameUtama() {
-		
+
 		DatabaseAdmin db = new DatabaseAdmin();
 		initComponents();
 
@@ -55,7 +54,7 @@ public class JFrameUtama extends javax.swing.JFrame {
 		this.jPanelUtama.add("MasterDataShift", this.MasterDataShift);
 		this.jPanelUtama.add("Login", this.panelLogin);
 		this.jPanelUtama.add("Laporan", this.panelLaporan);
-		
+
 		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
 	}
 
@@ -201,7 +200,7 @@ public class JFrameUtama extends javax.swing.JFrame {
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
-	
+
         private void jMenuMasterData_KaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMasterData_KaryawanActionPerformed
 		if (!this.admin_terlogin) {
 			DialogPesan.tampilPesan("Login Terlebih Dahulu Jika ingin mengakses data!.");
@@ -233,7 +232,7 @@ public class JFrameUtama extends javax.swing.JFrame {
         }//GEN-LAST:event_jMenuMasterData_ShiftActionPerformed
 
         private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-                if (!this.admin_terlogin) {
+		if (!this.admin_terlogin) {
 			DialogPesan.tampilPesan("Login Terlebih Dahulu Jika ingin mengakses data!.");
 			this.layoutPanel.show(this.jPanelUtama, "Login");
 			return;
@@ -245,39 +244,39 @@ public class JFrameUtama extends javax.swing.JFrame {
 	public void bukaLoginAdmin() {
 		this.layoutPanel.show(this.jPanelUtama, "Login");
 	}
-	
+
         private void bukaLoginAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bukaLoginAdminActionPerformed
-                this.bukaLoginAdmin();
+		this.bukaLoginAdmin();
         }//GEN-LAST:event_bukaLoginAdminActionPerformed
 
         private void menuBtnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBtnLogoutActionPerformed
-                if(this.admin_terlogin) {
+		if (this.admin_terlogin) {
 			DialogPesan.tampilPesan("Anda Terlogout");
 			this.layoutPanel.show(this.jPanelUtama, "Home");
 			this.admin_terlogin = false;
 		}
-		
+
         }//GEN-LAST:event_menuBtnLogoutActionPerformed
 
 	public void bukaTampilanAbsen() {
 		JFrame frame = new JFrame();
-		frame.setSize(800,600);
+		frame.setSize(800, 600);
 		JPanel panel = new JPanelAbsen();
 		panel.setVisible(true);
 		frame.add(panel);
 		frame.setVisible(true);
 	}
-	
+
         private void bukaTampilanAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bukaTampilanAbsenActionPerformed
 		this.bukaTampilanAbsen();
         }//GEN-LAST:event_bukaTampilanAbsenActionPerformed
 
         private void bukaHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bukaHomeActionPerformed
-                this.layoutPanel.show(this.jPanelUtama, "Home");
+		this.layoutPanel.show(this.jPanelUtama, "Home");
         }//GEN-LAST:event_bukaHomeActionPerformed
 
         private void exitAplikasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitAplikasiActionPerformed
-                System.exit(0);
+		System.exit(0);
         }//GEN-LAST:event_exitAplikasiActionPerformed
 
 	public void bukaMaintenenceKaryawan() {
@@ -292,7 +291,7 @@ public class JFrameUtama extends javax.swing.JFrame {
 	/**
 	 * @param args the command line arguments
 	 */
-	
+
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JMenuItem bukaHome;

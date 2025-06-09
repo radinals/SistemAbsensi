@@ -2,15 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.ui.admin.ui;
+package sistemabsensi.ui.admin;
 
 import java.util.LinkedList;
+import sistemabsensi.database.Jabatan;
+import sistemabsensi.database.Karyawan;
+import sistemabsensi.database.Prodi;
 import sistemabsensi.database.Shift;
 import sistemabsensi.database.admin.DatabaseAdmin;
-import sistemabsensi.database.admin.Jabatan;
-import sistemabsensi.database.admin.Karyawan;
 import sistemabsensi.database.admin.KolomPencarian;
-import sistemabsensi.database.admin.Prodi;
 
 /**
  *
@@ -504,10 +504,9 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 			return;
 		}
 
-		
-			this.tabelData.setModel(db.getModelTabel_PencarianKaryawan(this.textFieldPencarian.getText(), kolomPencarian));
-			this.isiDataDataComboBox();
-		
+		this.tabelData.setModel(db.getModelTabel_PencarianKaryawan(this.textFieldPencarian.getText(), kolomPencarian));
+		this.isiDataDataComboBox();
+
         }//GEN-LAST:event_btnPencarianActionPerformed
 
         private void textFieldPencarianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldPencarianActionPerformed

@@ -12,17 +12,20 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import sistemabsensi.database.Database;
+import sistemabsensi.database.Jabatan;
+import sistemabsensi.database.Karyawan;
+import sistemabsensi.database.Prodi;
 import sistemabsensi.database.RecordAbsen;
 import sistemabsensi.database.Shift;
 import sistemabsensi.database.StatusAbsen;
 import sistemabsensi.database.TipeAbsen;
-import sistemabsensi.ui.admin.ui.DialogPesan;
+import sistemabsensi.ui.admin.DialogPesan;
 
 /**
  *
  * @author rss
  */
-public class DatabaseAdmin extends Database{
+public class DatabaseAdmin extends Database {
 
 	public LinkedList<Jabatan> getDaftarDataJabatan() {
 		final String sql = "SELECT * FROM tjabatan";
@@ -249,7 +252,7 @@ public class DatabaseAdmin extends Database{
 		return null;
 	}
 
-	public Prodi getDataProdi(String namaProdi){
+	public Prodi getDataProdi(String namaProdi) {
 		final String sql
 			= "SELECT * FROM tprodi where nama_prodi = ?";
 
@@ -268,7 +271,7 @@ public class DatabaseAdmin extends Database{
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 		return null;
 	}
 
@@ -378,17 +381,19 @@ public class DatabaseAdmin extends Database{
 					queryWhere += " a.alamat like '" + pencarian + "'";
 					break;
 				default:
-					throw new AssertionError(kolom.name());
+					System.err.println(kolom);
+					System.exit(-1);
 			}
 
 			if (kolomTarget.size() <= 1) {
-				break;
+				continue;
 			}
 
 			if (i < kolomTarget.size()) {
-				queryWhere += " OR "; // tambahkan keyword "OR" setelah setiap 'like'.
-				i++;
+				queryWhere += " OR "; // tambahkan keyword "OR" setelah setiap 'like'.	
 			}
+			
+			i++;
 		}
 
 		return queryWhere;
@@ -663,7 +668,7 @@ public class DatabaseAdmin extends Database{
 			+ "FROM trecordabsen a "
 			+ "LEFT JOIN tkaryawan b ON a.id_karyawan = b.id_karyawan "
 			+ "LEFT JOIN tshift c ON b.id_shift = c.id_shift";
-		
+
 		DefaultTableModel model = new DefaultTableModel();
 
 		model.addColumn("ID RECORD");
@@ -1001,14 +1006,14 @@ public class DatabaseAdmin extends Database{
 				};
 				model.addRow(baris);
 			}
-			
+
 			return model;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 		return null;
 	}
 

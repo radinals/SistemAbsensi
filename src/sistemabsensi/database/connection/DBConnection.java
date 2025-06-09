@@ -14,28 +14,31 @@ import java.sql.Statement;
  * @author rss
  */
 public class DBConnection {
+
 	private Connection connection;
-	
+
 	public DBConnection(String url, String username, String password) {
 		this.connection = null;
-		createConnection(url,username,password);
+		createConnection(url, username, password);
 	}
-	
+
 	public final void createConnection(String url, String username, String password) {
 		try {
-			this.connection = DriverManager.getConnection(url, username, password); 
-		} catch (SQLException e) { 
+			this.connection = DriverManager.getConnection(url, username, password);
+		} catch (SQLException e) {
 			System.err.println("gagal menghubungkan database: " + e.getMessage());
 			System.exit(-1);
 		}
 	}
-	
+
 	public Connection getConnection() {
 		return this.connection;
 	}
-	
+
 	public Statement createStatement() throws Exception {
-		if(this.connection == null) throw new Exception("Database belum di hubungkan");
+		if (this.connection == null) {
+			throw new Exception("Database belum di hubungkan");
+		}
 		return connection.createStatement();
 	}
 }

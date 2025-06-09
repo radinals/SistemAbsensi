@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.ui.admin.ui;
+package sistemabsensi.ui.admin;
 
+import sistemabsensi.database.Prodi;
 import sistemabsensi.database.admin.DatabaseAdmin;
-import sistemabsensi.database.admin.Prodi;
 
 /**
  *
@@ -16,7 +16,6 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
 	private DatabaseAdmin db;
 
 	private Prodi prodiTerpilih;
-
 	private final JPanelMasterDataKaryawan panelKaryawan;
 
 	/**
@@ -24,7 +23,7 @@ public class JPanelMasterDataProdi extends javax.swing.JPanel {
 	 */
 	public JPanelMasterDataProdi(DatabaseAdmin db, JPanelMasterDataKaryawan panelKaryawan) {
 		this.db = db;
-		this.panelKaryawan = panelKaryawan;
+		this.panelKaryawan = panelKaryawan; // untuk memanggil update pada panel karyawan
 		initComponents();
 		this.updateData();
 	}

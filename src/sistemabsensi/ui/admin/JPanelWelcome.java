@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.ui.admin.ui;
+package sistemabsensi.ui.admin;
 
 import sistemabsensi.ui.JFrameUtama;
 
@@ -13,7 +13,7 @@ import sistemabsensi.ui.JFrameUtama;
 public class JPanelWelcome extends javax.swing.JPanel {
 
 	private JFrameUtama frameAdmin;
-	
+
 	/**
 	 * Creates new form JPanelWelcome
 	 */
@@ -84,11 +84,11 @@ public class JPanelWelcome extends javax.swing.JPanel {
         }// </editor-fold>//GEN-END:initComponents
 
         private void btnAbsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbsenActionPerformed
-                this.frameAdmin.bukaTampilanAbsen();
+		this.frameAdmin.bukaTampilanAbsen();
         }//GEN-LAST:event_btnAbsenActionPerformed
 
         private void btnLoginAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginAdminActionPerformed
-                this.frameAdmin.bukaLoginAdmin();
+		this.frameAdmin.bukaLoginAdmin();
         }//GEN-LAST:event_btnLoginAdminActionPerformed
 
 

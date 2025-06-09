@@ -22,7 +22,7 @@ import sistemabsensi.database.TipeAbsen;
  * @author rss
  */
 public class AbsenKaryawan extends Database {
-	
+
 	private String idKaryawan;
 	private String namaKaryawan;
 	private String namaProdi;
@@ -80,7 +80,7 @@ public class AbsenKaryawan extends Database {
 	public String getIdKaryawan() {
 		return idKaryawan;
 	}
-	
+
 	public void buatRecordAbsen(TipeAbsen tipe_absen, Timestamp waktuAbsen, StatusAbsen status_absen, String catatan) {
 		final String sql = "INSERT INTO trecordabsen(waktu_absen, id_karyawan,status_absen,catatan_absen,tipe_absen)"
 			+ " values (?,?,?,?,?);";
@@ -89,13 +89,13 @@ public class AbsenKaryawan extends Database {
 			PreparedStatement query = this.getConnection().prepareStatement(sql);
 
 			RecordAbsen record = new RecordAbsen();
-				
+
 			record.catatan_absen = catatan;
 			record.id_karyawan = this.idKaryawan;
 			record.status_absen = status_absen;
 			record.waktu_absen = waktuAbsen;
 			record.tipe_absen = tipe_absen;
-			
+
 			query.setTimestamp(1, record.waktu_absen);
 			query.setString(2, record.id_karyawan);
 			query.setString(3, record.status_absen.toString());
@@ -103,7 +103,7 @@ public class AbsenKaryawan extends Database {
 			query.setString(5, record.tipe_absen.toString());
 
 			int affected = query.executeUpdate();
-			
+
 			System.out.println("MENGINSERT " + affected + " recordabsen.");
 
 		} catch (SQLException e) {
@@ -111,15 +111,14 @@ public class AbsenKaryawan extends Database {
 			System.exit(-1);
 		}
 	}
-	
-	
+
 	public boolean adaDataRecordAbsenHariIni(TipeAbsen tipe) {
 		final String sql = "SELECT 1 FROM trecordabsen"
 			+ " WHERE id_karyawan = ? AND DATE(waktu_absen) = ? AND tipe_absen = ?;";
 
 		try {
 			PreparedStatement query = this.getConnection().prepareStatement(sql);
-			
+
 			Date tanggalSekarang = Date.valueOf(LocalDate.now()); // dapatkan tanggal terkini
 
 			query.setString(1, this.idKaryawan);
@@ -134,20 +133,20 @@ public class AbsenKaryawan extends Database {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------//
 	// Kembalikan Sebuah Linked List / Daftar semua data record yang dimiliki seorang karyawan                            //
 	//--------------------------------------------------------------------------------------------------------------------//
-	public LinkedList<RecordAbsen> getDaftarRecordAbsenHariIni()  {
+	public LinkedList<RecordAbsen> getDaftarRecordAbsenHariIni() {
 		final String sql = "SELECT * FROM trecordabsen WHERE id_karyawan = ? AND DATE(waktu_absen) = ?;";
 
 		try {
 			LinkedList<RecordAbsen> daftarRecord = new LinkedList<>();
 			PreparedStatement query = this.getConnection().prepareStatement(sql);
-			
+
 			Date tanggalSekarang = Date.valueOf(LocalDate.now());
 
 			query.setString(1, this.idKaryawan);
@@ -160,8 +159,8 @@ public class AbsenKaryawan extends Database {
 				record.id_recordabsen = result.getInt("id_recordabsen");
 				record.id_karyawan = result.getString("id_karyawan");
 				record.waktu_absen = result.getTimestamp("waktu_absen");
-				
-				switch(result.getString("status_absen")) {
+
+				switch (result.getString("status_absen")) {
 					case "TELAT":
 						record.status_absen = StatusAbsen.TELAT;
 						break;
@@ -175,8 +174,8 @@ public class AbsenKaryawan extends Database {
 						record.status_absen = StatusAbsen.INVALID;
 						break;
 				}
-				
-				switch(result.getString("tipe_absen")) {
+
+				switch (result.getString("tipe_absen")) {
 					case "ABSEN_MASUK":
 						record.tipe_absen = TipeAbsen.ABSEN_MASUK;
 						break;
@@ -192,9 +191,9 @@ public class AbsenKaryawan extends Database {
 					case "INVALID":
 						record.tipe_absen = TipeAbsen.INVALID;
 						break;
-					
+
 				}
-				
+
 				record.catatan_absen = result.getString("catatan_absen");
 				daftarRecord.add(record);
 			}
@@ -205,7 +204,7 @@ public class AbsenKaryawan extends Database {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		
+
 		return null;
 	}
 

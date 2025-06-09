@@ -31,6 +31,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 
 	// jadwal istirahat di hardcode!.
 	private static class JadwalIstirahat {
+
 		public static final Time mulai = Time.valueOf("12:00:00");
 		public static final Time selesai = Time.valueOf("13:00:00");
 	}
@@ -128,7 +129,6 @@ public class JPanelAbsen extends javax.swing.JPanel {
                 add(jLabelNama);
                 jLabelNama.setBounds(30, 170, 740, 110);
         }// </editor-fold>//GEN-END:initComponents
-
 
 	// tampilkan peringatan dll
 	private void tampilkanPesan(String pesan) {
@@ -294,7 +294,7 @@ public class JPanelAbsen extends javax.swing.JPanel {
 			status = StatusAbsen.TEPAT_WAKTU;
 		}
 
-		this.absenKaryawan.buatRecordAbsen( TipeAbsen.ABSEN_PULANG, waktuAbsen, status, catatan);
+		this.absenKaryawan.buatRecordAbsen(TipeAbsen.ABSEN_PULANG, waktuAbsen, status, catatan);
 
 	}
 
@@ -303,12 +303,15 @@ public class JPanelAbsen extends javax.swing.JPanel {
 	//--------------------------------------------------------------------------------------------------------//
 	private void updateTabelData() {
 
-		if (this.absenKaryawan == null) return;
-		
+		if (this.absenKaryawan == null) {
+			return;
+		}
+
 		LinkedList<RecordAbsen> daftarRecord = this.absenKaryawan.getDaftarRecordAbsenHariIni();
 
-		if (daftarRecord.isEmpty()) 
+		if (daftarRecord.isEmpty()) {
 			return;
+		}
 
 		DefaultTableModel model = new DefaultTableModel();
 
@@ -377,12 +380,12 @@ public class JPanelAbsen extends javax.swing.JPanel {
 		} else {
 			String idKaryawan = jTextFieldID.getText();
 			clear();
-			
+
 			if (!this.absenKaryawan.isDataKaryawanAda(idKaryawan)) {
 				tampilkanDialog("Pastikan anda telah terdaftar sebagai karyawan!");
 				return;
 			}
-			
+
 			this.absenKaryawan.dapatkanDataKaryawan(idKaryawan);
 
 			this.jLabelNama.setText(this.absenKaryawan.getNamaKaryawan());

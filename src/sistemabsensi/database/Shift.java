@@ -27,11 +27,11 @@ public class Shift {
 		this.shift_start = shift_start;
 		this.deskripsi = deskripsi;
 	}
-	
+
 	public Time getShiftStart() {
 		return this.shift_start;
 	}
-	
+
 	public Time getShiftEnd() {
 		return this.shift_end;
 	}

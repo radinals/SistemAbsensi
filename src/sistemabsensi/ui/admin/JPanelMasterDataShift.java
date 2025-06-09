@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.ui.admin.ui;
+package sistemabsensi.ui.admin;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -174,7 +174,6 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(24, 24, 24)
                                 .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(42, 42, 42)
@@ -199,20 +198,11 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
                 );
         }// </editor-fold>//GEN-END:initComponents
 
-	public static Date toDate(LocalTime localTime) {
-		// Combine LocalTime with current date
+	private static Date toDate(LocalTime localTime) {
 		return Date.from(
-			localTime.atDate(LocalDate.now()) // Combine time with today’s date
-				.atZone(ZoneId.systemDefault()) // Add system default timezone
-				.toInstant() // Convert to Instant
-		);
-	}
-
-	public static Date toDate(LocalDate localDate) {
-		return Date.from(
-			localDate.atStartOfDay() // Set time to 00:00
-				.atZone(ZoneId.systemDefault()) // Apply system time zone
-				.toInstant() // Convert to Instant
+			localTime.atDate(LocalDate.now())
+				.atZone(ZoneId.systemDefault())
+				.toInstant()
 		);
 	}
 

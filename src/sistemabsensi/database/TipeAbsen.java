@@ -9,9 +9,9 @@ package sistemabsensi.database;
  * @author rss
  */
 public enum TipeAbsen {
-		ABSEN_MASUK,
-		ABSEN_PULANG,
-		ABSEN_ISTIRAHAT,
-		ABSEN_KEMBALI_ISTIRAHAT,
-		INVALID
+	ABSEN_MASUK,
+	ABSEN_PULANG,
+	ABSEN_ISTIRAHAT,
+	ABSEN_KEMBALI_ISTIRAHAT,
+	INVALID
 }

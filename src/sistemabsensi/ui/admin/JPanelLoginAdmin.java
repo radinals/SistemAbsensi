@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package sistemabsensi.ui.admin.ui;
+package sistemabsensi.ui.admin;
 
 import java.awt.event.ActionEvent;
 import sistemabsensi.database.admin.DatabaseAdmin;
@@ -164,23 +164,25 @@ public class JPanelLoginAdmin extends javax.swing.JPanel {
 			final String password = this.textFieldPassword.getText();
 
 			final StatusLogin status = db.loginAdminValid(id, password);
-			
-			assert(status != null);
-			
+
+			assert (status != null);
+
 			switch (status) {
 				case LOGIN_VALID: {
-					
+
 					final String namaKaryawan = this.db.getNamaKaryawan(id);
-					
+
 					assert (namaKaryawan != null);
-					
-					if (namaKaryawan != null)
+
+					if (namaKaryawan != null) {
 						DialogPesan.tampilPesan("SELAMAT DATANG, " + namaKaryawan);
-					
+					}
+
 					this.frameAdmin.admin_terlogin = true;
-					
+
 					this.frameAdmin.bukaMaintenenceKaryawan();
-				}break;
+				}
+				break;
 				case PASSWORD_SALAH:
 					DialogPesan.tampilPesan("Password Salah!.");
 					this.clearField();

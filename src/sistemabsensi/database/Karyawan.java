@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemabsensi.database.admin;
+package sistemabsensi.database;
 
 /**
  *
@@ -100,8 +100,7 @@ public class Karyawan {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
+
 	@Override
 	public String toString() {
 		return this.idKaryawan + ":" + this.namaKaryawan;
