@@ -5,9 +5,9 @@
 package sistemabsensi.ui.admin.ui;
 
 import java.awt.event.ActionEvent;
+import sistemabsensi.database.admin.DatabaseAdmin;
+import sistemabsensi.database.admin.StatusLogin;
 import sistemabsensi.ui.JFrameUtama;
-import sistemabsensi.ui.admin.database.DatabaseAdmin;
-import sistemabsensi.ui.admin.database.StatusLogin;
 
 /**
  *

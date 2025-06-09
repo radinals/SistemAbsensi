@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 import sistemabsensi.database.Shift;
-import sistemabsensi.ui.admin.database.DatabaseAdmin;
+import sistemabsensi.database.admin.DatabaseAdmin;
 
 /**
  *

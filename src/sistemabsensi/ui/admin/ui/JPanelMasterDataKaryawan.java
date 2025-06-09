@@ -6,11 +6,11 @@ package sistemabsensi.ui.admin.ui;
 
 import java.util.LinkedList;
 import sistemabsensi.database.Shift;
-import sistemabsensi.ui.admin.database.DatabaseAdmin;
-import sistemabsensi.ui.admin.database.Jabatan;
-import sistemabsensi.ui.admin.database.Karyawan;
-import sistemabsensi.ui.admin.database.KolomPencarian;
-import sistemabsensi.ui.admin.database.Prodi;
+import sistemabsensi.database.admin.DatabaseAdmin;
+import sistemabsensi.database.admin.Jabatan;
+import sistemabsensi.database.admin.Karyawan;
+import sistemabsensi.database.admin.KolomPencarian;
+import sistemabsensi.database.admin.Prodi;
 
 /**
  *
@@ -570,11 +570,11 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
 	private boolean isFieldInputTerisiSemua() {
 		if (this.textFieldID.getText().isEmpty()) {
 			textFieldID.requestFocus();
-			DialogPesan.tampilPesan("ID Masih Home");
+			DialogPesan.tampilPesan("ID Tidak Boleh Kosong!");
 			return false;
 		} else if (this.textFieldNama.getText().isEmpty()) {
 			textFieldNama.requestFocus();
-			DialogPesan.tampilPesan("Nama masih Home");
+			DialogPesan.tampilPesan("Nama Tidak Boleh Kosong!");
 			return false;
 		} else if (this.textFieldTelp.getText().isEmpty()) {
 			this.textFieldTelp.requestFocus();

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemabsensi.ui.absensi.database;
+package sistemabsensi.database.absensi;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.LinkedList;
-import sistemabsensi.database.DatabaseAbsensi;
+import sistemabsensi.database.Database;
 import sistemabsensi.database.RecordAbsen;
 import sistemabsensi.database.Shift;
 import sistemabsensi.database.StatusAbsen;
@@ -21,9 +21,67 @@ import sistemabsensi.database.TipeAbsen;
  *
  * @author rss
  */
-public class DatabaseAbsen extends DatabaseAbsensi {
+public class AbsenKaryawan extends Database {
 	
-	public void tambahkanRecordAbsen(String id_karyawan, TipeAbsen tipe_absen, Timestamp waktuAbsen, StatusAbsen status_absen, String catatan) {
+	private String idKaryawan;
+	private String namaKaryawan;
+	private String namaProdi;
+	private String jabatan;
+	private Shift shift;
+
+	public AbsenKaryawan(String idKaryawan) {
+		this.dapatkanDataKaryawan(idKaryawan);
+	}
+
+	public AbsenKaryawan() {
+		this.idKaryawan = null;
+		this.namaKaryawan = null;
+		this.namaProdi = null;
+		this.jabatan = null;
+		this.shift = null;
+	}
+
+	public void setIdKaryawan(String idKaryawan) {
+		this.idKaryawan = idKaryawan;
+	}
+
+	public void setNamaKaryawan(String namaKaryawan) {
+		this.namaKaryawan = namaKaryawan;
+	}
+
+	public void setNamaProdi(String namaProdi) {
+		this.namaProdi = namaProdi;
+	}
+
+	public void setJabatan(String jabatan) {
+		this.jabatan = jabatan;
+	}
+
+	public void setShift(Shift shift) {
+		this.shift = shift;
+	}
+
+	public String getNamaKaryawan() {
+		return namaKaryawan;
+	}
+
+	public String getNamaProdi() {
+		return namaProdi;
+	}
+
+	public String getJabatan() {
+		return jabatan;
+	}
+
+	public Shift getShift() {
+		return shift;
+	}
+
+	public String getIdKaryawan() {
+		return idKaryawan;
+	}
+	
+	public void buatRecordAbsen(TipeAbsen tipe_absen, Timestamp waktuAbsen, StatusAbsen status_absen, String catatan) {
 		final String sql = "INSERT INTO trecordabsen(waktu_absen, id_karyawan,status_absen,catatan_absen,tipe_absen)"
 			+ " values (?,?,?,?,?);";
 
@@ -33,7 +91,7 @@ public class DatabaseAbsen extends DatabaseAbsensi {
 			RecordAbsen record = new RecordAbsen();
 				
 			record.catatan_absen = catatan;
-			record.id_karyawan = id_karyawan;
+			record.id_karyawan = this.idKaryawan;
 			record.status_absen = status_absen;
 			record.waktu_absen = waktuAbsen;
 			record.tipe_absen = tipe_absen;
@@ -55,7 +113,7 @@ public class DatabaseAbsen extends DatabaseAbsensi {
 	}
 	
 	
-	public boolean adaDataRecordAbsenHariIni(String idKaryawan, TipeAbsen tipe) {
+	public boolean adaDataRecordAbsenHariIni(TipeAbsen tipe) {
 		final String sql = "SELECT 1 FROM trecordabsen"
 			+ " WHERE id_karyawan = ? AND DATE(waktu_absen) = ? AND tipe_absen = ?;";
 
@@ -64,7 +122,7 @@ public class DatabaseAbsen extends DatabaseAbsensi {
 			
 			Date tanggalSekarang = Date.valueOf(LocalDate.now()); // dapatkan tanggal terkini
 
-			query.setString(1, idKaryawan);
+			query.setString(1, this.idKaryawan);
 			query.setDate(2, tanggalSekarang);
 			query.setString(3, tipe.toString());
 
@@ -83,7 +141,7 @@ public class DatabaseAbsen extends DatabaseAbsensi {
 	//--------------------------------------------------------------------------------------------------------------------//
 	// Kembalikan Sebuah Linked List / Daftar semua data record yang dimiliki seorang karyawan                            //
 	//--------------------------------------------------------------------------------------------------------------------//
-	public LinkedList<RecordAbsen> getDaftarRecordAbsenKaryawanHariIni(String idKaryawan)  {
+	public LinkedList<RecordAbsen> getDaftarRecordAbsenHariIni()  {
 		final String sql = "SELECT * FROM trecordabsen WHERE id_karyawan = ? AND DATE(waktu_absen) = ?;";
 
 		try {
@@ -92,7 +150,7 @@ public class DatabaseAbsen extends DatabaseAbsensi {
 			
 			Date tanggalSekarang = Date.valueOf(LocalDate.now());
 
-			query.setString(1, idKaryawan);
+			query.setString(1, this.idKaryawan);
 			query.setDate(2, tanggalSekarang);
 
 			ResultSet result = query.executeQuery();
@@ -155,7 +213,7 @@ public class DatabaseAbsen extends DatabaseAbsensi {
 	// Query SELECT join-relasi ke tabel-tabel data karyawan (prodi, shift, jabatan) dan juga membuat/mendapatkan        //
 	// record absen untuk karyawan tersebut.                                                                             //
 	//-------------------------------------------------------------------------------------------------------------------//
-	public Karyawan getDataKaryawan(String idKaryawan) {
+	public void dapatkanDataKaryawan(String idKaryawan) {
 		final String sql
 			= "SELECT "
 			+ "a.id_karyawan, a.nama_karyawan,"
@@ -176,25 +234,20 @@ public class DatabaseAbsen extends DatabaseAbsensi {
 			ResultSet result = query.executeQuery();
 
 			if (result.next()) {
-				Karyawan karyawan = new Karyawan();
 
-				karyawan.setIdKaryawan(result.getString("id_karyawan"));
-				karyawan.setNamaKaryawan(result.getString("nama_karyawan"));
-				karyawan.setShift(new Shift(
+				this.setIdKaryawan(result.getString("id_karyawan"));
+				this.setNamaKaryawan(result.getString("nama_karyawan"));
+				this.setShift(new Shift(
 					result.getInt("id_shift"),
 					result.getTime("shift_start"),
 					result.getTime("shift_end"),
 					result.getString("deskripsi")
 				));
-
-				return karyawan;
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		
-		return null;
 	}
 }

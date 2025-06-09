@@ -4,8 +4,8 @@
  */
 package sistemabsensi.ui.admin.ui;
 
-import sistemabsensi.ui.admin.database.DatabaseAdmin;
-import sistemabsensi.ui.admin.database.Jabatan;
+import sistemabsensi.database.admin.DatabaseAdmin;
+import sistemabsensi.database.admin.Jabatan;
 
 /**
  *

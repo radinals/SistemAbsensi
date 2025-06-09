@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemabsensi.ui.admin.database;
+package sistemabsensi.database.admin;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import sistemabsensi.database.DatabaseAbsensi;
+import sistemabsensi.database.Database;
 import sistemabsensi.database.RecordAbsen;
 import sistemabsensi.database.Shift;
 import sistemabsensi.database.StatusAbsen;
@@ -22,7 +22,7 @@ import sistemabsensi.ui.admin.ui.DialogPesan;
  *
  * @author rss
  */
-public class DatabaseAdmin extends DatabaseAbsensi{
+public class DatabaseAdmin extends Database{
 
 	public LinkedList<Jabatan> getDaftarDataJabatan() {
 		final String sql = "SELECT * FROM tjabatan";

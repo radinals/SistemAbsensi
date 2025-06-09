@@ -15,12 +15,12 @@ import sistemabsensi.database.connection.DBConnection;
  *
  * @author rss
  */
-public class DatabaseAbsensi {
+public class Database {
 	
 	private DBConnection database;
 	private Statement statement;
 
-	public DatabaseAbsensi() {
+	public Database() {
 		this.database = new DBConnection("jdbc:mysql://localhost/dbabsensi", "root", "");
 
 		try {

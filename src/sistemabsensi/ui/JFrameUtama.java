@@ -7,7 +7,7 @@ package sistemabsensi.ui;
 import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import sistemabsensi.ui.admin.database.DatabaseAdmin;
+import sistemabsensi.database.admin.DatabaseAdmin;
 import sistemabsensi.ui.admin.ui.DialogPesan;
 import sistemabsensi.ui.admin.ui.JPanelCetakLaporan;
 import sistemabsensi.ui.admin.ui.JPanelLoginAdmin;
@@ -15,7 +15,7 @@ import sistemabsensi.ui.admin.ui.JPanelMasterDataKaryawan;
 import sistemabsensi.ui.admin.ui.JPanelMasterDataRecordAbsen;
 import sistemabsensi.ui.admin.ui.JPanelMasterDataShift;
 import sistemabsensi.ui.admin.ui.JPanelWelcome;
-import sistemabsensi.ui.absensi.ui.JPanelAbsen;
+import sistemabsensi.ui.absensi.JPanelAbsen;
 
 /**
  *
