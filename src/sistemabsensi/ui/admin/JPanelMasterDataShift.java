@@ -222,12 +222,6 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
 		return sdf.format(waktu);
 	}
 
-	//NOTES:
-	// UNCLEAR LOGIC
-	// EDIT HAS ID,
-	// ADD IF NO ID, (NEED TO VERIFY)
-	// FIXME: NEED TO REVIEW USE CASE!
-
         private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
 		if (this.textFieldDeskripsi.getText().isEmpty()) {
 			this.textFieldDeskripsi.requestFocus();

@@ -182,19 +182,19 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                 jLabel1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jLabel1.setText("KARYAWAN");
 
-                comboBoxKaryawan.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                comboBoxKaryawan.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
                 comboBoxKaryawan.setModel(new javax.swing.DefaultComboBoxModel<>());
 
                 jLabel4.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jLabel4.setText("TIPE ABSEN");
 
-                comboBoxTipeAbsen.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                comboBoxTipeAbsen.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
                 comboBoxTipeAbsen.setModel(new javax.swing.DefaultComboBoxModel<>());
 
                 jLabel5.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jLabel5.setText("STATUS ABSEN");
 
-                comboBoxStatusAbsen.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                comboBoxStatusAbsen.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
                 comboBoxStatusAbsen.setModel(new javax.swing.DefaultComboBoxModel<>());
                 comboBoxStatusAbsen.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,11 +227,15 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addComponent(comboBoxKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, 0)
                                                 .addComponent(comboBoxTipeAbsen, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, 0)
                                                 .addComponent(comboBoxStatusAbsen, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, 0)
                                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, 0)
                                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(24, 24, 24))
                 );
@@ -249,7 +253,7 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                         }
                 });
                 jPanel6.add(btnHapus);
-                btnHapus.setBounds(420, 480, 90, 30);
+                btnHapus.setBounds(430, 480, 90, 30);
 
                 btnEdit.setBackground(new java.awt.Color(255, 255, 102));
                 btnEdit.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
@@ -263,6 +267,7 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                 jPanel6.add(btnEdit);
                 btnEdit.setBounds(10, 470, 76, 30);
 
+                tabelData.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null},
@@ -290,12 +295,12 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                 jLabel7.setBounds(10, 300, 120, 35);
 
                 textAreaCatatanAbsen.setColumns(20);
-                textAreaCatatanAbsen.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                textAreaCatatanAbsen.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
                 textAreaCatatanAbsen.setRows(5);
                 jScrollPane2.setViewportView(textAreaCatatanAbsen);
 
                 jPanel6.add(jScrollPane2);
-                jScrollPane2.setBounds(130, 300, 380, 160);
+                jScrollPane2.setBounds(150, 300, 370, 160);
 
                 javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
                 jPanel7.setLayout(jPanel7Layout);
@@ -331,14 +336,14 @@ public class JPanelMasterDataRecordAbsen extends javax.swing.JPanel {
                 jPanel6.add(jLabel6);
                 jLabel6.setBounds(60, 190, 80, 35);
 
-                spinnerJam.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                spinnerJam.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
                 spinnerJam.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.SECOND));
                 spinnerJam.setToolTipText("");
                 spinnerJam.setEditor(new javax.swing.JSpinner.DateEditor(spinnerJam, "HH:mm:ss"));
                 jPanel6.add(spinnerJam);
                 spinnerJam.setBounds(150, 230, 190, 35);
 
-                spinnerTanggal.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+                spinnerTanggal.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
                 spinnerTanggal.setModel(new javax.swing.SpinnerDateModel());
                 spinnerTanggal.setDoubleBuffered(true);
                 spinnerTanggal.setEditor(new javax.swing.JSpinner.DateEditor(spinnerTanggal, "yyyy-MM-dd"));
