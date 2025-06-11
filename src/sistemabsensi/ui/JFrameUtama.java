@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import sistemabsensi.database.admin.DatabaseAdmin;
 import sistemabsensi.ui.absensi.JPanelAbsen;
 import sistemabsensi.ui.admin.DialogPesan;
-import sistemabsensi.ui.admin.JPanelCetakLaporan;
 import sistemabsensi.ui.admin.JPanelLoginAdmin;
 import sistemabsensi.ui.admin.JPanelMasterDataKaryawan;
 import sistemabsensi.ui.admin.JPanelMasterDataRecordAbsen;
@@ -29,7 +28,6 @@ public class JFrameUtama extends javax.swing.JFrame {
 	private JPanelMasterDataShift MasterDataShift;
 	private JPanelLoginAdmin panelLogin;
 	private JPanelWelcome panelWelcome;
-	private JPanelCetakLaporan panelLaporan;
 
 	public boolean admin_terlogin = false;
 
@@ -46,14 +44,12 @@ public class JFrameUtama extends javax.swing.JFrame {
 		this.MasterDataShift = new JPanelMasterDataShift(db);
 		this.panelLogin = new JPanelLoginAdmin(db, this);
 		this.panelWelcome = new JPanelWelcome(this);
-		this.panelLaporan = new JPanelCetakLaporan(db);
 
 		this.jPanelUtama.add("Home", this.panelWelcome);
 		this.jPanelUtama.add("MasterDataKaryawan", this.MasterDataKaryawan);
 		this.jPanelUtama.add("MasterDataRecordAbsen", this.MasterDataRecordAbsen);
 		this.jPanelUtama.add("MasterDataShift", this.MasterDataShift);
 		this.jPanelUtama.add("Login", this.panelLogin);
-		this.jPanelUtama.add("Laporan", this.panelLaporan);
 
 		this.layoutPanel = (CardLayout) this.jPanelUtama.getLayout();
 	}
@@ -86,7 +82,6 @@ public class JFrameUtama extends javax.swing.JFrame {
                 jMenu5 = new javax.swing.JMenu();
                 jMenuMasterData_RecordAbsen = new javax.swing.JMenuItem();
                 jMenuMasterData_Shift = new javax.swing.JMenuItem();
-                jMenuItem3 = new javax.swing.JMenuItem();
 
                 jMenuItem1.setText("jMenuItem1");
 
@@ -186,14 +181,6 @@ public class JFrameUtama extends javax.swing.JFrame {
                 });
                 jMenu5.add(jMenuMasterData_Shift);
 
-                jMenuItem3.setText("Cetak Laporan");
-                jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jMenuItem3ActionPerformed(evt);
-                        }
-                });
-                jMenu5.add(jMenuItem3);
-
                 jMenuBar1.add(jMenu5);
 
                 setJMenuBar(jMenuBar1);
@@ -230,16 +217,6 @@ public class JFrameUtama extends javax.swing.JFrame {
 		this.layoutPanel.show(this.jPanelUtama, "MasterDataShift");
 		this.MasterDataShift.updateData();
         }//GEN-LAST:event_jMenuMasterData_ShiftActionPerformed
-
-        private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-		if (!this.admin_terlogin) {
-			DialogPesan.tampilPesan("Login Terlebih Dahulu Jika ingin mengakses data!.");
-			this.layoutPanel.show(this.jPanelUtama, "Login");
-			return;
-		}
-		this.layoutPanel.show(this.jPanelUtama, "Laporan");
-		this.panelLaporan.updateData();// TODO add your handling code here:
-        }//GEN-LAST:event_jMenuItem3ActionPerformed
 
 	public void bukaLoginAdmin() {
 		this.layoutPanel.show(this.jPanelUtama, "Login");
@@ -307,7 +284,6 @@ public class JFrameUtama extends javax.swing.JFrame {
         private javax.swing.JMenuBar jMenuBar2;
         private javax.swing.JMenuItem jMenuItem1;
         private javax.swing.JMenuItem jMenuItem2;
-        private javax.swing.JMenuItem jMenuItem3;
         private javax.swing.JMenuItem jMenuMasterData_Karyawan;
         private javax.swing.JMenuItem jMenuMasterData_RecordAbsen;
         private javax.swing.JMenuItem jMenuMasterData_Shift;

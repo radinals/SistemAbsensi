@@ -65,6 +65,7 @@ public class JPanelMasterDataShift extends javax.swing.JPanel {
 
                 setMaximumSize(new java.awt.Dimension(991, 599));
 
+                tabelData.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null},

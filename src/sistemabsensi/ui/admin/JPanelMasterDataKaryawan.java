@@ -105,6 +105,7 @@ public class JPanelMasterDataKaryawan extends javax.swing.JPanel {
                 jPanel1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 jPanel1.setLayout(null);
 
+                tabelData.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
                 tabelData.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
                                 {null, null, null, null},
